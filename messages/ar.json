@@ -1,0 +1,187 @@
+{
+  "dashboard": {
+    "common": {
+      "save": "حفظ",
+      "edit": "تعديل",
+      "delete": "حذف",
+      "create": "إنشاء",
+      "update": "تحديث",
+      "cancel": "إلغاء",
+      "back": "رجوع",
+      "next": "التالي",
+      "previous": "السابق",
+      "actions": "إجراءات",
+      "search": "بحث",
+      "filter": "تصفية",
+      "reset": "إعادة تعيين",
+      "success": "نجاح",
+      "error": "خطأ",
+      "home": "الرئيسية",
+      "homepage": "الصفحة الرئيسية",
+      "settings": "الإعدادات",
+      "title": "العنوان",
+      "createdAt": "تاريخ الإنشاء",
+      "updatedAt": "تاريخ التحديث",
+      "areYouSure": "هل أنت متأكد تماماً؟",
+      "deleteWarning": "لا يمكن التراجع عن هذا الإجراء. سيؤدي هذا إلى حذف هذه البيانات نهائيًا.",
+      "content": "المحتوى",
+      "lastUpdated": "آخر تحديث",
+      "view": "عرض",
+      "confirmDelete": "تأكيد الحذف",
+      "deleteSuccess": "تم الحذف بنجاح",
+      "deleteError": "خطأ في حذف العنصر",
+      "deleteSelected": "حذف المحدد",
+      "deleteMultipleWarning": "لا يمكن التراجع عن هذا الإجراء. سيؤدي هذا إلى حذف {count} عنصر من {entity}."
+    },
+    "homepage": {
+      "title": "إدارة الصفحة الرئيسية",
+      "create": "إنشاء صفحة رئيسية",
+      "edit": "تعديل الصفحة الرئيسية",
+      "deleteSelected": "حذف المحدد",
+      "areYouSure": "هل أنت متأكد تماماً؟",
+      "deleteSelectedDescription": "لا يمكن التراجع عن هذا الإجراء. سيؤدي هذا إلى حذف الصفحات الرئيسية المحددة نهائيًا.",
+      "noContent": "لم يتم العثور على محتوى للصفحة الرئيسية",
+      "previewContent": "معاينة محتوى الصفحة الرئيسية",
+      "summary": "ملخص المحتوى",
+      "form": {
+        "hero": {
+          "title": "قسم البطل",
+          "subtitle": "العنوان الفرعي",
+          "description": "الوصف",
+          "backgroundImage": "صورة الخلفية",
+          "buttonText": "نص الزر",
+          "buttonLink": "رابط الزر"
+        },
+        "about": {
+          "title": "قسم عن الشركة",
+          "miniTitle": "عنوان صغير",
+          "description": "الوصف",
+          "link": "الرابط",
+          "linkText": "نص الرابط",
+          "mainImage": "الصورة الرئيسية"
+        },
+        "aboutServices": {
+          "title": "خدمات قسم عن الشركة",
+          "addService": "إضافة خدمة",
+          "service": "خدمة",
+          "miniTitle": "عنوان صغير",
+          "description": "الوصف",
+          "image": "الصورة"
+        },
+        "logos": {
+          "title": "الشعارات",
+          "addLogo": "إضافة شعار",
+          "logo": "شعار",
+          "name": "الاسم",
+          "image": "الصورة"
+        },
+        "services": {
+          "title": "الخدمات",
+          "addService": "إضافة خدمة",
+          "service": "خدمة",
+          "description": "الوصف",
+          "icon": "الأيقونة",
+          "color": "اللون",
+          "link": "الرابط",
+          "linkText": "نص الرابط"
+        },
+        "technologies": {
+          "title": "قسم التقنيات",
+          "description": "الوصف",
+          "addTechnology": "إضافة تقنية",
+          "technology": "تقنية",
+          "name": "الاسم",
+          "images": "الصور"
+        }
+      }
+    },
+    "blogs": {
+      "title": "إدارة المدونات",
+      "create": "إنشاء مدونة",
+      "edit": "تعديل المدونة",
+      "addBlog": "إضافة مدونة",
+      "updateSuccess": "تم تحديث المدونة بنجاح",
+      "createSuccess": "تم إنشاء المدونة بنجاح",
+      "deleteSuccess": "تم حذف المدونة بنجاح",
+      "deleteError": "فشل في حذف المدونة",
+      "bulkDeleteSuccess": "تم حذف المدونات بنجاح",
+      "bulkDeleteError": "فشل في حذف المدونات",
+      "noBlogs": "لم يتم العثور على مدونات",
+      "searchPlaceholder": "بحث في المدونات...",
+      "deleteBlog": "حذف المدونة",
+      "deleteBlogConfirmation": "هل أنت متأكد من رغبتك في حذف هذه المدونة؟ لا يمكن التراجع عن هذا الإجراء.",
+      "columns": {
+        "thumbnail": "الصورة المصغرة",
+        "title": "العنوان",
+        "slug": "الرابط المختصر",
+        "sections": "الأقسام",
+        "category": "الفئة",
+        "status": "الحالة",
+        "featured": "مميز"
+      },
+      "status": {
+        "published": "منشور",
+        "draft": "مسودة"
+      },
+      "form": {
+        "mainInfo": "معلومات المدونة",
+        "published": "منشور",
+        "featured": "مميز",
+        "title": "العنوان",
+        "slug": "الرابط المختصر",
+        "slugPlaceholder": "أدخل الرابط المختصر أو اتركه فارغًا ليتم إنشاؤه تلقائيًا",
+        "description": "الوصف",
+        "author": "الكاتب",
+        "authorPlaceholder": "أدخل اسم الكاتب",
+        "mainImage": "الصورة الرئيسية",
+        "mainImagePlaceholder": "أدخل رابط الصورة الرئيسية أو قم برفع صورة",
+        "thumbnailImage": "الصورة المصغرة",
+        "thumbnailImagePlaceholder": "أدخل رابط الصورة المصغرة أو قم برفع صورة",
+        "tags": "الوسوم",
+        "tagsPlaceholder": "أدخل الوسوم مفصولة بفاصلة",
+        "sections": {
+          "title": "أقسام المحتوى",
+          "empty": "لم تتم إضافة أقسام بعد. أضف القسم الأول.",
+          "addSection": "إضافة قسم",
+          "addText": "إضافة قسم نصي",
+          "addImage": "إضافة قسم صورة",
+          "text": "قسم نصي",
+          "image": "قسم صورة",
+          "content": "المحتوى",
+          "imageUrl": "رابط الصورة",
+          "caption": "التعليق التوضيحي"
+        }
+      }
+    },
+    "sidebar": {
+      "adminDashboard": "لوحة تحكم المسؤول",
+      "management": "الإدارة",
+      "home": "الرئيسية",
+      "products": "المنتجات",
+      "createProduct": "إنشاء منتج",
+      "blogs": "المدونات",
+      "createBlog": "إنشاء مدونة",
+      "users": "المستخدمين",
+      "business": "الأعمال",
+      "logout": "تسجيل الخروج"
+    }
+  },
+  "auth": {
+    "login": "تسجيل الدخول",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "signingIn": "جاري تسجيل الدخول...",
+    "signIn": "تسجيل الدخول",
+    "signUp": "إنشاء حساب",
+    "noAccount": "ليس لديك حساب؟",
+    "enterCredentials": "أدخل بيانات الاعتماد الخاصة بك للوصول إلى حسابك",
+    "loginFailed": "فشل تسجيل الدخول. يرجى التحقق من بيانات الاعتماد الخاصة بك.",
+    "loginSuccess": "تم تسجيل الدخول بنجاح",
+    "unexpectedError": "حدث خطأ غير متوقع",
+    "emailPlaceholder": "your@email.com",
+    "passwordPlaceholder": "••••••••",
+    "welcomeBack": "مرحبًا بعودتك",
+    "appName": "سبارتا",
+    "processing": "جاري المعالجة..."
+  }
+}

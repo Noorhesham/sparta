@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
@@ -20,6 +20,8 @@ export const PhotoInput = ({
   const {
     setValue,
     watch,
+    clearErrors,
+    trigger,
     formState: { errors },
   } = useFormContext();
   const [isUploading, setIsUploading] = useState(false);
@@ -30,6 +32,21 @@ export const PhotoInput = ({
   // Get current value from form
   const watchedValue = watch(name);
 
+  // Get field error
+  const fieldError = errors[name];
+  const hasError = !!fieldError;
+
+  // Effect to check if we have images and if there's an error, clear it
+  useEffect(() => {
+    const value = watch(name);
+    const hasValue = Array.isArray(value) ? value.length > 0 : !!value;
+
+    if (hasValue && hasError) {
+      clearErrors(name);
+      trigger(name);
+    }
+  }, [watchedValue, hasError, name, clearErrors, watch, trigger]);
+
   // Normalize current images
   let currentImages: string[] = [];
 
@@ -38,7 +55,7 @@ export const PhotoInput = ({
   } else if (typeof watchedValue === "string" && watchedValue) {
     currentImages = [watchedValue];
   }
-  console.log(watchedValue);
+
   const handleUpload = useCallback(
     async (files: FileList) => {
       try {
@@ -51,10 +68,13 @@ export const PhotoInput = ({
         const newImages = results.map((res) => res.url);
 
         if (shouldStoreSingle) {
-          setValue(name, newImages[0]); // Store single image
+          setValue(name, newImages[0], { shouldValidate: true }); // Store single image and validate
         } else {
-          setValue(name, [...currentImages, ...newImages]); // Append new images to array
+          setValue(name, [...currentImages, ...newImages], { shouldValidate: true }); // Append new images and validate
         }
+
+        // Explicitly clear errors for this field
+        clearErrors(name);
       } catch (error) {
         console.error("Upload failed:", error);
       } finally {
@@ -62,12 +82,13 @@ export const PhotoInput = ({
         setValue("isUploading", false);
       }
     },
-    [currentImages, name, setValue, shouldStoreSingle]
+    [currentImages, name, setValue, shouldStoreSingle, clearErrors]
   );
 
   const handleDelete = (url: string) => {
     const filteredImages = currentImages.filter((imgUrl) => imgUrl !== url);
-    setValue(name, shouldStoreSingle ? filteredImages[0] || "" : filteredImages);
+    const newValue = shouldStoreSingle ? filteredImages[0] || "" : filteredImages;
+    setValue(name, newValue, { shouldValidate: true });
   };
 
   return (
@@ -78,8 +99,14 @@ export const PhotoInput = ({
         accept={mediaType === "image" ? "image/*" : "video/*"}
         disabled={isUploading}
         onChange={(e) => e.target.files && handleUpload(e.target.files)}
-        className="cursor-pointer"
+        className={`cursor-pointer ${hasError ? "border-red-500" : ""}`}
       />
+
+      {hasError && (
+        <p className="text-sm text-red-500">
+          {typeof fieldError === "string" ? fieldError : fieldError?.message?.toString() || "Please upload an image"}
+        </p>
+      )}
 
       <div className="grid grid-cols-3 gap-4">
         {currentImages.length > 0 &&
@@ -93,7 +120,7 @@ export const PhotoInput = ({
                   className="rounded-lg w-full object-cover aspect-square"
                 />
               ) : (
-                <video controls src={url} className="max-w-full h-full  absolute inset-0 object-cover rounded" />
+                <video controls src={url} className="max-w-full h-full absolute inset-0 object-cover rounded" />
               )}
               <Button
                 type="button"

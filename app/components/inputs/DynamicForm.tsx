@@ -5,12 +5,10 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z, ZodTypeAny } from "zod";
-import { Form, FormField, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import FormSelect from "../inputs/FormSelect";
 import FormInput from "../inputs/FormInput";
-import { PhotoInput } from "../inputs/PhotoInput";
-import { toast } from "react-toastify";
 import { DynamicFormProps } from "@/app/types";
 
 export default function DynamicForm({

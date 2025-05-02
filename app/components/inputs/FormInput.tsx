@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from "react";
+import React, { useState } from "react";
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -10,8 +10,9 @@ import Image from "next/image";
 import Link from "next/link";
 import RichText from "./RichText";
 import { PhotoInput } from "./PhotoInput";
+
 interface FormInputProps {
-  control?: any;
+  control?: React.ComponentProps<typeof FormField>["control"];
   name: string;
   label?: string;
   width?: string;
@@ -24,13 +25,13 @@ interface FormInputProps {
   description?: string;
   price?: boolean;
   select?: boolean;
-  register?: any;
+  register?: unknown;
   switchToggle?: boolean;
   desc?: string;
   disabled?: boolean;
   placeholder?: string;
   label2?: string;
-  icon?: any;
+  icon?: React.ReactNode;
   password?: boolean;
   optional?: boolean;
   returnFullPhone?: boolean;
@@ -48,15 +49,17 @@ interface FormInputProps {
 }
 
 export interface PhoneProps {
-  onChange: any;
+  onChange: (value: string) => void;
   returnFullPhone?: boolean;
   name: string;
 }
+
 export interface CalendarProps {
-  control: any;
+  control: React.ComponentProps<typeof FormField>["control"];
   name: string;
   label?: string;
 }
+
 const FormInput = ({
   control,
   name,
@@ -77,7 +80,8 @@ const FormInput = ({
   photo = false,
   area = false,
   width,
-  check = false,mediaType
+  check = false,
+  mediaType,
 }: FormInputProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -103,7 +107,7 @@ const FormInput = ({
               {!optional && !date && !switchToggle && label && (
                 <span className={`absolute -right-3 top-0   font-normal text-red-600`}>*</span>
               )}
-              {label} {icon}
+              {label}
             </FormLabel>
           )}
           <div className={`relative  w-full inline-flex items-center justify-center ${className}`}>
@@ -137,43 +141,46 @@ const FormInput = ({
                       </div>
                     </Link>
                   )}
-                  <Input
-                    disabled={disabled}
-                    autoComplete={password ? "off" : "on"}
-                    type={
-                      type == "password" && !showPassword
-                        ? "password"
-                        : type === "password" && showPassword
-                        ? "text"
-                        : type || "text"
-                    }
-                    accept={type === "file" ? "image/*, application/pdf" : undefined}
-                    className={`${!phone && ""} mt-auto shadow-sm w-full ${
-                      password && form.getValues(name) && "pl-8"
-                    } `}
-                    placeholder={placeholder}
-                    {...field}
-                    value={type === "file" ? null : field.value}
-                    onChange={(e: any) => {
-                      let value = e.target.value;
-                      if (e.target.type === "file") {
-                        field.onChange(e.target.files ? e.target.files[0] : null);
-                      } else {
-                        field.onChange(value);
+                  <div className="relative w-full">
+                    {icon && (
+                      <div className="absolute left-3 top-1/2 -translate-y-1/2  text-muted-foreground">{icon}</div>
+                    )}
+                    <Input
+                      disabled={disabled}
+                      autoComplete={password ? "off" : "on"}
+                      type={
+                        type == "password" && !showPassword
+                          ? "password"
+                          : type === "password" && showPassword
+                          ? "text"
+                          : type || "text"
                       }
-                    }}
-                  />{" "}
+                      accept={type === "file" ? "image/*, application/pdf" : undefined}
+                      className={`${!phone && ""} mt-auto shadow-sm w-full ${password && "pr-8"} ${icon && "pl-10"}`}
+                      placeholder={placeholder}
+                      {...field}
+                      value={type === "file" ? null : field.value}
+                      onChange={(e: any) => {
+                        let value = e.target.value;
+                        if (e.target.type === "file") {
+                          field.onChange(e.target.files ? e.target.files[0] : null);
+                        } else {
+                          field.onChange(value);
+                        }
+                      }}
+                    />
+                    {password && (
+                      <span
+                        className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer hover:text-gray-900 text-gray-800"
+                        onClick={togglePasswordVisibility}
+                      >
+                        {showPassword ? <EyeIcon className="w-4 h-4" /> : <EyeOffIcon className="w-4 h-4" />}
+                      </span>
+                    )}
+                  </div>
                 </div>
               )}
             </FormControl>
-            {password && field.value && (
-              <span
-                className=" absolute left-2 top-[13px]  cursor-pointer hover:text-gray-900 text-gray-800"
-                onClick={togglePasswordVisibility}
-              >
-                {showPassword ? <EyeIcon className="w-4 h-4" /> : <EyeOffIcon className="w-4 h-4" />}
-              </span>
-            )}
           </div>
           {desc && <FormDescription className=" text-sm text-muted-foreground">{desc}</FormDescription>}
           <FormMessage className=" text-sm dark:text-red-500" />
