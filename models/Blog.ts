@@ -47,11 +47,6 @@ const BlogSchema = new Schema(
     author: { type: String, required: true },
     mainImage: { type: String, required: true },
     thumbnailImage: { type: String, required: true },
-    category: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Category",
-      required: true,
-    },
     sections: {
       type: [Schema.Types.Mixed],
       validate: {
