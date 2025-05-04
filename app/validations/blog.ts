@@ -38,7 +38,7 @@ export const blogSchema = z.object({
   sections: z.array(sectionSchema).min(1, "At least one section is required"),
   published: z.boolean().default(false),
   featured: z.boolean().default(false),
-  tags: z.array(z.string()).default([]),
+  tags: z.string(),
 });
 
 // Category schema

@@ -10,6 +10,9 @@ import {
   LayoutDashboard,
   LogOut,
   BriefcaseBusinessIcon,
+  Settings,
+  Mail,
+  Users2,
 } from "lucide-react";
 
 import {
@@ -68,6 +71,21 @@ const data = {
           icon: FilePlus,
         },
         {
+          title: "services",
+          url: "/dashboard/services",
+          icon: Settings,
+        },
+        {
+          title: "contact",
+          url: "/dashboard/contact",
+          icon: Mail,
+        },
+        {
+          title: "subscribers",
+          url: "/dashboard/subscribers",
+          icon: Users2,
+        },
+        {
           title: "users",
           url: "/dashboard/user",
           icon: Users,
@@ -109,7 +127,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {item.items.map((item,i) => (
+                {item.items.map((item, i) => (
                   <SidebarMenuItem key={i}>
                     <SidebarMenuButton
                       asChild

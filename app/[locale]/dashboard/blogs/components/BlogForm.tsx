@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { useForm, FormProvider, useFieldArray, SubmitHandler } from "react-hook-form";
+import React, { useEffect, useState } from "react";
+import { useForm, FormProvider, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, Trash2, Text, ImageIcon } from "lucide-react";
 import { BlogFormValues, SectionType, blogSchema } from "@/app/validations/blog";
@@ -89,7 +89,6 @@ export function BlogForm({ initialData }: BlogFormProps) {
 
   // Initialize form with default values or initial data
   const form = useForm<BlogFormValues>({
-    // @ts-expect-error zod resolver typing issue with react-hook-form
     resolver: zodResolver(blogSchema),
     defaultValues: initialData || {
       title: { en: "", ar: "" },
@@ -104,7 +103,15 @@ export function BlogForm({ initialData }: BlogFormProps) {
       tags: [],
     },
   });
-
+  useEffect(() => {
+    if (Object.keys(form.formState.errors).length > 0) {
+      toast.error(
+        Object.values(form.formState.errors)
+          .map((error) => error.message)
+          .join(", ")
+      );
+    }
+  }, [form.formState.errors]);
   // Get form methods
   const { handleSubmit, control, watch, setValue } = form;
 
@@ -143,7 +150,7 @@ export function BlogForm({ initialData }: BlogFormProps) {
   };
 
   // Handle form submission
-  const onSubmit: SubmitHandler<BlogFormValues> = async (data) => {
+  const onSubmit = async (data: BlogFormValues) => {
     try {
       // Create a clean copy of the data to avoid circular references
       const cleanData = JSON.parse(JSON.stringify(data));

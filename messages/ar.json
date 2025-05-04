@@ -163,7 +163,171 @@
       "createBlog": "إنشاء مدونة",
       "users": "المستخدمين",
       "business": "الأعمال",
-      "logout": "تسجيل الخروج"
+      "logout": "تسجيل الخروج",
+      "services": "الخدمات",
+      "contact": "طلبات التواصل",
+      "subscribers": "المشتركين"
+    },
+    "team": {
+      "title": "أعضاء الفريق",
+      "addTeamMember": "إضافة عضو فريق",
+      "editTeamMember": "تعديل عضو الفريق",
+      "createTeamMember": "إنشاء عضو فريق",
+      "createSuccess": "تم إنشاء عضو الفريق بنجاح",
+      "updateSuccess": "تم تحديث عضو الفريق بنجاح",
+      "error": "حدث خطأ",
+      "form": {
+        "name": "الاسم",
+        "job_title": "المسمى الوظيفي",
+        "image": "صورة الملف الشخصي",
+        "Facebook_link": "رابط فيسبوك",
+        "instagram_link": "رابط انستغرام",
+        "x_link": "رابط إكس",
+        "linkedin": "رابط لينكد إن",
+        "mainInfo": "معلومات عضو الفريق",
+        "namePlaceholder": "أدخل اسم العضو",
+        "jobTitlePlaceholder": "أدخل المسمى الوظيفي",
+        "imagePlaceholder": "رفع صورة الملف الشخصي",
+        "socialLinksTitle": "روابط وسائل التواصل الاجتماعي"
+      },
+      "columns": {
+        "image": "الصورة",
+        "name": "الاسم",
+        "job_title": "المسمى الوظيفي",
+        "socials": "الروابط الاجتماعية"
+      }
+    },
+    "products": {
+      "title": "إدارة المنتجات",
+      "addProduct": "إضافة منتج",
+      "editProduct": "تعديل المنتج",
+      "createProduct": "إنشاء منتج",
+      "createSuccess": "تم إنشاء المنتج بنجاح",
+      "updateSuccess": "تم تحديث المنتج بنجاح",
+      "deleteSuccess": "تم حذف المنتج بنجاح",
+      "deleteError": "فشل في حذف المنتج",
+      "bulkDeleteSuccess": "تم حذف المنتجات بنجاح",
+      "bulkDeleteError": "فشل في حذف المنتجات",
+      "noProducts": "لم يتم العثور على منتجات",
+      "searchPlaceholder": "بحث في المنتجات...",
+      "deleteProduct": "حذف المنتج",
+      "deleteProductConfirmation": "هل أنت متأكد من رغبتك في حذف هذا المنتج؟ لا يمكن التراجع عن هذا الإجراء.",
+      "form": {
+        "mainInfo": "معلومات المنتج",
+        "cover": "صورة الغلاف",
+        "project_name": "اسم المشروع",
+        "description": "الوصف",
+        "links": "روابط المنتج",
+        "google_link": "رابط جوجل بلاي",
+        "app_store_link": "رابط آب ستور",
+        "website_link": "رابط الموقع الإلكتروني",
+        "project_images": "صور المشروع",
+        "addImage": "إضافة صورة",
+        "imagesSection": "الصور الإضافية",
+        "noImages": "لم تتم إضافة صور إضافية"
+      },
+      "columns": {
+        "cover": "الغلاف",
+        "project_name": "اسم المشروع",
+        "description": "الوصف",
+        "links": "الروابط",
+        "images": "الصور"
+      }
+    },
+    "services": {
+      "title": "إدارة الخدمات",
+      "addService": "إضافة خدمة",
+      "editService": "تعديل الخدمة",
+      "createService": "إنشاء خدمة",
+      "createSuccess": "تم إنشاء الخدمة بنجاح",
+      "updateSuccess": "تم تحديث الخدمة بنجاح",
+      "deleteSuccess": "تم حذف الخدمة بنجاح",
+      "deleteError": "فشل في حذف الخدمة",
+      "error": "حدث خطأ",
+      "form": {
+        "mainInfo": "معلومات الخدمة",
+        "icon": "الأيقونة",
+        "iconPlaceholder": "أدخل فئة الأيقونة أو الرمز",
+        "title": "العنوان",
+        "titlePlaceholder": "أدخل عنوان الخدمة",
+        "description": "الوصف",
+        "descriptionPlaceholder": "أدخل وصف الخدمة"
+      },
+      "columns": {
+        "icon": "الأيقونة",
+        "title": "العنوان",
+        "description": "الوصف"
+      }
+    },
+    "contact": {
+      "title": "طلبات التواصل",
+      "description": "إدارة طلبات التواصل",
+      "contactDetails": "تفاصيل طلب التواصل",
+      "personalInfo": "المعلومات الشخصية",
+      "serviceInfo": "معلومات الخدمة",
+      "fullName": "الاسم الكامل",
+      "email": "البريد الإلكتروني",
+      "phone": "رقم الهاتف",
+      "serviceName": "الخدمة",
+      "submittedOn": "تاريخ الإرسال",
+      "columns": {
+        "first_name": "الاسم الأول",
+        "last_name": "الاسم الأخير",
+        "email": "البريد الإلكتروني",
+        "phone_number": "رقم الهاتف",
+        "service": "الخدمة"
+      }
+    },
+    "subscribers": {
+      "title": "المشتركين",
+      "description": "إدارة المشتركين في النشرة الإخبارية",
+      "columns": {
+        "email": "البريد الإلكتروني"
+      }
+    },
+    "users": {
+      "title": "إدارة المستخدمين",
+      "addUser": "إضافة مستخدم",
+      "editUser": "تعديل المستخدم",
+      "createUser": "إنشاء مستخدم",
+      "createSuccess": "تم إنشاء المستخدم بنجاح",
+      "updateSuccess": "تم تحديث المستخدم بنجاح",
+      "deleteSuccess": "تم حذف المستخدم بنجاح",
+      "deleteError": "فشل في حذف المستخدم",
+      "bulkDeleteSuccess": "تم حذف المستخدمين بنجاح",
+      "bulkDeleteError": "فشل في حذف المستخدمين",
+      "noUsers": "لم يتم العثور على مستخدمين",
+      "searchPlaceholder": "بحث في المستخدمين...",
+      "deleteUser": "حذف المستخدم",
+      "deleteUserConfirmation": "هل أنت متأكد من رغبتك في حذف هذا المستخدم؟ لا يمكن التراجع عن هذا الإجراء.",
+      "columns": {
+        "avatar": "الصورة الرمزية",
+        "name": "الاسم",
+        "email": "البريد الإلكتروني",
+        "phone": "الهاتف",
+        "address": "العنوان",
+        "role": "الدور",
+        "verified": "موثق"
+      },
+      "form": {
+        "mainInfo": "معلومات المستخدم",
+        "name": "الاسم",
+        "namePlaceholder": "أدخل اسم المستخدم",
+        "email": "البريد الإلكتروني",
+        "emailPlaceholder": "أدخل البريد الإلكتروني للمستخدم",
+        "password": "كلمة المرور",
+        "passwordPlaceholder": "أدخل كلمة المرور",
+        "phone": "الهاتف",
+        "phonePlaceholder": "أدخل هاتف المستخدم",
+        "address": "العنوان",
+        "addressPlaceholder": "أدخل عنوان المستخدم",
+        "role": "الدور",
+        "isVerified": "موثق",
+        "userRoles": {
+          "user": "مستخدم",
+          "admin": "مدير"
+        }
+      }
     }
   },
   "auth": {
