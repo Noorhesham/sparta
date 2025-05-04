@@ -131,6 +131,7 @@ export async function deleteEntity(model: string, id: string): Promise<ActionRes
   try {
     await connectToDatabase();
     let Entity;
+    console.log(model, id);
 
     switch (model) {
       case "Homepage":
@@ -145,12 +146,17 @@ export async function deleteEntity(model: string, id: string): Promise<ActionRes
       case "Product":
         Entity = Product;
         break;
+      case "Service":
+        Entity = Service;
+        break;
+      case "User":
+        Entity = User;
+        break;
       default:
         throw new Error(`Unknown model: ${model}`);
     }
-
     const deletedEntity = await Entity.findByIdAndDelete(id);
-
+    console.log("deletedEntity", deletedEntity);
     if (!deletedEntity) {
       return {
         success: false,
@@ -293,6 +299,12 @@ export async function deleteEntities(model: string, ids: string[]): Promise<Acti
         break;
       case "Product":
         Entity = Product;
+        break;
+      case "Service":
+        Entity = Service;
+        break;
+      case "User":
+        Entity = User;
         break;
       default:
         throw new Error(`Unknown model: ${model}`);

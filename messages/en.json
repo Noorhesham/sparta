@@ -216,6 +216,8 @@
         "mainInfo": "Product Information",
         "cover": "Cover Image",
         "project_name": "Project Name",
+        "slug": "Slug",
+        "slugPlaceholder": "Enter slug or leave empty to auto-generate",
         "description": "Description",
         "links": "Product Links",
         "google_link": "Google Play Link",

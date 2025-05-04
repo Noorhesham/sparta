@@ -32,6 +32,7 @@ export function ProductForm({ initialData }: ProductFormProps) {
     defaultValues: initialData || {
       cover: "",
       project_name: "",
+      slug: "",
       description: "",
       google_link: "",
       app_store_link: "",
@@ -41,10 +42,23 @@ export function ProductForm({ initialData }: ProductFormProps) {
   });
 
   // Get form methods
-  const { handleSubmit, watch } = form;
+  const { handleSubmit, watch, setValue } = form;
 
   // Watch cover image for preview
   const coverImage = watch("cover");
+  const projectName = watch("project_name");
+
+  // Generate slug from project name
+  useEffect(() => {
+    if (projectName && !initialData) {
+      const generatedSlug = projectName
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-");
+      setValue("slug", generatedSlug);
+    }
+  }, [projectName, setValue, initialData]);
 
   // Handle form submission
   const onSubmit = async (data: ProductFormValues) => {
@@ -113,6 +127,8 @@ export function ProductForm({ initialData }: ProductFormProps) {
               <FormInput name="cover" label={t("form.cover")} photo single />
 
               <FormInput name="project_name" label={t("form.project_name")} />
+
+              <FormInput name="slug" label={t("form.slug") || "Slug"} placeholder="project-url-slug" />
 
               <FormInput name="description" label={t("form.description")} area />
             </div>

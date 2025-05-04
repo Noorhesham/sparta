@@ -1,10 +1,12 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { userColumns, UserData } from "./columns";
 import { Button } from "@/components/ui/button";
 import ModelCustom from "@/app/components/ModelCustom";
 import UserForm from "./components/UserForm";
 import { DataTable } from "@/app/components/DataTable";
 import { ColumnDef } from "@tanstack/react-table";
+import connectToDatabase from "@/lib/mongodb";
+import User from "@/models/User";
 export const dynamic = "force-dynamic";
 
 // Extend UserData to have an index signature to satisfy TableData constraint
@@ -13,30 +15,21 @@ interface ExtendedUserData extends UserData {
 }
 
 const UsersPage = async ({ searchParams }: { searchParams: { page?: string } }) => {
-  const t = await getTranslations("dashboard.users");
-  const page = searchParams.page ? parseInt(searchParams.page) : 1;
+  await connectToDatabase();
+  const t = await getTranslations("dashboard.team");
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
-  const res = await fetch(`${API_URL}/api/users?page=${page}&limit=10`, {
-    cache: "no-store",
-  });
+  const currentPage = parseInt(searchParams.page || "1", 10);
+  const limit = 10;
 
-  const { success, data } = await res.json();
+  const data = await User.find({})
+    .sort({ createdAt: -1 })
+    .limit(limit)
+    .skip((currentPage - 1) * limit)
+    .lean();
 
-  if (!success || !data) {
-    return <div>Failed to load users</div>;
-  }
-
-  const { data: users, pagination } = data;
-  const { totalPages, page: currentPage } = pagination;
-
-  // Format user data and remove sensitive info
-  const formattedData: ExtendedUserData[] = users.map((user: Record<string, any>) => ({
-    ...user,
-    _id: user._id.toString(),
-    password: undefined,
-  }));
-
+  const dataObj = JSON.parse(JSON.stringify(data));
+  const totalCount = await User.countDocuments({});
+  const totalPages = Math.ceil(totalCount / limit);
   // Cast columns to the required type for DataTable
   const typedColumns = userColumns as ColumnDef<ExtendedUserData, unknown>[];
 
@@ -50,7 +43,7 @@ const UsersPage = async ({ searchParams }: { searchParams: { page?: string } }) 
         <h1 className="text-3xl font-bold">{t("title")}</h1>
         <ModelCustom title={t("createUser")} btn={<Button>Add User</Button>} content={<UserForm />} />
       </div>
-      <DataTable columns={typedColumns} data={formattedData} page={currentPage} totalPages={totalPages} entity="User" />
+      <DataTable columns={typedColumns} data={dataObj} page={currentPage} totalPages={totalPages} entity="User" />
     </MaxWidthWrapper>
   );
 };
