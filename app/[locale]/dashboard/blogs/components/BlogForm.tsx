@@ -169,6 +169,13 @@ export function BlogForm({ initialData }: BlogFormProps) {
         order: index,
       }));
 
+      // Process tags - convert from string to array if it's a string
+      if (typeof cleanData.tags === "string" && cleanData.tags.trim() !== "") {
+        cleanData.tags = cleanData.tags.split(",").map((tag: string) => tag.trim());
+      } else if (cleanData.tags === "") {
+        cleanData.tags = [];
+      }
+
       // Remove empty or undefined values
       if (cleanData._id === "") {
         delete cleanData._id;

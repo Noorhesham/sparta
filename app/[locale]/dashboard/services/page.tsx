@@ -26,7 +26,7 @@ const ServicesPage = async ({ searchParams }: { searchParams: { page?: string } 
   const dataObj = JSON.parse(JSON.stringify(data));
   const totalCount = await Service.countDocuments({});
   const totalPages = Math.ceil(totalCount / limit);
-
+  console.log("totalPages", data);
   return (
     <MaxWidthWrapper className="flex px-4 flex-col mt-5">
       <div className="flex items-center gap-2">

@@ -92,7 +92,7 @@ export function ServiceForm({ initialData }: ServiceFormProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card>
                 <CardContent className="pt-6 space-y-4">
-                  <FormInput name="icon" photo label={t("form.icon")} placeholder={t("form.iconPlaceholder")} />
+                  <FormInput name="icon" photo single label={t("form.icon")} placeholder={t("form.iconPlaceholder")} />
                   <FormInput name="title" label={t("form.title")} placeholder={t("form.titlePlaceholder")} />
                   <FormInput
                     name="description"

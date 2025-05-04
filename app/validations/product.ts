@@ -5,6 +5,7 @@ export const productSchema = z.object({
   _id: z.string().optional(),
   cover: z.string().min(1, "Cover image is required"),
   project_name: z.string().min(1, "Project name is required"),
+  slug: z.string().optional(),
   description: z.string().min(1, "Description is required"),
   google_link: z.string().optional(),
   app_store_link: z.string().optional(),

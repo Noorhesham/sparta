@@ -8,6 +8,7 @@ import TeamMember from "@/models/TeamMember";
 import Product from "@/models/Product";
 import User from "@/models/User";
 import { hash } from "bcryptjs";
+import Service from "@/models/Service";
 
 interface ActionResponse {
   success: boolean;
@@ -37,6 +38,9 @@ export async function createEntity(model: string, data: any): Promise<ActionResp
         break;
       case "Product":
         Entity = Product;
+        break;
+      case "Service":
+        Entity = Service;
         break;
       default:
         throw new Error(`Unknown model: ${model}`);
@@ -84,6 +88,10 @@ export async function updateEntity(model: string, id: string, data: any): Promis
         break;
       case "Product":
         Entity = Product;
+      case "Service":
+        Entity = Service;
+      case "User":
+        Entity = User;
         break;
       default:
         throw new Error(`Unknown model: ${model}`);

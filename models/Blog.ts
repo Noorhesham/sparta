@@ -51,18 +51,32 @@ const BlogSchema = new Schema(
       type: [Schema.Types.Mixed],
       validate: {
         validator: function (sections: any[]) {
-          return sections.every(
-            (section) =>
-              (section.type === "text" && section.content && section.order) ||
-              (section.type === "image" && section.imageUrl && section.order)
-          );
+          if (!sections || !Array.isArray(sections) || sections.length === 0) {
+            return false;
+          }
+
+          return sections.every((section) => {
+            if (!section || typeof section !== "object") return false;
+
+            // Validate text section
+            if (section.type === "text") {
+              return section.content && section.content.en && section.content.ar && typeof section.order === "number";
+            }
+            // Validate image section
+            else if (section.type === "image") {
+              return section.imageUrl && typeof section.imageUrl === "string" && typeof section.order === "number";
+            }
+
+            return false;
+          });
         },
         message: "All sections must have valid type and required fields",
       },
+      required: [true, "At least one section is required"],
     },
     published: { type: Boolean, default: false },
     featured: { type: Boolean, default: false },
-    tags: [String],
+    tags: { type: [String], default: [] },
   },
   { timestamps: true }
 );

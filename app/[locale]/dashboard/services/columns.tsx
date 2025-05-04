@@ -12,6 +12,7 @@ import Link from "next/link";
 import TranslatedHeader from "@/app/components/TranslatedHeader";
 import DeleteSingle from "@/app/components/DeleteSingle";
 import { Checkbox } from "@/components/ui/checkbox";
+import Image from "next/image";
 
 export interface ServiceData {
   _id: string;
@@ -47,7 +48,11 @@ export const serviceColumns: ColumnDef<ServiceData>[] = [
     header: () => <TranslatedHeader title="dashboard.services.columns.icon" />,
     cell: ({ row }) => {
       const icon = row.original.icon;
-      return <div className="text-xl">{icon}</div>;
+      return (
+        <div className=" w-20 h-20 relative">
+          <Image src={icon} alt="Placeholder" fill className="object-cover rounded-md" />
+        </div>
+      );
     },
   },
   {

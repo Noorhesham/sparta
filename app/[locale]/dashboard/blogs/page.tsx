@@ -18,7 +18,6 @@ const BlogsPage = async ({ searchParams }: { searchParams: { page?: string } }) 
   const limit = 10;
 
   const data = await Blog.find({})
-    .populate("category")
     .sort({ createdAt: -1 })
     .limit(limit)
     .skip((currentPage - 1) * limit)

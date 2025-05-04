@@ -14,6 +14,8 @@ import { Badge } from "@/components/ui/badge";
 import TranslatedHeader from "@/app/components/TranslatedHeader";
 import DeleteSingle from "@/app/components/DeleteSingle";
 import { Checkbox } from "@/components/ui/checkbox";
+import ModelCustom from "@/app/components/ModelCustom";
+import { BlogForm } from "./components/BlogForm";
 
 export interface BlogData {
   _id: string;
@@ -136,9 +138,14 @@ export const blogColumns: ColumnDef<BlogData>[] = [
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href={`/dashboard/blogs/edit/${blog._id}`}>
-                <TranslatedHeader title="dashboard.common.edit" />
-              </Link>
+              <ModelCustom
+                btn={
+                  <Button variant="ghost" className=" w-full text-left">
+                    <TranslatedHeader title="dashboard.common.edit" />
+                  </Button>
+                }
+                content={<BlogForm initialData={blog} />}
+              />
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
               <DeleteSingle data={blog} entity="Blog" />

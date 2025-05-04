@@ -52,6 +52,15 @@ export function ProductForm({ initialData }: ProductFormProps) {
       // Create a clean copy of the data to avoid circular references
       const cleanData = JSON.parse(JSON.stringify(data));
 
+      // Generate slug if empty
+      if (!cleanData.slug) {
+        cleanData.slug = cleanData.project_name
+          .toLowerCase()
+          .replace(/[^\w\s-]/g, "") // Remove special characters
+          .replace(/\s+/g, "-") // Replace spaces with hyphens
+          .replace(/-+/g, "-"); // Replace multiple hyphens with single hyphen
+      }
+
       // Remove empty or undefined values
       if (cleanData._id === "") {
         delete cleanData._id;
@@ -103,7 +112,6 @@ export function ProductForm({ initialData }: ProductFormProps) {
             <div className="grid grid-cols-1 gap-6">
               <FormInput name="cover" label={t("form.cover")} photo single />
 
-   
               <FormInput name="project_name" label={t("form.project_name")} />
 
               <FormInput name="description" label={t("form.description")} area />
