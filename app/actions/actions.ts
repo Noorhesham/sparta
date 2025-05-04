@@ -1,4 +1,5 @@
 "use server";
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 
 import connectToDatabase from "@/lib/mongodb";
 import Blog from "@/models/Blog";
@@ -11,7 +12,11 @@ import { hash } from "bcryptjs";
 interface ActionResponse {
   success: boolean;
   message?: string;
-  data?: any;
+  data?: {
+    _id: string;
+    createdAt: string;
+    updatedAt: string;
+  };
 }
 
 // Generic function to create an entity

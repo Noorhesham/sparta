@@ -75,24 +75,24 @@ export const teamMemberColumns: ColumnDef<TeamMemberData>[] = [
       return (
         <div className="flex space-x-2">
           {member.Facebook_link && (
-            <a href={member.Facebook_link} target="_blank" rel="noopener noreferrer">
+            <Link href={member.Facebook_link} target="_blank" rel="noopener noreferrer">
               <Facebook className="h-5 w-5 text-blue-600" />
-            </a>
+            </Link>
           )}
           {member.instagram_link && (
-            <a href={member.instagram_link} target="_blank" rel="noopener noreferrer">
+            <Link href={member.instagram_link} target="_blank" rel="noopener noreferrer">
               <Instagram className="h-5 w-5 text-pink-600" />
-            </a>
+            </Link>
           )}
           {member.x_link && (
-            <a href={member.x_link} target="_blank" rel="noopener noreferrer">
+            <Link href={member.x_link} target="_blank" rel="noopener noreferrer">
               <Twitter className="h-5 w-5 text-blue-400" />
-            </a>
+            </Link>
           )}
           {member.linkedin && (
-            <a href={member.linkedin} target="_blank" rel="noopener noreferrer">
+            <Link href={member.linkedin} target="_blank" rel="noopener noreferrer">
               <Linkedin className="h-5 w-5 text-blue-800" />
-            </a>
+            </Link>
           )}
         </div>
       );

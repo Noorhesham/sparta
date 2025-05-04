@@ -1,37 +1,48 @@
-import MaxWidthWrapper from "@/app/components/MaxWidthWrapper";
-import User from "@/models/User";
-import connectToDatabase from "@/lib/mongodb";
 import { getTranslations } from "next-intl/server";
-import { userColumns } from "./columns";
+import { userColumns, UserData } from "./columns";
 import { Button } from "@/components/ui/button";
 import ModelCustom from "@/app/components/ModelCustom";
 import UserForm from "./components/UserForm";
 import { DataTable } from "@/app/components/DataTable";
+import { ColumnDef } from "@tanstack/react-table";
 export const dynamic = "force-dynamic";
 
+// Extend UserData to have an index signature to satisfy TableData constraint
+interface ExtendedUserData extends UserData {
+  [key: string]: unknown;
+}
+
 const UsersPage = async ({ searchParams }: { searchParams: { page?: string } }) => {
-  await connectToDatabase();
   const t = await getTranslations("dashboard.users");
+  const page = searchParams.page ? parseInt(searchParams.page) : 1;
 
-  const currentPage = parseInt(searchParams.page || "1", 10);
-  const limit = 10;
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const res = await fetch(`${API_URL}/api/users?page=${page}&limit=10`, {
+    cache: "no-store",
+  });
 
-  const data = await User.find({})
-    .sort({ createdAt: -1 })
-    .limit(limit)
-    .skip((currentPage - 1) * limit)
-    .lean();
+  const { success, data } = await res.json();
+
+  if (!success || !data) {
+    return <div>Failed to load users</div>;
+  }
+
+  const { data: users, pagination } = data;
+  const { totalPages, page: currentPage } = pagination;
 
   // Format user data and remove sensitive info
-  const formattedData = data.map((user: any) => ({
+  const formattedData: ExtendedUserData[] = users.map((user: Record<string, any>) => ({
     ...user,
     _id: user._id.toString(),
     password: undefined,
   }));
 
-  const dataObj = JSON.parse(JSON.stringify(formattedData));
-  const totalCount = await User.countDocuments({});
-  const totalPages = Math.ceil(totalCount / limit);
+  // Cast columns to the required type for DataTable
+  const typedColumns = userColumns as ColumnDef<ExtendedUserData, unknown>[];
+
+  const MaxWidthWrapper = ({ children, className }: { children: React.ReactNode; className?: string }) => (
+    <div className={`max-w-screen-xl mx-auto w-full ${className || ""}`}>{children}</div>
+  );
 
   return (
     <MaxWidthWrapper className="flex px-4 flex-col mt-5">
@@ -39,13 +50,7 @@ const UsersPage = async ({ searchParams }: { searchParams: { page?: string } }) 
         <h1 className="text-3xl font-bold">{t("title")}</h1>
         <ModelCustom title={t("createUser")} btn={<Button>Add User</Button>} content={<UserForm />} />
       </div>
-      <DataTable
-        columns={userColumns}
-        data={dataObj || []}
-        page={currentPage}
-        totalPages={totalPages}
-        searchKey="name"
-      />
+      <DataTable columns={typedColumns} data={formattedData} page={currentPage} totalPages={totalPages} entity="User" />
     </MaxWidthWrapper>
   );
 };

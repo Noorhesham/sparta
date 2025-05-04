@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Layers, Users, Settings, BarChart3 } from "lucide-react";
 import MaxWidthWrapper from "@/app/components/MaxWidthWrapper";
+import Link from "next/link";
 
 export default function DashboardPage() {
   const t = useTranslations("dashboard.common");
@@ -71,7 +72,7 @@ export default function DashboardPage() {
             <CardDescription>Frequently used dashboard pages</CardDescription>
           </CardHeader>
           <CardContent className="grid gap-2">
-            <a
+            <Link
               href="/dashboard/homepage"
               className="flex items-center gap-2 p-3 rounded-md bg-muted hover:bg-muted/80 transition-colors"
             >
@@ -80,8 +81,8 @@ export default function DashboardPage() {
                 <div className="font-medium">Homepage Management</div>
                 <div className="text-sm text-muted-foreground">Edit your website's main landing page</div>
               </div>
-            </a>
-            <a
+            </Link>
+            <Link
               href="/dashboard/settings"
               className="flex items-center gap-2 p-3 rounded-md bg-muted hover:bg-muted/80 transition-colors"
             >
@@ -90,7 +91,7 @@ export default function DashboardPage() {
                 <div className="font-medium">Settings</div>
                 <div className="text-sm text-muted-foreground">Configure your website settings</div>
               </div>
-            </a>
+            </Link>
           </CardContent>
         </Card>
 

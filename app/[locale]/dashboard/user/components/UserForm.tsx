@@ -12,16 +12,17 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { createUser, updateUser } from "@/app/actions/actions";
 
-interface UserFormProps {
+export interface UserFormProps {
   initialData?: {
     _id?: string;
     name?: string;
     email?: string;
+    password?: string;
     phone?: string;
     address?: string;
     role?: "user" | "admin";
@@ -47,7 +48,7 @@ const formSchema = z.object({
   phone: z.string().optional(),
   address: z.string().optional(),
   role: z.enum(["user", "admin"]),
-  isVerified: z.boolean().default(false),
+  isVerified: z.boolean(),
 });
 
 export type UserFormValues = z.infer<typeof formSchema>;
@@ -57,10 +58,10 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData, isEdit = false 
   const router = useRouter();
   const t = useTranslations("dashboard");
 
-  const defaultValues: Partial<UserFormValues> = {
+  const defaultValues: UserFormValues = {
     name: initialData?.name || "",
     email: initialData?.email || "",
-    password: "",
+    password: initialData?.password || "",
     phone: initialData?.phone || "",
     address: initialData?.address || "",
     role: initialData?.role || "user",
@@ -72,39 +73,38 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData, isEdit = false 
     defaultValues,
   });
 
-  const onSubmit = async (data: UserFormValues) => {
+  const onSubmit = async (values: UserFormValues) => {
     try {
       setIsLoading(true);
 
       let response;
       if (isEdit && initialData?._id) {
         // For edit, exclude password if empty
-        const updateData = { ...data };
+        const updateData = { ...values };
         if (!updateData.password) {
           delete updateData.password;
         }
         response = await updateUser(initialData._id, updateData);
       } else {
         // For create, ensure password is provided
-        if (!data.password) {
+        if (!values.password) {
           toast.error(t("common.error"));
           form.setError("password", { message: "Password is required for new users" });
           setIsLoading(false);
           return;
         }
-        response = await createUser(data);
+        response = await createUser(values);
       }
 
       if (response.success) {
-        toast.success(isEdit ? t("users.updateSuccess") : t("users.createSuccess"));
+        toast.success(response.message);
         router.refresh();
-        router.push("/dashboard/user");
       } else {
         toast.error(response.message || t("common.error"));
       }
     } catch (error) {
-      console.error("Form submission error:", error);
       toast.error(t("common.error"));
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
@@ -235,12 +235,12 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData, isEdit = false 
           </CardContent>
         </Card>
 
-        <div className="flex justify-end gap-2">
-          <Button type="button" variant="outline" disabled={isLoading} onClick={() => router.push("/dashboard/user")}>
+        <div className="flex justify-end space-x-2">
+          <Button disabled={isLoading} variant="outline" type="button" onClick={() => router.push("/dashboard/user")}>
             {t("common.cancel")}
           </Button>
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Processing..." : isEdit ? t("common.update") : t("common.create")}
+          <Button disabled={isLoading} type="submit">
+            {isLoading ? t("common.loading") : isEdit ? t("common.update") : t("common.create")}
           </Button>
         </div>
       </form>
