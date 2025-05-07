@@ -14,11 +14,16 @@ import DeleteSingle from "@/app/components/DeleteSingle";
 import { Checkbox } from "@/components/ui/checkbox";
 import Image from "next/image";
 
+export interface DescriptionItem {
+  title: string;
+  description: string;
+}
+
 export interface ServiceData {
   _id: string;
   icon: string;
   title: string;
-  description: string;
+  descriptions: DescriptionItem[];
   createdAt: string;
   updatedAt: string;
 }
@@ -60,11 +65,14 @@ export const serviceColumns: ColumnDef<ServiceData>[] = [
     header: () => <TranslatedHeader title="dashboard.services.columns.title" />,
   },
   {
-    accessorKey: "description",
-    header: () => <TranslatedHeader title="dashboard.services.columns.description" />,
+    accessorKey: "descriptions",
+    header: () => <TranslatedHeader title="dashboard.services.columns.descriptions" />,
     cell: ({ row }) => {
-      const description = row.original.description;
-      return description.length > 100 ? `${description.substring(0, 100)}...` : description;
+      const descriptions = row.original.descriptions;
+      if (!descriptions || descriptions.length === 0) return "-";
+
+      // Display count of descriptions
+      return `${descriptions.length} item${descriptions.length > 1 ? "s" : ""}`;
     },
   },
   {

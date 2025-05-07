@@ -252,13 +252,18 @@
         "iconPlaceholder": "Enter icon class or code",
         "title": "Title",
         "titlePlaceholder": "Enter service title",
-        "description": "Description",
-        "descriptionPlaceholder": "Enter service description"
+        "descriptions": "Service Descriptions",
+        "descriptionItem": "Description",
+        "addDescription": "Add Description",
+        "descriptionTitle": "Title",
+        "descriptionTitlePlaceholder": "Enter description title",
+        "descriptionContent": "Content",
+        "descriptionContentPlaceholder": "Enter description content"
       },
       "columns": {
         "icon": "Icon",
         "title": "Title",
-        "description": "Description"
+        "descriptions": "Descriptions"
       }
     },
     "contact": {

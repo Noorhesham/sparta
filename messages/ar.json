@@ -252,13 +252,18 @@
         "iconPlaceholder": "أدخل فئة الأيقونة أو الرمز",
         "title": "العنوان",
         "titlePlaceholder": "أدخل عنوان الخدمة",
-        "description": "الوصف",
-        "descriptionPlaceholder": "أدخل وصف الخدمة"
+        "descriptions": "أوصاف الخدمة",
+        "descriptionItem": "الوصف",
+        "addDescription": "إضافة وصف",
+        "descriptionTitle": "العنوان",
+        "descriptionTitlePlaceholder": "أدخل عنوان الوصف",
+        "descriptionContent": "المحتوى",
+        "descriptionContentPlaceholder": "أدخل محتوى الوصف"
       },
       "columns": {
         "icon": "الأيقونة",
         "title": "العنوان",
-        "description": "الوصف"
+        "descriptions": "الأوصاف"
       }
     },
     "contact": {

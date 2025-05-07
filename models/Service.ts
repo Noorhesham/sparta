@@ -1,5 +1,17 @@
 import mongoose, { Schema, models } from "mongoose";
 
+// Description schema
+const DescriptionSchema = new Schema({
+  title: {
+    type: String,
+    required: [true, "Description title is required"],
+  },
+  description: {
+    type: String,
+    required: [true, "Description content is required"],
+  },
+});
+
 // Create the schema
 const ServiceSchema = new Schema(
   {
@@ -11,9 +23,15 @@ const ServiceSchema = new Schema(
       type: String,
       required: [true, "Title is required"],
     },
-    description: {
-      type: String,
-      required: [true, "Description is required"],
+    descriptions: {
+      type: [DescriptionSchema],
+      required: [true, "At least one description is required"],
+      validate: {
+        validator: function (v) {
+          return Array.isArray(v) && v.length > 0;
+        },
+        message: "Service must have at least one description",
+      },
     },
   },
   {

@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect } from "react";
-import { useForm, FormProvider } from "react-hook-form";
+import React, { useEffect, useTransition } from "react";
+import { useForm, FormProvider, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { productSchema, ProductFormValues } from "@/app/validations/product";
 import FormInput from "@/app/components/inputs/FormInput";
@@ -13,7 +13,7 @@ import MaxWidthWrapper from "@/app/components/MaxWidthWrapper";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
-import Image from "next/image";
+import { LoadingButton } from "@/app/components/ui/loading-button";
 
 interface ProductFormProps {
   initialData?: ProductFormValues;
@@ -24,10 +24,10 @@ export function ProductForm({ initialData }: ProductFormProps) {
   const locale = useLocale();
   const t = useTranslations("dashboard.products");
   const common = useTranslations("dashboard.common");
+  const [isPending, startTransition] = useTransition();
 
   // Initialize form with default values or initial data
   const form = useForm<ProductFormValues>({
-    // @ts-expect-error - There's a type mismatch with the zod resolver that we can safely ignore
     resolver: zodResolver(productSchema),
     defaultValues: initialData || {
       cover: "",
@@ -40,6 +40,16 @@ export function ProductForm({ initialData }: ProductFormProps) {
       project_images: [],
     },
   });
+
+  useEffect(() => {
+    if (Object.keys(form.formState.errors).length > 0) {
+      toast.error(
+        Object.values(form.formState.errors)
+          .map((error) => error.message)
+          .join(", ")
+      );
+    }
+  }, [form.formState.errors]);
 
   // Get form methods
   const { handleSubmit, watch, setValue } = form;
@@ -61,60 +71,53 @@ export function ProductForm({ initialData }: ProductFormProps) {
   }, [projectName, setValue, initialData]);
 
   // Handle form submission
-  const onSubmit = async (data: ProductFormValues) => {
-    try {
-      // Create a clean copy of the data to avoid circular references
-      const cleanData = JSON.parse(JSON.stringify(data));
+  const onSubmit: SubmitHandler<ProductFormValues> = async (data) => {
+    startTransition(async () => {
+      try {
+        // Create a clean copy of the data to avoid circular references
+        const cleanData = JSON.parse(JSON.stringify(data));
 
-      // Generate slug if empty
-      if (!cleanData.slug) {
-        cleanData.slug = cleanData.project_name
-          .toLowerCase()
-          .replace(/[^\w\s-]/g, "") // Remove special characters
-          .replace(/\s+/g, "-") // Replace spaces with hyphens
-          .replace(/-+/g, "-"); // Replace multiple hyphens with single hyphen
+        // Generate slug if empty
+        if (!cleanData.slug) {
+          cleanData.slug = cleanData.project_name
+            .toLowerCase()
+            .replace(/[^\w\s-]/g, "") // Remove special characters
+            .replace(/\s+/g, "-") // Replace spaces with hyphens
+            .replace(/-+/g, "-"); // Replace multiple hyphens with single hyphen
+        }
+
+        // Remove empty or undefined values
+        if (cleanData._id === "") {
+          delete cleanData._id;
+        }
+
+        // Create or update entity
+        const res = initialData
+          ? await updateEntity("Product", initialData._id as string, cleanData)
+          : await createEntity("Product", cleanData);
+
+        if (res.success) {
+          toast.success(initialData ? t("updateSuccess") : t("createSuccess"));
+          router.push(`/${locale}/dashboard/products`);
+        } else {
+          toast.error(res.message || t("error"));
+        }
+      } catch (error) {
+        console.error("Product form error:", error);
+        toast.error(t("error"));
       }
-
-      // Remove empty or undefined values
-      if (cleanData._id === "") {
-        delete cleanData._id;
-      }
-
-      // Create or update entity
-      const res = initialData
-        ? await updateEntity("Product", initialData._id as string, cleanData)
-        : await createEntity("Product", cleanData);
-
-      if (res.success) {
-        toast.success(initialData ? t("updateSuccess") : t("createSuccess"));
-        router.push(`/${locale}/dashboard/products`);
-      } else {
-        toast.error(res.message || common("error"));
-      }
-    } catch (error) {
-      console.error("Product form error:", error);
-      toast.error(common("error"));
-    }
+    });
   };
-
-  useEffect(() => {
-    if (Object.keys(form.formState.errors).length > 0) {
-      toast.error(
-        Object.values(form.formState.errors)
-          .map((error) => error.message)
-          .join(", ")
-      );
-    }
-  }, [form.formState.errors]);
 
   return (
     <MaxWidthWrapper>
       <FormProvider {...form}>
-        {/* @ts-expect-error - The handleSubmit type mismatch can be ignored */}
         <form onSubmit={handleSubmit(onSubmit)} className="w-full mx-auto space-y-8">
           <div className="flex justify-between items-center">
             <h1 className="text-3xl font-bold">{initialData ? t("editProduct") : t("createProduct")}</h1>
-            <Button type="submit">{initialData ? common("update") : common("create")}</Button>
+            <LoadingButton type="submit" isLoading={isPending}>
+              {initialData ? common("update") : common("create")}
+            </LoadingButton>
           </div>
 
           <Separator />
@@ -157,7 +160,9 @@ export function ProductForm({ initialData }: ProductFormProps) {
 
           {/* Submit Button */}
           <div className="flex justify-end mb-10">
-            <Button type="submit">{initialData ? common("update") : common("create")}</Button>
+            <LoadingButton type="submit" isLoading={isPending}>
+              {initialData ? common("update") : common("create")}
+            </LoadingButton>
           </div>
         </form>
       </FormProvider>
