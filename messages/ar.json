@@ -1,4 +1,27 @@
-{
+{  "create": "إنشاء",
+"update": "تحديث",
+"error": "حدث خطأ ما. حاول مرة أخرى.",
+"createSuccess": "تم الإنشاء بنجاح!",
+"updateSuccess": "تم التحديث بنجاح!",
+"editHomepage": "تعديل الصفحة الرئيسية",
+"createHomepage": "إنشاء الصفحة الرئيسية",
+"form": {
+  "hero": "قسم البطل",
+  "about": "قسم من نحن",
+  "services": "قسم الخدمات",
+  "logos": "قسم الشعارات",
+  "technologies": "قسم التقنيات",
+  "title": "العنوان",
+  "subtitle": "العنوان الفرعي",
+  "description": "الوصف",
+  "image": "الصورة",
+  "buttonText": "نص الزر",
+  "buttonLink": "رابط الزر",
+  "miniTitle": "العنوان الصغير",
+  "link": "الرابط",
+  "linkText": "نص الرابط"
+},
+  
   "dashboard": {
     "common": {
       "save": "حفظ",

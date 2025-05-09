@@ -1,4 +1,27 @@
 {
+  "create": "Create",
+  "update": "Update",
+  "error": "Something went wrong. Please try again.",
+  "createSuccess": "Created successfully!",
+  "updateSuccess": "Updated successfully!",
+  "editHomepage": "Edit Homepage",
+  "createHomepage": "Create Homepage",
+  "form": {
+    "hero": "Hero Section",
+    "about": "About Section",
+    "services": "Services Section",
+    "logos": "Logos Section",
+    "technologies": "Technologies Section",
+    "title": "Title",
+    "subtitle": "Subtitle",
+    "description": "Description",
+    "image": "Image",
+    "buttonText": "Button Text",
+    "buttonLink": "Button Link",
+    "miniTitle": "Mini Title",
+    "link": "Link",
+    "linkText": "Link Text"
+  },
   "dashboard": {
     "common": {
       "save": "Save",

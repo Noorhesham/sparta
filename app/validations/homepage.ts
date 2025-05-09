@@ -57,9 +57,6 @@ const technologySchema = z.object({
 });
 
 // Technology section schema
-const technologiesSectionSchema = z.object({
-  technologies: z.array(technologySchema),
-});
 
 // Homepage schema
 export const homepageSchema = z.object({
@@ -69,7 +66,7 @@ export const homepageSchema = z.object({
   aboutServices: z.array(aboutServiceSchema),
   logos: z.array(logoSchema),
   services: z.array(serviceSchema),
-  technologiesSection: technologiesSectionSchema,
+  technologies: z.array(technologySchema),
 });
 
 export type HomepageFormValues = z.infer<typeof homepageSchema>;
