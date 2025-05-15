@@ -1,4 +1,4 @@
-import MaxWidthWrapper from "@/app/components/MaxWidthWrapper";
+import MaxWidthWrapper from "@/app/components/defaults/MaxWidthWrapper";
 import Service from "@/models/Service";
 import connectToDatabase from "@/lib/mongodb";
 import { Button } from "@/components/ui/button";

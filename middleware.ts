@@ -5,7 +5,7 @@ import createMiddleware from "next-intl/middleware";
 const localeMiddleware = createMiddleware({
   // A list of all locales that are supported
   locales: ["en", "ar"],
-  localePrefix: "always",
+  localePrefix: "as-needed",
 
   // Used when no locale matches
   defaultLocale: "en",

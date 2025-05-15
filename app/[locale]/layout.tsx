@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "../globals.css";
+import { Poppins } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { ThemeProvider } from "@/components/theme-provider";
+import Navbar from "../components/NavBar";
+import Footer from "../components/layouts/Footer";
+import React from "react";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Poppins({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800", "900"] });
 
 export const metadata: Metadata = {
   title: "Sparta",
@@ -24,14 +27,28 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  const messages = await getMessages();
+  const messages = await getMessages({ locale });
 
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"} suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={`${inter.className} !bg-bg relative`}>
+        {/* Top radial gradient */}
+        <div className="fixed inset-0 pointer-events-none z-[-1]">
+          <div
+            className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#7E22CE]/20"
+            style={{
+              filter: "blur(150px)",
+              borderRadius: "50%",
+              transform: "translate(10%, -30%)",
+            }}
+          ></div>
+        </div>
+
         <ThemeProvider attribute="class" enableSystem defaultTheme="system">
           <NextIntlClientProvider locale={locale} messages={messages}>
-            {children}
+            <Navbar />
+            <div className="pt-10 relative z-[1]">{children}</div>
+            <Footer locale={locale} />
             <Toaster />
           </NextIntlClientProvider>
         </ThemeProvider>

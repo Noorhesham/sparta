@@ -11,7 +11,7 @@ import { createEntity, updateEntity } from "@/app/actions/actions";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useTranslations, useLocale } from "next-intl";
-import MaxWidthWrapper from "@/app/components/MaxWidthWrapper";
+import MaxWidthWrapper from "@/app/components/defaults/MaxWidthWrapper";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";

@@ -9,7 +9,7 @@ import { createEntity, updateEntity } from "@/app/actions/actions";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useTranslations, useLocale } from "next-intl";
-import MaxWidthWrapper from "@/app/components/MaxWidthWrapper";
+import MaxWidthWrapper from "@/app/components/defaults/MaxWidthWrapper";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";

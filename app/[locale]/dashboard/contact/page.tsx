@@ -1,4 +1,4 @@
-import MaxWidthWrapper from "@/app/components/MaxWidthWrapper";
+import MaxWidthWrapper from "@/app/components/defaults/MaxWidthWrapper";
 import ContactUs from "@/models/ContactUs";
 import connectToDatabase from "@/lib/mongodb";
 import { getTranslations } from "next-intl/server";

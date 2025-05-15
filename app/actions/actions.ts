@@ -88,8 +88,10 @@ export async function updateEntity(model: string, id: string, data: any): Promis
         break;
       case "Product":
         Entity = Product;
+        break;
       case "Service":
         Entity = Service;
+        break;
       case "User":
         Entity = User;
         break;

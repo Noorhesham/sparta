@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import MaxWidthWrapper from "@/app/components/MaxWidthWrapper";
+import MaxWidthWrapper from "@/app/components/defaults/MaxWidthWrapper";
 import { LoadingButton } from "@/app/components/ui/loading-button";
 
 interface HomepageFormProps {
@@ -373,7 +373,6 @@ export function HomepageForm({ initialData }: HomepageFormProps) {
             <LoadingButton type="submit" isLoading={isPending}>
               {initialData ? common("update") : common("create")}
             </LoadingButton>
-            s
           </div>
         </form>
       </FormProvider>

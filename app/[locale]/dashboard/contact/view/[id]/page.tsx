@@ -2,7 +2,7 @@ import ContactUs from "@/models/ContactUs";
 import connectToDatabase from "@/lib/mongodb";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
-import MaxWidthWrapper from "@/app/components/MaxWidthWrapper";
+import MaxWidthWrapper from "@/app/components/defaults/MaxWidthWrapper";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";

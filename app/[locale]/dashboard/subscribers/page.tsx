@@ -1,4 +1,4 @@
-import MaxWidthWrapper from "@/app/components/MaxWidthWrapper";
+import MaxWidthWrapper from "@/app/components/defaults/MaxWidthWrapper";
 import Subscriber from "@/models/Subscriber";
 import connectToDatabase from "@/lib/mongodb";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -41,4 +41,4 @@ const SubscribersPage = async ({ searchParams }: { searchParams: { page?: string
   );
 };
 
-export default SubscribersPage; 
+export default SubscribersPage;
