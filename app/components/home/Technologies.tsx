@@ -8,6 +8,7 @@ import { TechnologyType } from "@/app/types/homepage";
 import { motion } from "framer-motion";
 import MotionContainer from "../defaults/MotionContainer";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 interface TechnologiesProps {
   data?: TechnologyType[];
@@ -15,6 +16,9 @@ interface TechnologiesProps {
 }
 
 export default function Technologies({ data = [], locale = "en" }: TechnologiesProps) {
+  const t = useTranslations("Technologies");
+  const isRTL = locale === "ar";
+
   // Use the first technology name as default active tab if available
   const defaultTab = data.length > 0 ? data[0].name.toLowerCase().trim() : "";
   const [activeTab, setActiveTab] = useState(defaultTab);
@@ -35,10 +39,10 @@ export default function Technologies({ data = [], locale = "en" }: TechnologiesP
   ];
 
   return (
-    <section className="bg-white">
+    <section className={`bg-white ${isRTL ? "rtl" : "ltr"}`}>
       <MaxWidthWrapper>
         <Flex direction="col" gap="xl">
-          <h2 className="text-3xl font-bold text-gray-900">Technologies we use</h2>
+          <h2 className="text-3xl font-bold text-gray-900">{t("sectionTitle")}</h2>
 
           <div className="w-full flex flex-col lg:flex-row justify-between gap-8">
             <div className="w-full lg:w-[45%]">
@@ -63,7 +67,7 @@ export default function Technologies({ data = [], locale = "en" }: TechnologiesP
                           <motion.div key={`row1-${index}`} className="flex items-center justify-center h-20">
                             <img
                               src={image}
-                              alt={`${tech.name} technology ${index + 1}`}
+                              alt={`${tech.name} ${t("techIconAlt")} ${index + 1}`}
                               className="max-w-full max-h-full object-contain"
                             />
                           </motion.div>
@@ -75,7 +79,7 @@ export default function Technologies({ data = [], locale = "en" }: TechnologiesP
                             <motion.div key={`row2-${index}`} className="flex items-center justify-center h-20">
                               <img
                                 src={image}
-                                alt={`${tech.name} technology ${index + 5}`}
+                                alt={`${tech.name} ${t("techIconAlt")} ${index + 5}`}
                                 className="max-w-full max-h-full object-contain"
                               />
                             </motion.div>
@@ -89,7 +93,7 @@ export default function Technologies({ data = [], locale = "en" }: TechnologiesP
             </div>
 
             <div className="relative h-80 w-full lg:w-[45%] mt-12 lg:mt-0 flex items-center justify-center">
-              <Image src="/chart.png" className="object-contain" alt="Technology chart" fill />
+              <Image src="/chart.png" className="object-contain" alt={t("technologyImageAlt")} fill />
 
               {/* Technology icons positioned radially around the chart */}
               {activeTechnology?.images.slice(0, Math.min(8, activeTechnology.images.length)).map((image, index) => (

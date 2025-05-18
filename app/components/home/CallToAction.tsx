@@ -7,14 +7,18 @@ import MaxWidthWrapper from "@/app/components/defaults/MaxWidthWrapper";
 import MotionItem from "@/app/components/defaults/MotionItem";
 import Button from "@/app/components/defaults/Button";
 import Lines from "./Lines";
+import { useTranslations } from "next-intl";
 
 interface CallToActionProps {
   locale?: string;
 }
 
 const CallToAction = ({ locale = "en" }: CallToActionProps) => {
+  const t = useTranslations("CallToAction");
+  const isRTL = locale === "ar";
+
   return (
-    <section className="bg-[#0F172A] relative overflow-hidden ">
+    <section className={`bg-[#0F172A] relative overflow-hidden ${isRTL ? "rtl" : ""}`}>
       {/* Colorful vertical lines */}
 
       <MaxWidthWrapper className="relative z-20">
@@ -23,12 +27,12 @@ const CallToAction = ({ locale = "en" }: CallToActionProps) => {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.7, ease: "easeOut" }}
-            className="  relative flex justify-center items-center mt-10 md:mt-0"
+            className="relative flex justify-center items-center mt-10 md:mt-0"
           >
             <div className="relative">
               <Image
                 src="/iPhone.png"
-                alt="Mobile app interface"
+                alt={t("mobileAppAlt")}
                 width={350}
                 height={600}
                 className="object-contain drop-shadow-2xl"
@@ -45,7 +49,7 @@ const CallToAction = ({ locale = "en" }: CallToActionProps) => {
               transition={{ duration: 0.5, delay: 0.1 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Make your projects come true with us</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">{t("title")}</h2>
             </MotionItem>
 
             <MotionItem
@@ -54,9 +58,7 @@ const CallToAction = ({ locale = "en" }: CallToActionProps) => {
               transition={{ duration: 0.5, delay: 0.2 }}
               viewport={{ once: true }}
             >
-              <p className="text-gray-300 mb-8">
-                Contact us now and let your ideas turn into successful projects on the reality
-              </p>
+              <p className="text-gray-300 mb-8">{t("description")}</p>
             </MotionItem>
 
             <MotionItem
@@ -67,17 +69,22 @@ const CallToAction = ({ locale = "en" }: CallToActionProps) => {
               className="flex flex-wrap gap-4"
             >
               <Link
-                href="/contact"
+                href={`/${locale}/contact`}
                 className="rounded-full bg-white text-[#111827] px-6 py-3 font-medium hover:bg-gray-200 transition-colors"
               >
-                Get Started Now
+                {t("getStarted")}
               </Link>
 
               <Link
-                href="/contact"
+                href={`/${locale}/contact`}
                 className="inline-flex items-center text-white rounded-full px-6 py-3 hover:bg-white/10 transition-colors"
               >
-                <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg
+                  className={`w-5 h-5 ${isRTL ? "ml-2" : "mr-2"}`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -85,7 +92,7 @@ const CallToAction = ({ locale = "en" }: CallToActionProps) => {
                     d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
                   />
                 </svg>
-                Contact Us
+                {t("contactUs")}
               </Link>
             </MotionItem>
           </div>

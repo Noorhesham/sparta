@@ -9,6 +9,7 @@ import Paragraph from "../defaults/Paragraph";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper/modules";
+import { useTranslations } from "next-intl";
 
 // Import Swiper styles
 import "swiper/css";
@@ -32,6 +33,9 @@ interface TeamProps {
 }
 
 const Team = ({ data = [], locale = "en" }: TeamProps) => {
+  const t = useTranslations("Team");
+  const isRTL = locale === "ar";
+
   // Social media icons configuration
   const socialMediaConfig = [
     {
@@ -153,7 +157,7 @@ const Team = ({ data = [], locale = "en" }: TeamProps) => {
   );
 
   return (
-    <section className="bg-white ">
+    <section className={`bg-white ${isRTL ? "rtl" : "ltr"}`}>
       <MaxWidthWrapper>
         <div className="grid w-full grid-cols-1 md:grid-cols-2 gap-10 items-center">
           <div className="relative flex flex-col gap-6 z-10">
@@ -165,7 +169,7 @@ const Team = ({ data = [], locale = "en" }: TeamProps) => {
             >
               <div className="relative">
                 <h2 className="text-3xl w-fit relative md:text-5xl font-bold text-gray-900 mb-1">
-                  <span className=" text-black">Meet Our Team </span>
+                  <span className=" text-black">{t("sectionTitle")}</span>
                   <motion.div
                     initial={{ width: 0 }}
                     whileInView={{ width: "100%" }}
@@ -182,7 +186,7 @@ const Team = ({ data = [], locale = "en" }: TeamProps) => {
                       whileInView={{ strokeDashoffset: 0 }}
                       transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
                       style={{ strokeDasharray: 300 }}
-                      className="absolute right-0"
+                      className={`absolute ${isRTL ? "left-0" : "right-0"}`}
                     >
                       <path
                         d="M1.59088 8.14588C17.3933 6.12998 74.9142 2.20919 122.006 8.1459C97.5611 8.1459 65.7122 8.7462 45.2056 15"
@@ -202,14 +206,7 @@ const Team = ({ data = [], locale = "en" }: TeamProps) => {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="mb-8"
             >
-              <Paragraph
-                isHtml
-                content={
-                  "Empowers users to create, customize, collaborate, and track seamlessly, streamlining project tasks for optimal efficiency."
-                }
-                locale={locale}
-                className="!text-gray-700"
-              />
+              <Paragraph isHtml content={t("sectionDescription")} locale={locale} className="!text-gray-700" />
             </MotionItem>
           </div>
         </div>
@@ -224,6 +221,7 @@ const Team = ({ data = [], locale = "en" }: TeamProps) => {
               }}
               navigation={true}
               modules={[Pagination, Navigation]}
+              dir={isRTL ? "rtl" : "ltr"}
               breakpoints={{
                 768: {
                   slidesPerView: 3,

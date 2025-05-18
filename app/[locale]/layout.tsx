@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "../globals.css";
-import { Poppins } from "next/font/google";
+import { Poppins, Cairo } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
@@ -9,7 +9,17 @@ import Navbar from "../components/NavBar";
 import Footer from "../components/layouts/Footer";
 import React from "react";
 
-const inter = Poppins({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800", "900"] });
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-poppins",
+});
+
+const cairo = Cairo({
+  subsets: ["arabic"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-cairo",
+});
 
 export const metadata: Metadata = {
   title: "Sparta",
@@ -28,10 +38,16 @@ export default async function RootLayout({
   params: { locale: string };
 }) {
   const messages = await getMessages({ locale });
+  const isArabic = locale === "ar";
 
   return (
-    <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"} suppressHydrationWarning>
-      <body className={`${inter.className} !bg-bg relative`}>
+    <html
+      lang={locale}
+      dir={isArabic ? "rtl" : "ltr"}
+      suppressHydrationWarning
+      className={`${cairo.variable} ${poppins.variable}`}
+    >
+      <body className={`${isArabic ? cairo.className : poppins.className} !bg-bg relative`}>
         {/* Top radial gradient */}
         <div className="fixed inset-0 pointer-events-none z-[-1]">
           <div

@@ -3,21 +3,17 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import MaxWidthWrapper from "./defaults/MaxWidthWrapper";
-import { usePathname } from "next/navigation";
+import { usePathname, useParams } from "next/navigation";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-
-const navItems = [
-  { name: "Home", href: "/" },
-  { name: "About Us", href: "/about" },
-  { name: "Services", href: "/services" },
-  { name: "Portfolio", href: "/portfolio" },
-  { name: "Blog", href: "/blog" },
-  { name: "Contact Us", href: "/contact" },
-];
+import { useTranslations } from "next-intl";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const params = useParams();
+  const locale = params.locale as string || "en";
+  const t = useTranslations("Navbar");
+  const isRTL = locale === "ar";
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Don't render navbar on dashboard page
@@ -25,9 +21,18 @@ export default function Navbar() {
     return null;
   }
 
+  const navItems = [
+    { name: t("home"), href: `/${locale}` },
+    { name: t("about"), href: `/${locale}/about` },
+    { name: t("services"), href: `/${locale}/services` },
+    { name: t("portfolio"), href: `/${locale}/portfolio` },
+    { name: t("blog"), href: `/${locale}/blog` },
+    { name: t("contact"), href: `/${locale}/contact` },
+  ];
+
   const isActiveLink = (href: string) => {
-    if (href === "/" && pathname === "/") return true;
-    if (href !== "/" && pathname?.startsWith(href)) return true;
+    if (href === `/${locale}` && pathname === `/${locale}`) return true;
+    if (href !== `/${locale}` && pathname?.startsWith(href)) return true;
     return false;
   };
 
@@ -64,16 +69,16 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="w-full py-4">
+    <nav className={`w-full py-4 ${isRTL ? "rtl" : "ltr"}`}>
       <MaxWidthWrapper noPadding className="container mx-auto flex items-center justify-between">
         <div className="flex items-center">
-          <Link href="/" className="mr-12">
+          <Link href={`/${locale}`} className={`${isRTL ? 'ml-12' : 'mr-12'}`}>
             <span className="text-2xl font-bold">
               <span className="text-[#8a70d6]">Sparta</span>
             </span>
           </Link>
 
-          <ul className="hidden md:flex items-center space-x-8">
+          <ul className="hidden md:flex items-center gap-4   rtl:space-x-reverse">
             {navItems.map((item) => (
               <li key={item.name} className="relative">
                 <Link
@@ -93,26 +98,26 @@ export default function Navbar() {
           </ul>
         </div>
 
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 rtl:space-x-reverse">
           <Link
-            href="/contact"
+            href={`/${locale}/contact`}
             className="hidden md:inline-flex items-center justify-center rounded-full border border-white px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-white/10"
           >
-            Contact Us
+            {t("contact")}
           </Link>
           <Link
-            href="/get-started"
+            href={`/${locale}/get-started`}
             className="hidden md:inline-flex items-center justify-center rounded-full bg-white px-6 py-2 text-sm font-medium text-[#121628] transition-colors hover:bg-white/90"
           >
-            Get Started Now
+            {t("getStarted")}
           </Link>
 
           {/* Mobile Get Started button */}
           <Link
-            href="/get-started"
+            href={`/${locale}/get-started`}
             className="md:hidden inline-flex items-center justify-center rounded-full bg-white px-4 py-1.5 text-xs font-medium text-[#121628] transition-colors hover:bg-white/90"
           >
-            Get Started
+            {t("getStartedMobile")}
           </Link>
 
           {/* Mobile Menu Button */}
@@ -150,7 +155,7 @@ export default function Navbar() {
             variants={menuVariants}
             className="md:hidden fixed inset-0 bg-[#121628]/95 z-40 flex flex-col items-center justify-center"
           >
-            <motion.ul className="flex flex-col items-center space-y-6 w-full px-12">
+            <motion.ul className={`flex flex-col items-center space-y-6 w-full px-12 ${isRTL ? "rtl" : "ltr"}`}>
               {navItems.map((item) => (
                 <motion.li key={item.name} variants={itemVariants} className="w-full">
                   <Link
@@ -158,9 +163,7 @@ export default function Navbar() {
                     onClick={() => setIsMenuOpen(false)}
                     className={cn(
                       "block text-center text-lg font-medium py-2 border-b border-white/10 w-full",
-                      isActiveLink(item.href)
-                        ? "text-[#d359ff] border-[#d359ff]"
-                        : "text-white hover:text-[#8a70d6]"
+                      isActiveLink(item.href) ? "text-[#d359ff] border-[#d359ff]" : "text-white hover:text-[#8a70d6]"
                     )}
                   >
                     {item.name}
@@ -169,11 +172,11 @@ export default function Navbar() {
               ))}
               <motion.li variants={itemVariants} className="w-full pt-4">
                 <Link
-                  href="/contact"
+                  href={`/${locale}/contact`}
                   onClick={() => setIsMenuOpen(false)}
                   className="block text-center rounded-full border border-white px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-white/10 w-full"
                 >
-                  Contact Us
+                  {t("contact")}
                 </Link>
               </motion.li>
             </motion.ul>

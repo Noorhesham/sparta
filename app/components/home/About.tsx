@@ -10,6 +10,7 @@ import Image from "next/image";
 import { AboutType } from "@/app/types/homepage";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 interface AboutProps {
   data?: AboutType;
@@ -70,8 +71,11 @@ const FeatureCard = ({
 };
 
 export default function About({ data, locale = "en" }: AboutProps) {
+  const t = useTranslations("About");
+  const isRTL = locale === "ar";
+
   return (
-    <section className="relative flex justify-center min-h-[75dvh] bg-white">
+    <section className={`relative flex justify-center min-h-[75dvh] bg-white ${isRTL ? "rtl" : ""}`}>
       {" "}
       <img src="/starts.svg" className="absolute top-1/2 left-1/2 -translate-x-1/2 w-40 -translate-y-1/2" alt="" />
       <MaxWidthWrapper className="flex items-center w-full">
@@ -84,8 +88,8 @@ export default function About({ data, locale = "en" }: AboutProps) {
               className=""
             >
               <div className="relative">
-                <h2 className="text-3xl w-fit relative md:text-5xl font-bold text-gray-900 mb-1">
-                  <span className=" text-black">About Sparta</span>
+                <h2 className="text-3xl w-fit relative md:text-5xl font-bold text-gray-900 lg:mb-8">
+                  <span className=" text-black !mb-6">{t("title")}</span>
                   <motion.div
                     initial={{ width: 0 }}
                     whileInView={{ width: "100%" }}
@@ -102,7 +106,7 @@ export default function About({ data, locale = "en" }: AboutProps) {
                       whileInView={{ strokeDashoffset: 0 }}
                       transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
                       style={{ strokeDasharray: 300 }}
-                      className="absolute lg:block hidden right-10"
+                      className="absolute -bottom-7 lg:block hidden right-10"
                     >
                       <path
                         d="M1.59088 8.14588C17.3933 6.12998 74.9142 2.20919 122.006 8.1459C97.5611 8.1459 65.7122 8.7462 45.2056 15"
@@ -120,7 +124,7 @@ export default function About({ data, locale = "en" }: AboutProps) {
                 transition={{ duration: 0.5, delay: 0.2 }}
               >
                 <h3 className="text-xl md:text-2xl -mb-4 font-semibold text-gray-800">
-                  {data?.miniTitle?.[locale as keyof typeof data.miniTitle] || "Company For Programming Services."}
+                  {data?.miniTitle?.[locale as keyof typeof data.miniTitle] || t("subtitle")}
                 </h3>
               </MotionItem>
             </MotionItem>
@@ -144,8 +148,11 @@ export default function About({ data, locale = "en" }: AboutProps) {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
             >
-              <Link href="/about" className="text-[#C026D3] font-medium flex items-center gap-2 hover:underline">
-                Find more about us
+              <Link
+                href={`/${locale}/about`}
+                className="text-[#C026D3] font-medium flex items-center gap-2 hover:underline"
+              >
+                {t("findMore")}
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
                     d="M13.5 19L20 12L13.5 5"
@@ -187,7 +194,7 @@ export default function About({ data, locale = "en" }: AboutProps) {
                   <div className="absolute top-8 left-0 right-0 bottom-0 z-10">
                     <Image
                       src={data?.mainImage || "/team-image.jpg"}
-                      alt="Team collaboration"
+                      alt={t("teamImageAlt")}
                       fill
                       className="object-cover"
                     />
@@ -204,9 +211,9 @@ export default function About({ data, locale = "en" }: AboutProps) {
                 >
                   <FeatureCard
                     color="purple"
-                    label="performance"
-                    title="Fast performance"
-                    description="The speed in the implementation of services is something we have been keen on from the beginning to reach our customers where they want in a short time."
+                    label={t("features.performance.label")}
+                    title={t("features.performance.title")}
+                    description={t("features.performance.description")}
                   />
                 </MotionItem>
 
@@ -217,9 +224,9 @@ export default function About({ data, locale = "en" }: AboutProps) {
                 >
                   <FeatureCard
                     color="blue"
-                    label="Support"
-                    title="Fast technical support"
-                    description="Always ready to serve our customers and answer all questions and inquiries as quickly as possible."
+                    label={t("features.support.label")}
+                    title={t("features.support.title")}
+                    description={t("features.support.description")}
                   />
                 </MotionItem>
 
@@ -230,9 +237,9 @@ export default function About({ data, locale = "en" }: AboutProps) {
                 >
                   <FeatureCard
                     color="green"
-                    label="Innovative"
-                    title="Innovative Solutions"
-                    description="The speed in the implementation of services is something we have been keen on from the beginning to reach our customers where they want in a short time."
+                    label={t("features.innovative.label")}
+                    title={t("features.innovative.title")}
+                    description={t("features.innovative.description")}
                   />
                 </MotionItem>
               </div>
@@ -246,9 +253,9 @@ export default function About({ data, locale = "en" }: AboutProps) {
                 >
                   <FeatureCard
                     color="purple"
-                    label="performance"
-                    title="Fast performance"
-                    description="The speed in the implementation of services is something we have been keen on from the beginning to reach our customers where they want in a short time."
+                    label={t("features.performance.label")}
+                    title={t("features.performance.title")}
+                    description={t("features.performance.description")}
                   />
                 </MotionItem>
 
@@ -259,9 +266,9 @@ export default function About({ data, locale = "en" }: AboutProps) {
                 >
                   <FeatureCard
                     color="blue"
-                    label="Support"
-                    title="Fast technical support"
-                    description="Always ready to serve our customers and answer all questions and inquiries as quickly as possible."
+                    label={t("features.support.label")}
+                    title={t("features.support.title")}
+                    description={t("features.support.description")}
                   />
                 </MotionItem>
 
@@ -272,9 +279,9 @@ export default function About({ data, locale = "en" }: AboutProps) {
                 >
                   <FeatureCard
                     color="green"
-                    label="Innovative"
-                    title="Innovative Solutions"
-                    description="The speed in the implementation of services is something we have been keen on from the beginning to reach our customers where they want in a short time."
+                    label={t("features.innovative.label")}
+                    title={t("features.innovative.title")}
+                    description={t("features.innovative.description")}
                   />
                 </MotionItem>
               </div>

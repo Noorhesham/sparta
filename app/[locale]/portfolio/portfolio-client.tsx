@@ -1,161 +1,181 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState, useMemo } from "react";
+import MaxWidthWrapper from "@/app/components/defaults/MaxWidthWrapper";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PaginationDemo } from "@/app/components/Pagination";
-import { Loader2 } from "lucide-react";
-
-// Number of products per page
-const ITEMS_PER_PAGE = 8;
-
-interface CategoryType {
-  _id: string;
-  name_en: string;
-  name_ar: string;
-}
-
-interface ProductType {
-  _id: string;
-  project_name: string;
-  slug: string;
-  cover: string;
-  category: CategoryType;
-}
+import { useTranslations } from "next-intl";
 
 interface PortfolioClientProps {
-  initialProducts: ProductType[];
-  initialCategories: CategoryType[];
+  initialProducts: any[];
+  initialCategories: any[];
   locale: string;
+  translations?: {
+    title: string;
+    subtitle: string;
+    allCategories: string;
+    noProjects: string;
+    viewProject: string;
+    searchPlaceholder: string;
+  };
 }
 
-export default function PortfolioClient({ initialProducts, initialCategories, locale }: PortfolioClientProps) {
-  // State for client-side filtering
-  const [activeCategory, setActiveCategory] = useState("all");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
+export default function PortfolioClient({
+  initialProducts,
+  initialCategories,
+  locale,
+  translations,
+}: PortfolioClientProps) {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const isRTL = locale === "ar";
+  const t = useTranslations("Portfolio");
 
-  // Filter products based on selected category
-  const filteredProducts =
-    activeCategory === "all"
-      ? initialProducts
-      : initialProducts.filter((product) => product.category?._id === activeCategory);
-
-  // Calculate pagination
-  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
-  const paginatedProducts = filteredProducts.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
-
-  // Handle category change
-  const handleCategoryChange = (category: string) => {
-    setIsLoading(true);
-    setActiveCategory(category);
-    setCurrentPage(1);
-
-    // Add fake loading delay for better UX
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 500);
+  // Use provided translations or fallback to t()
+  const trans = {
+    title: translations?.title || t("title"),
+    subtitle: translations?.subtitle || t("subtitle"),
+    allCategories: translations?.allCategories || t("allCategories"),
+    noProjects: translations?.noProjects || t("noProjects"),
+    viewProject: translations?.viewProject || t("viewProject"),
+    searchPlaceholder: translations?.searchPlaceholder || t("searchPlaceholder"),
   };
 
-  // Handle page change
-  const handlePageChange = (page: number) => {
-    setIsLoading(true);
-    setCurrentPage(page);
+  // Filter products based on search term and selected category
+  const filteredProducts = useMemo(() => {
+    return initialProducts.filter((product) => {
+      const matchesSearch =
+        searchTerm === "" ||
+        product.title_en?.toLowerCase()?.includes(searchTerm.toLowerCase()) ||
+        product.project_name?.toLowerCase()?.includes(searchTerm.toLowerCase()) ||
+        (product.title_ar && product.title_ar.includes(searchTerm)) ||
+        (product.description_en && product.description_en.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (product.description && product.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (product.description_ar && product.description_ar.includes(searchTerm));
 
-    // Add fake loading delay for better UX
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 300);
+      const matchesCategory = !selectedCategory || product.category?._id === selectedCategory;
+
+      return matchesSearch && matchesCategory;
+    });
+  }, [initialProducts, searchTerm, selectedCategory]);
+
+  // Get translated title
+  const getTitle = (product: any) => {
+    if (locale === "ar" && product.title_ar) {
+      return product.title_ar;
+    }
+    if (product.title_en) {
+      return product.title_en;
+    }
+    return product.project_name || "Unnamed Project";
+  };
+
+  // Get translated description
+  const getDescription = (product: any) => {
+    if (locale === "ar" && product.description_ar) {
+      return product.description_ar;
+    }
+    if (product.description_en) {
+      return product.description_en;
+    }
+    return product.description || "";
+  };
+
+  // Get translated category name
+  const getCategoryName = (category: any) => {
+    return locale === "ar" && category.name_ar ? category.name_ar : category.name_en;
   };
 
   return (
-    <div className="container mx-auto">
-      {/* Portfolio Header */}
-      <div className="text-center mb-10">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-          {locale === "ar" ? "معرض الأعمال" : "Our Portfolio"}
-        </h1>
-        <p className="text-gray-600 max-w-2xl mx-auto">
-          {locale === "ar"
-            ? "اكتشف مجموعة متنوعة من مشاريعنا التي تظهر خبرتنا في مختلف التخصصات"
-            : "Discover our diverse collection of projects showcasing our expertise across various disciplines"}
-        </p>
+    <div className={` ${isRTL ? "rtl" : ""}`}>
+      <div className="text-center mb-12">
+        <h1 className="text-3xl font-bold text-gray-900 mb-4">{trans.title}</h1>
+        <p className="text-gray-600 max-w-2xl mx-auto">{trans.subtitle}</p>
       </div>
 
-      {/* Category Tabs */}
-      <Tabs value={activeCategory} onValueChange={handleCategoryChange} className="w-full mb-8">
-        <div className="flex justify-center mb-6">
-          <TabsList className="h-auto p-1 bg-gray-100">
-            <TabsTrigger
-              value="all"
-              className="px-4 py-2 data-[state=active]:bg-white data-[state=active]:text-black font-medium"
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
+        {/* Categories Filter */}
+        <div className={`flex flex-wrap items-center gap-2 ${isRTL ? "md:justify-end" : "md:justify-start"}`}>
+          <button
+            className={`px-3 py-1 rounded-full text-sm ${
+              !selectedCategory ? "bg-fuchsia-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+            }`}
+            onClick={() => setSelectedCategory(null)}
+          >
+            {trans.allCategories}
+          </button>
+          {initialCategories.map((category) => (
+            <button
+              key={category._id}
+              className={`px-3 py-1 rounded-full text-sm ${
+                selectedCategory === category._id
+                  ? "bg-fuchsia-600 text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+              onClick={() => setSelectedCategory(category._id)}
             >
-              {locale === "ar" ? "الكل" : "All"}
-            </TabsTrigger>
-
-            {initialCategories.map((category) => (
-              <TabsTrigger
-                key={category._id}
-                value={category._id}
-                className="px-4 py-2 data-[state=active]:bg-white data-[state=active]:text-black font-medium"
-              >
-                {locale === "ar" ? category.name_ar : category.name_en}
-              </TabsTrigger>
-            ))}
-          </TabsList>
+              {getCategoryName(category)}
+            </button>
+          ))}
         </div>
+      </div>
 
-        {/* Loading Indicator */}
-        {isLoading && (
-          <div className="flex flex-col justify-center items-center py-20">
-            <Loader2 className="h-12 w-12 text-fuchsia-600 animate-spin mb-4" />
-            <p className="text-gray-600">{locale === "ar" ? "جاري التحميل..." : "Loading..."}</p>
+      {/* Project Grid */}
+      <AnimatePresence>
+        {filteredProducts.length > 0 ? (
+          <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredProducts.map((product) => (
+              <motion.div
+                layout
+                key={product._id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.3 }}
+                className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-gray-100"
+              >
+                <div className="relative h-48 w-full">
+                  <Image
+                    src={product.cover || "/placeholder-project.jpg"}
+                    alt={getTitle(product)}
+                    className="object-cover"
+                    fill
+                  />
+                </div>
+                <div className="p-4">
+                  {product.category && (
+                    <span className="text-xs font-medium text-fuchsia-600 bg-fuchsia-50 px-2 py-1 rounded-full">
+                      {getCategoryName(product.category)}
+                    </span>
+                  )}
+                  <h3 className="font-semibold text-lg mt-2">{getTitle(product)}</h3>
+                  <p className="text-gray-600 text-sm line-clamp-2 mt-1">{getDescription(product)}</p>
+                  <Link
+                    href={`/${locale}/portfolio/${product.slug || product._id}`}
+                    className="mt-3 inline-flex items-center text-sm text-fuchsia-600 hover:text-fuchsia-700"
+                  >
+                    {trans.viewProject}
+                    <svg
+                      className={`w-5 h-5 ${isRTL ? "rotate-180 mr-1" : "ml-1"}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </Link>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        ) : (
+          <div className="text-center py-8">
+            <p className="text-gray-500">{trans.noProjects}</p>
           </div>
         )}
-
-        {/* Products Grid */}
-        {!isLoading && (
-          <TabsContent value={activeCategory} className="mt-0">
-            {paginatedProducts.length === 0 ? (
-              <div className="text-center py-20">
-                <p className="text-gray-500">
-                  {locale === "ar" ? "لا توجد منتجات في هذه الفئة" : "No products found in this category"}
-                </p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {paginatedProducts.map((product) => (
-                  <Link href={`/${locale}/portfolio/${product.slug}`} key={product._id} className="group">
-                    <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 group-hover:shadow-xl group-hover:-translate-y-1">
-                      <div className="relative w-full h-48">
-                        <Image src={product.cover} alt={product.project_name} fill className="object-cover" />
-                      </div>
-                      <div className="p-4">
-                        <h3 className="font-semibold text-gray-900 text-lg mb-1 group-hover:text-fuchsia-600">
-                          {product.project_name}
-                        </h3>
-                        {product.category && (
-                          <span className="inline-block bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded">
-                            {locale === "ar" ? product.category.name_ar : product.category.name_en}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </TabsContent>
-        )}
-      </Tabs>
-
-      {/* Pagination */}
-      {filteredProducts.length > ITEMS_PER_PAGE && !isLoading && (
-        <div className="mt-10">
-          <PaginationDemo totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} />
-        </div>
-      )}
+      </AnimatePresence>
     </div>
   );
 }

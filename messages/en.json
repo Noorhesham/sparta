@@ -400,5 +400,107 @@
     "welcomeBack": "Welcome Back",
     "appName": "Sparta",
     "processing": "Processing..."
+  },
+  "Hero": {
+    "companyName": "Sparta",
+    "trustedPartner": "Your Trusted Partner",
+    "forProgramming": "For Programming & Technology Solutions",
+    "contactUs": "Contact Us",
+    "backgroundAlt": "Background decoration",
+    "mobileAppAlt": "Mobile application preview",
+    "macbookAlt": "Macbook preview"
+  },
+  "About": {
+    "title": "About Us",
+    "subtitle": "Your Digital Future",
+    "findMore": "Learn More About Us",
+    "teamImageAlt": "Our team",
+    "features": {
+      "performance": {
+        "label": "Performance",
+        "title": "High Performance Solutions",
+        "description": "We build fast, reliable applications optimized for the best user experience."
+      },
+      "support": {
+        "label": "Support",
+        "title": "24/7 Technical Support",
+        "description": "Our team is always available to help with any technical issues or questions."
+      },
+      "innovative": {
+        "label": "Innovation",
+        "title": "Cutting Edge Technology",
+        "description": "We use the latest technologies to build modern, future-proof applications."
+      }
+    }
+  },
+  "Blog": {
+    "blogSection": "Our Blog",
+    "allPosts": "Latest Articles & News",
+    "moreArticles": "View All Articles",
+    "readMore": "Read More"
+  },
+  "CallToAction": {
+    "title": "Ready to Transform Your Business?",
+    "description": "Let's discuss how our development services can help your business grow and succeed in the digital world.",
+    "getStarted": "Get Started",
+    "contactUs": "Contact Us",
+    "mobileAppAlt": "Mobile application showcase"
+  },
+  "Navbar": {
+    "home": "Home",
+    "about": "About Us",
+    "services": "Services",
+    "portfolio": "Portfolio",
+    "blog": "Blog",
+    "contact": "Contact Us",
+    "getStarted": "Get Started Now",
+    "getStartedMobile": "Get Started"
+  },
+  "Services": {
+    "sectionTitle": "Our Services",
+    "sectionSubtitle": "Discover all the services we offer to clients",
+    "workWithUs": "Work with Us!",
+    "portfolio": "Portfolio",
+    "recentProducts": "Our recent Products"
+  },
+  "Technologies": {
+    "sectionTitle": "Technologies we use",
+    "technologyImageAlt": "Technology chart",
+    "techIconAlt": "Technology icon"
+  },
+  "Team": {
+    "sectionTitle": "Meet Our Team",
+    "sectionDescription": "Empowers users to create, customize, collaborate, and track seamlessly, streamlining project tasks for optimal efficiency."
+  },
+  "VisionMission": {
+    "vision": {
+      "title": "Vision",
+      "description": "To create technology that simplifies processes, solves complex challenges, and adds value to businesses and communities."
+    },
+    "mission": {
+      "title": "Mission",
+      "description": "To be a global leader in innovative software solutions, empowering businesses with cutting-edge technology. We strive to set new industry standards through creativity and excellence."
+    },
+    "values": {
+      "title": "Values",
+      "description": "To develop high-quality, scalable, and secure software that drives digital transformation and enhances business efficiency. Our goal is to provide tailored solutions that meet evolving market needs."
+    }
+  },
+  "Footer": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "contactUs": "Contact Us",
+    "emailPlaceholder": "Enter your email",
+    "send": "Send",
+    "copyright": "Copyright © {year} Sparta, All rights reserved."
+  },
+  "Portfolio": {
+    "title": "Our Portfolio",
+    "subtitle": "Browse our latest projects and featured works",
+    "allCategories": "All Categories",
+    "noProjects": "No projects available",
+    "viewProject": "View Project",
+    "searchPlaceholder": "Search projects..."
   }
 }

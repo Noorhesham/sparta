@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import MaxWidthWrapper from "@/app/components/defaults/MaxWidthWrapper";
 import { usePathname, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 interface FooterProps {
   locale?: string;
@@ -15,6 +16,8 @@ const Footer = ({ locale = "en" }: FooterProps) => {
   const router = useRouter();
   const currentYear = new Date().getFullYear();
   const pathname = usePathname();
+  const t = useTranslations("Footer");
+  const isRTL = locale === "ar";
 
   // Don't render navbar on dashboard page
   if (pathname?.includes("/dashboard")) {
@@ -29,12 +32,12 @@ const Footer = ({ locale = "en" }: FooterProps) => {
   };
 
   return (
-    <footer className="w-full">
+    <footer className={`w-full ${isRTL ? "rtl" : ""}`}>
       {/* Decorative top border */}
       <div className="h-1 w-full bg-gradient-to-r from-purple-600 via-cyan-400 to-fuchsia-500"></div>
 
       {/* Top Footer - Light Background */}
-      <div className="bg-[#F7F7FB] ">
+      <div className="bg-[#F7F7FB]">
         <MaxWidthWrapper>
           <div className="flex flex-col items-center justify-center">
             {/* Logo */}
@@ -62,7 +65,7 @@ const Footer = ({ locale = "en" }: FooterProps) => {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
+                    placeholder={t("emailPlaceholder")}
                     className="py-2 pl-10 pr-3 block w-full rounded-l-md border-none bg-white text-gray-900 focus:outline-none"
                     required
                   />
@@ -71,24 +74,24 @@ const Footer = ({ locale = "en" }: FooterProps) => {
                   type="submit"
                   className="flex-shrink-0 px-4 py-2 bg-[#111827] text-white text-sm font-medium rounded-r-md hover:bg-[#1E293B] focus:outline-none"
                 >
-                  send
+                  {t("send")}
                 </button>
               </div>
             </form>
 
             {/* Navigation */}
             <nav className="flex flex-wrap justify-center gap-8 mb-4">
-              <Link href="/" className="text-gray-800 hover:text-[#8B5CF6] transition-colors">
-                Home
+              <Link href={`/${locale}`} className="text-gray-800 hover:text-[#8B5CF6] transition-colors">
+                {t("home")}
               </Link>
-              <Link href="/about" className="text-gray-800 hover:text-[#8B5CF6] transition-colors">
-                About
+              <Link href={`/${locale}/about`} className="text-gray-800 hover:text-[#8B5CF6] transition-colors">
+                {t("about")}
               </Link>
-              <Link href="/services" className="text-gray-800 hover:text-[#8B5CF6] transition-colors">
-                Services
+              <Link href={`/${locale}/services`} className="text-gray-800 hover:text-[#8B5CF6] transition-colors">
+                {t("services")}
               </Link>
-              <Link href="/contact" className="text-gray-800 hover:text-[#8B5CF6] transition-colors">
-                Contact Us
+              <Link href={`/${locale}/contact`} className="text-gray-800 hover:text-[#8B5CF6] transition-colors">
+                {t("contactUs")}
               </Link>
             </nav>
           </div>
@@ -99,7 +102,9 @@ const Footer = ({ locale = "en" }: FooterProps) => {
       <div className="bg-[#111827] py-4">
         <MaxWidthWrapper>
           <div className="flex flex-col md:flex-row items-center justify-between">
-            <p className="text-gray-400 text-sm mb-4 md:mb-0">Copyright © {currentYear} Sparta, All rights reserved.</p>
+            <p className="text-gray-400 text-sm mb-4 md:mb-0">
+              {t("copyright")} {currentYear}
+            </p>
 
             <div className="flex space-x-4">
               <a

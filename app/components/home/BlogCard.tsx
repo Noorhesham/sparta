@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
+import { ar } from "date-fns/locale";
+import { useTranslations } from "next-intl";
 
 interface BlogCardProps {
   title: string;
@@ -16,9 +18,11 @@ interface BlogCardProps {
 
 const BlogCard = ({ title, description, slug, date, image, locale = "en" }: BlogCardProps) => {
   const [truncatedDescription, setTruncatedDescription] = useState("");
+  const t = useTranslations("Blog");
+  const isRTL = locale === "ar";
 
-  // Format the date: Sunday, 1 Jan 2023
-  const formattedDate = format(new Date(date), "EEEE, d MMM yyyy");
+  // Format the date based on locale
+  const formattedDate = format(new Date(date), "EEEE, d MMM yyyy", { locale: isRTL ? ar : undefined });
 
   useEffect(() => {
     // Remove HTML tags from description and limit to 100 characters
@@ -35,7 +39,11 @@ const BlogCard = ({ title, description, slug, date, image, locale = "en" }: Blog
   }, [description]);
 
   return (
-    <motion.div className="group flex flex-col h-full" whileHover={{ y: -5 }} transition={{ duration: 0.3 }}>
+    <motion.div
+      className={`group flex flex-col h-full ${isRTL ? "rtl" : ""}`}
+      whileHover={{ y: -5 }}
+      transition={{ duration: 0.3 }}
+    >
       <Link href={`/${locale}/blog/${slug}`} className="block h-full">
         <div className="flex flex-col h-full bg-gray-900 text-white rounded-lg overflow-hidden shadow-lg">
           <div className="relative w-full h-48 md:h-64 lg:h-48 xl:h-56">
@@ -54,10 +62,12 @@ const BlogCard = ({ title, description, slug, date, image, locale = "en" }: Blog
             </h3>
             <p className="text-gray-400 text-xs mb-4 flex-grow line-clamp-2">{truncatedDescription}</p>
 
-            <div className="flex justify-between items-center mt-auto">
-              <span className="text-sm font-medium group-hover:text-[#8B5CF6] transition-colors">Read more</span>
+            <div className={`flex justify-between items-center mt-auto ${isRTL ? "flex-row-reverse" : ""}`}>
+              <span className="text-sm font-medium group-hover:text-[#8B5CF6] transition-colors">{t("readMore")}</span>
               <svg
-                className="w-5 h-5 transform group-hover:translate-x-1 transition-transform"
+                className={`w-5 h-5 transform group-hover:translate-x-1 transition-transform ${
+                  isRTL ? "rotate-180 group-hover:-translate-x-1" : ""
+                }`}
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"

@@ -77,6 +77,10 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Font variables */
+  --font-poppins: "Poppins", system-ui, sans-serif;
+  --font-cairo: "Cairo", system-ui, sans-serif;
 }
 
 .dark {
@@ -146,4 +150,31 @@
 /* Add this class for hover effect */
 .group:hover .group-hover\:rotate-y-180 {
   transform: rotateY(180deg);
+}
+
+/* RTL Support */
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.ltr {
+  direction: ltr;
+  text-align: left;
+}
+
+/* RTL specific spacing utilities */
+.rtl .space-x-reverse > * + * {
+  margin-right: 0;
+  margin-left: var(--tw-space-x-reverse);
+}
+
+.rtl .ml-auto {
+  margin-left: unset;
+  margin-right: auto;
+}
+
+.rtl .mr-auto {
+  margin-right: unset;
+  margin-left: auto;
 }

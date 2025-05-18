@@ -10,6 +10,7 @@ import Flex from "@/app/components/defaults/Flex";
 import Button from "@/app/components/defaults/Button";
 import { motion } from "framer-motion";
 import Lines from "./Lines";
+import { useTranslations } from "next-intl";
 
 interface HeroProps {
   data?: HeroType;
@@ -17,8 +18,11 @@ interface HeroProps {
 }
 
 export default function Hero({ data, locale = "en" }: HeroProps) {
+  const t = useTranslations("Hero");
+  const isRTL = locale === "ar";
+
   return (
-    <section className="relative overflow-hidden pb-20">
+    <section className={`relative overflow-hidden pb-20 ${isRTL ? "rtl" : ""}`}>
       <MaxWidthWrapper className="relative grid grid-cols-1 md:grid-cols-2 ">
         {/* Background SVG animation */}
         <div className="absolute w-[30rem] left-0 top-0 z-10">
@@ -28,7 +32,7 @@ export default function Hero({ data, locale = "en" }: HeroProps) {
             transition={{ duration: 1.2, ease: "easeOut" }}
             className="absolute right-0 top-0 w-[412px] h-[414px]"
           >
-            <Image src="/Group 458.svg" alt="Background circles" width={412} height={414} className="w-full h-auto" />
+            <Image src="/Group 458.svg" alt={t("backgroundAlt")} width={412} height={414} className="w-full h-auto" />
           </MotionItem>
         </div>
 
@@ -42,10 +46,10 @@ export default function Hero({ data, locale = "en" }: HeroProps) {
             >
               <h1 className="text-[3rem] md:text-[5rem] leading-tight font-bold">
                 <span className="bg-gradient-to-r from-[#8ED4DD] via-[#7E22CE] to-[#8ED4DD] bg-clip-text text-transparent">
-                  Sparta
+                  {t("companyName")}
                 </span>{" "}
                 <span className="text-white relative">
-                  {data?.title?.[locale as keyof typeof data.title] || "Your Trusted Partner"}
+                  {data?.title?.[locale as keyof typeof data.title] || t("trustedPartner")}
                   <div className="absolute -bottom-2 md:-bottom-6 right-0">
                     <motion.div
                       initial={{ width: 0 }}
@@ -84,7 +88,7 @@ export default function Hero({ data, locale = "en" }: HeroProps) {
               className="w-full"
             >
               <h2 className="text-2xl md:text-3xl text-white font-bold">
-                {data?.subtitle?.[locale as keyof typeof data.subtitle] || "For Programming Services"}
+                {data?.subtitle?.[locale as keyof typeof data.subtitle] || t("forProgramming")}
               </h2>
             </MotionItem>
 
@@ -108,8 +112,8 @@ export default function Hero({ data, locale = "en" }: HeroProps) {
               className="mt-4"
               nohover={false}
             >
-              <Button href={data?.buttonLink || "#contact"} size="lg">
-                {data?.buttonText?.[locale as keyof typeof data.buttonText] || "Contact us"}
+              <Button href={`/${locale}${data?.buttonLink || "#contact"}`} size="lg">
+                {data?.buttonText?.[locale as keyof typeof data.buttonText] || t("contactUs")}
               </Button>
             </MotionItem>
           </Flex>
@@ -120,12 +124,12 @@ export default function Hero({ data, locale = "en" }: HeroProps) {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.7, ease: "easeOut" }}
-          className="  relative flex justify-center items-center mt-10 md:mt-0"
+          className="relative flex justify-center items-center mt-10 md:mt-0"
         >
           <div className="relative">
             <Image
               src="/iPhone.png"
-              alt="Mobile app interface"
+              alt={t("mobileAppAlt")}
               width={350}
               height={600}
               className="object-contain drop-shadow-2xl"
@@ -135,7 +139,7 @@ export default function Hero({ data, locale = "en" }: HeroProps) {
         </MotionItem>
       </MaxWidthWrapper>{" "}
       <MaxWidthWrapper className="relative flex justify-center items-center mt-20">
-        <img src="/Macbook.svg" alt="Background circles" className="object-contain" />
+        <img src="/Macbook.svg" alt={t("macbookAlt")} className="object-contain" />
         <div>
           <svg
             width="182"

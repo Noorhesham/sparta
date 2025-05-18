@@ -19,26 +19,32 @@ interface ServiceProps {
     }>;
   }>;
   locale: string;
+  translations?: {
+    title: string;
+    subtitle: string;
+    noServices: string;
+  };
 }
 
-const ServicesClient = ({ services, locale }: ServiceProps) => {
+const ServicesClient = ({ services, locale, translations }: ServiceProps) => {
   const [activeServiceId, setActiveServiceId] = useState(services.length > 0 ? services[0]._id : "");
 
   // Get the currently active service
   const activeService = services.find((service) => service._id === activeServiceId) || services[0];
+  const isRTL = locale === "ar";
 
   return (
     <MaxWidthWrapper className="">
-      <div className="flex flex-col md:flex-row">
+      <div className={`flex flex-col md:flex-row ${isRTL ? "rtl" : ""}`}>
         {/* Tabs Navigation */}
-        <div className="w-full md:w-1/3 lg:w-1/4 md:pr-6">
+        <div className="w-full md:w-1/3 lg:w-1/4 md:pr-6 rtl:md:pr-0 rtl:md:pl-6">
           <div className="bg-white rounded-lg shadow-sm overflow-hidden">
             <div className="flex flex-col">
               {services.map((service) => (
                 <button
                   key={service._id}
                   onClick={() => setActiveServiceId(service._id)}
-                  className={`flex items-center gap-3 p-4 text-left border-l-4 ${
+                  className={`flex items-center gap-3 p-4 text-left rtl:text-right border-l-4 rtl:border-l-0 rtl:border-r-4 ${
                     service._id === activeServiceId
                       ? "border-fuchsia-600 bg-fuchsia-50"
                       : "border-transparent hover:bg-gray-50"
@@ -75,8 +81,12 @@ const ServicesClient = ({ services, locale }: ServiceProps) => {
                   <div className="space-y-6">
                     {activeService.descriptions.map((desc, descIndex) => (
                       <div key={descIndex} className="border-b pb-4 last:border-0">
-                        <div className="flex items-start">
-                          <div className="mt-2 mr-3 w-2 h-2 bg-purple-600 rounded-full flex-shrink-0" />
+                        <div className={`flex items-start ${isRTL ? "flex-row-reverse" : ""}`}>
+                          <div
+                            className={`mt-2 ${
+                              isRTL ? "ml-3" : "mr-3"
+                            } w-2 h-2 bg-purple-600 rounded-full flex-shrink-0`}
+                          />
                           <div>
                             <h4 className="font-medium text-gray-900 mb-2">
                               {locale === "ar" ? desc.title_ar : desc.title_en}
@@ -94,7 +104,8 @@ const ServicesClient = ({ services, locale }: ServiceProps) => {
             ) : (
               <div className="text-center py-8">
                 <p className="text-gray-500">
-                  {locale === "ar" ? "لا توجد خدمات متاحة حالياً" : "No services available at the moment"}
+                  {translations?.noServices ||
+                    (locale === "ar" ? "لا توجد خدمات متاحة حالياً" : "No services available at the moment")}
                 </p>
               </div>
             )}

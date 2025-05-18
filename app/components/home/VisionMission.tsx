@@ -5,6 +5,7 @@ import MaxWidthWrapper from "../defaults/MaxWidthWrapper";
 import MotionItem from "../defaults/MotionItem";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 interface VisionMissionItem {
   title: string;
@@ -21,41 +22,46 @@ interface VisionMissionProps {
   locale?: string;
 }
 
-const VisionMission = ({
-  data = {
+const VisionMission = ({ data, locale = "en" }: VisionMissionProps) => {
+  const t = useTranslations("VisionMission");
+  const isRTL = locale === "ar";
+
+  // Use translation data if no specific data is provided
+  const defaultData = {
     vision: {
-      title: "Vision",
-      description:
-        "To create technology that simplifies processes, solves complex challenges, and adds value to businesses and communities.",
+      title: t("vision.title"),
+      description: t("vision.description"),
       color: "#c084fc", // Purple
     },
     mission: {
-      title: "Mission",
-      description:
-        "To be a global leader in innovative software solutions, empowering businesses with cutting-edge technology. We strive to set new industry standards through creativity and excellence.",
+      title: t("mission.title"),
+      description: t("mission.description"),
       color: "#67e8f9", // Cyan
     },
     values: {
-      title: "Values",
-      description:
-        "To develop high-quality, scalable, and secure software that drives digital transformation and enhances business efficiency. Our goal is to provide tailored solutions that meet evolving market needs.",
+      title: t("values.title"),
+      description: t("values.description"),
       color: "#c084fc", // Purple
     },
-  },
-  locale = "en",
-}: VisionMissionProps) => {
+  };
+
+  // Use provided data or fallback to translated data
+  const visionData = data?.vision || defaultData.vision;
+  const missionData = data?.mission || defaultData.mission;
+  const valuesData = data?.values || defaultData.values;
+
   return (
     <section
-      className="relative min-h-[60dvh] flex items-center overflow-hidden"
+      className={`relative min-h-[60dvh] flex items-center overflow-hidden ${isRTL ? "rtl" : "ltr"}`}
       style={{
         background: "linear-gradient(to right, #0f172a, #1e293b, #0f172a)",
       }}
     >
       {/* Background lines */}
-      <MaxWidthWrapper noPadding className="absolute !w-fit inset-0 flex  gap-44 z-0">
-        <div className="w-4 h-full" style={{ background: data.vision?.color || "#c084fc" }}></div>
-        <div className="w-4 h-full" style={{ background: data.mission?.color || "#67e8f9" }}></div>
-        <div className="w-4 h-full" style={{ background: data.values?.color || "#c084fc" }}></div>
+      <MaxWidthWrapper noPadding className="absolute !w-fit inset-0 flex gap-44 z-0">
+        <div className="w-4 h-full" style={{ background: visionData.color }}></div>
+        <div className="w-4 h-full" style={{ background: missionData.color }}></div>
+        <div className="w-4 h-full" style={{ background: valuesData.color }}></div>
       </MaxWidthWrapper>
 
       <MaxWidthWrapper>
@@ -75,11 +81,11 @@ const VisionMission = ({
                 style={{
                   background: "rgba(15, 23, 42, 0.6)",
                   backdropFilter: "blur(10px)",
-                  borderColor: data.vision?.color || "#c084fc",
-                  boxShadow: `0 0 20px rgba(0, 0, 0, 0.2), 0 0 0 1px ${data.vision?.color || "#c084fc"}30`,
+                  borderColor: visionData.color,
+                  boxShadow: `0 0 20px rgba(0, 0, 0, 0.2), 0 0 0 1px ${visionData.color}30`,
                 }}
               >
-                <h3 className="text-2xl font-bold text-white">{data.vision?.title}</h3>
+                <h3 className="text-2xl font-bold text-white">{visionData.title}</h3>
               </div>
 
               {/* Back Card */}
@@ -90,8 +96,8 @@ const VisionMission = ({
                   boxShadow: `0 0 20px rgba(0, 0, 0, 0.2)`,
                 }}
               >
-                <p className="text-center text-sm" style={{ color: data.vision?.color || "#c084fc" }}>
-                  "{data.vision?.description}"
+                <p className="text-center text-sm" style={{ color: visionData.color }}>
+                  "{visionData.description}"
                 </p>
               </div>
             </div>
@@ -112,11 +118,11 @@ const VisionMission = ({
                 style={{
                   background: "rgba(15, 23, 42, 0.6)",
                   backdropFilter: "blur(10px)",
-                  borderColor: data.mission?.color || "#67e8f9",
-                  boxShadow: `0 0 20px rgba(0, 0, 0, 0.2), 0 0 0 1px ${data.mission?.color || "#67e8f9"}30`,
+                  borderColor: missionData.color,
+                  boxShadow: `0 0 20px rgba(0, 0, 0, 0.2), 0 0 0 1px ${missionData.color}30`,
                 }}
               >
-                <h3 className="text-2xl font-bold text-white">{data.mission?.title}</h3>
+                <h3 className="text-2xl font-bold text-white">{missionData.title}</h3>
               </div>
 
               {/* Back Card */}
@@ -127,8 +133,8 @@ const VisionMission = ({
                   boxShadow: `0 0 20px rgba(0, 0, 0, 0.2)`,
                 }}
               >
-                <p className="text-center text-sm" style={{ color: data.mission?.color || "#67e8f9" }}>
-                  "{data.mission?.description}"
+                <p className="text-center text-sm" style={{ color: missionData.color }}>
+                  "{missionData.description}"
                 </p>
               </div>
             </div>
@@ -149,11 +155,11 @@ const VisionMission = ({
                 style={{
                   background: "rgba(15, 23, 42, 0.6)",
                   backdropFilter: "blur(10px)",
-                  borderColor: data.values?.color || "#c084fc",
-                  boxShadow: `0 0 20px rgba(0, 0, 0, 0.2), 0 0 0 1px ${data.values?.color || "#c084fc"}30`,
+                  borderColor: valuesData.color,
+                  boxShadow: `0 0 20px rgba(0, 0, 0, 0.2), 0 0 0 1px ${valuesData.color}30`,
                 }}
               >
-                <h3 className="text-2xl font-bold text-white">{data.values?.title}</h3>
+                <h3 className="text-2xl font-bold text-white">{valuesData.title}</h3>
               </div>
 
               {/* Back Card */}
@@ -164,8 +170,8 @@ const VisionMission = ({
                   boxShadow: `0 0 20px rgba(0, 0, 0, 0.2)`,
                 }}
               >
-                <p className="text-center text-sm" style={{ color: data.values?.color || "#c084fc" }}>
-                  "{data.values?.description}"
+                <p className="text-center text-sm" style={{ color: valuesData.color }}>
+                  "{valuesData.description}"
                 </p>
               </div>
             </div>

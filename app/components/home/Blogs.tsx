@@ -7,6 +7,7 @@ import BlogCard from "./BlogCard";
 import Link from "next/link";
 import MotionContainer from "../defaults/MotionContainer";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 interface BlogType {
   _id: string;
@@ -31,14 +32,16 @@ interface BlogsProps {
 }
 
 export default function Blogs({ data = [], locale = "en", more = true }: BlogsProps) {
-  console.log(data);
+  const t = useTranslations("Blog");
+  const isRTL = locale === "ar";
+
   return (
-    <section className="bg-[#0F172A] ">
+    <section className="bg-[#0F172A]">
       <MaxWidthWrapper>
         <Flex direction="col" gap="xl">
           <div className="flex text-center mx-auto flex-col items-center text-center mb-8">
-            <span className="text-[#8B5CF6] text-sm font-medium">Blog</span>
-            <h2 className="text-3xl font-bold text-white mt-2">All blog posts</h2>
+            <span className="text-[#8B5CF6] text-sm font-medium">{t("blogSection")}</span>
+            <h2 className="text-3xl font-bold text-white mt-2">{t("allPosts")}</h2>
           </div>
 
           <MotionContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -57,11 +60,14 @@ export default function Blogs({ data = [], locale = "en", more = true }: BlogsPr
           </MotionContainer>
 
           {more && (
-            <div className="flex ml-auto justify-end mt-8">
-              <Link href="/blog" className="flex items-center text-white hover:text-[#8B5CF6] transition-colors">
-                <span className="mr-2">More Articles</span>
+            <div className={`flex ${isRTL ? "mr-auto justify-start" : "ml-auto justify-end"} mt-8`}>
+              <Link
+                href={`/${locale}/blog`}
+                className="flex items-center text-white hover:text-[#8B5CF6] transition-colors"
+              >
+                <span className={`${isRTL ? "ml-2" : "mr-2"}`}>{t("moreArticles")}</span>
                 <svg
-                  className="w-4 h-4"
+                  className={`w-4 h-4 ${isRTL ? "rotate-180" : ""}`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"

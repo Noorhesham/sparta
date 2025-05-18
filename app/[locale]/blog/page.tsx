@@ -29,10 +29,10 @@ export default async function BlogPage({ searchParams }: { searchParams: { page?
 
   return (
     <div className="bg-[#0F172A]">
-      <MaxWidthWrapper>
+      <div>
         <Blogs more={false} data={posts} locale={locale} />
         <PaginationDemo currentPage={currentPage} totalPages={totalPages} />
-      </MaxWidthWrapper>
+      </div>
     </div>
   );
 }
