@@ -14,6 +14,14 @@ import TranslatedHeader from "@/app/components/TranslatedHeader";
 import DeleteSingle from "@/app/components/DeleteSingle";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
+import { useLocale } from "next-intl";
+import TranslatedText from "@/app/components/TranslatedText";
+
+export interface CategoryData {
+  _id: string;
+  name_en: string;
+  name_ar: string;
+}
 
 export interface ProductData {
   _id: string;
@@ -26,6 +34,7 @@ export interface ProductData {
   project_images: string[];
   createdAt: string;
   updatedAt: string;
+  category: string | CategoryData;
 }
 
 export const productColumns: ColumnDef<ProductData>[] = [
@@ -72,32 +81,33 @@ export const productColumns: ColumnDef<ProductData>[] = [
       return description.length > 100 ? `${description.substring(0, 100)}...` : description;
     },
   },
-  {
-    id: "links",
-    header: () => <TranslatedHeader title="dashboard.products.columns.links" />,
-    cell: ({ row }) => {
-      const product = row.original;
-      return (
-        <div className="flex space-x-2">
-          {product.google_link && (
-            <a href={product.google_link} target="_blank" rel="noopener noreferrer">
-              <Store className="h-5 w-5 text-green-600" />
-            </a>
-          )}
-          {product.app_store_link && (
-            <a href={product.app_store_link} target="_blank" rel="noopener noreferrer">
-              <SmartphoneIcon className="h-5 w-5 text-blue-600" />
-            </a>
-          )}
-          {product.website_link && (
-            <a href={product.website_link} target="_blank" rel="noopener noreferrer">
-              <AppWindow className="h-5 w-5 text-purple-600" />
-            </a>
-          )}
-        </div>
-      );
-    },
-  },
+
+  // {
+  //   id: "links",
+  //   header: () => <TranslatedHeader title="dashboard.products.columns.links" />,
+  //   cell: ({ row }) => {
+  //     const product = row.original;
+  //     return (
+  //       <div className="flex space-x-2">
+  //         {product.google_link && (
+  //           <a href={product.google_link} target="_blank" rel="noopener noreferrer">
+  //             <Store className="h-5 w-5 text-green-600" />
+  //           </a>
+  //         )}
+  //         {product.app_store_link && (
+  //           <a href={product.app_store_link} target="_blank" rel="noopener noreferrer">
+  //             <SmartphoneIcon className="h-5 w-5 text-blue-600" />
+  //           </a>
+  //         )}
+  //         {product.website_link && (
+  //           <a href={product.website_link} target="_blank" rel="noopener noreferrer">
+  //             <AppWindow className="h-5 w-5 text-purple-600" />
+  //           </a>
+  //         )}
+  //       </div>
+  //     );
+  //   },
+  // },
   {
     id: "images",
     header: () => <TranslatedHeader title="dashboard.products.columns.images" />,

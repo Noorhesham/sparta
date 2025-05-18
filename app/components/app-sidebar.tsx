@@ -13,6 +13,7 @@ import {
   Settings,
   Mail,
   Users2,
+  Circle,
 } from "lucide-react";
 
 import {
@@ -90,6 +91,11 @@ const data = {
           title: "users",
           url: "/dashboard/user",
           icon: Users,
+        },
+        {
+          title: "categories",
+          url: "/dashboard/categories",
+          icon: Circle,
         },
       ],
     },

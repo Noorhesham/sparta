@@ -9,6 +9,7 @@ import Product from "@/models/Product";
 import User from "@/models/User";
 import { hash } from "bcryptjs";
 import Service from "@/models/Service";
+import ContactUs from "@/models/ContactUs";
 
 interface ActionResponse {
   success: boolean;
@@ -18,6 +19,52 @@ interface ActionResponse {
     createdAt: string;
     updatedAt: string;
   };
+}
+
+// Contact form submission
+export async function submitContactForm(data: any): Promise<ActionResponse> {
+  try {
+    await connectToDatabase();
+
+    // Extract and validate required fields
+    const { first_name, last_name, email, phone_number, service_id, message } = data;
+
+    if (!first_name || !last_name || !email || !phone_number || !service_id) {
+      return {
+        success: false,
+        message: "All fields are required",
+      };
+    }
+
+    // Create new contact entry
+    const newContact = new ContactUs({
+      first_name,
+      last_name,
+      email,
+      phone_number,
+      service_id, // This is now the MongoDB ID of the service
+      message: message || "",
+    });
+
+    // Save to database
+    await newContact.save();
+
+    return {
+      success: true,
+      message: "Contact form submitted successfully",
+      data: {
+        _id: newContact._id,
+        createdAt: newContact.createdAt,
+        updatedAt: newContact.updatedAt,
+      },
+    };
+  } catch (error: any) {
+    console.error("Error saving contact form:", error);
+    return {
+      success: false,
+      message: error.message || "Failed to submit contact form",
+    };
+  }
 }
 
 // Generic function to create an entity
@@ -243,6 +290,12 @@ export async function getEntities(
       case "Product":
         Entity = Product;
         break;
+      case "Service":
+        Entity = Service;
+        break;
+      case "ContactUs":
+        Entity = ContactUs;
+        break;
       default:
         throw new Error(`Unknown model: ${model}`);
     }
@@ -323,6 +376,27 @@ export async function deleteEntities(model: string, ids: string[]): Promise<Acti
     return {
       success: false,
       message: error.message || `Failed to delete ${model} entities`,
+    };
+  }
+}
+
+// Get active services
+export async function getServices(): Promise<{ success: boolean; data?: any[]; message?: string }> {
+  try {
+    await connectToDatabase();
+
+    // Get all active services
+    const services = await Service.find().lean();
+    console.log(services);
+    return {
+      success: true,
+      data: services,
+    };
+  } catch (error: any) {
+    console.error("Error fetching services:", error);
+    return {
+      success: false,
+      message: error.message || "Failed to fetch services",
     };
   }
 }

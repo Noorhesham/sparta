@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useTransition } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import { useForm, FormProvider, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { productSchema, ProductFormValues } from "@/app/validations/product";
@@ -14,6 +14,20 @@ import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
 import { LoadingButton } from "@/app/components/ui/loading-button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+
+interface Category {
+  _id: string;
+  name_en: string;
+  name_ar: string;
+}
 
 interface ProductFormProps {
   initialData?: ProductFormValues;
@@ -25,6 +39,24 @@ export function ProductForm({ initialData }: ProductFormProps) {
   const t = useTranslations("dashboard.products");
   const common = useTranslations("dashboard.common");
   const [isPending, startTransition] = useTransition();
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  // Fetch categories on component mount
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('/api/categories');
+        if (!response.ok) throw new Error('Failed to fetch categories');
+        const data = await response.json();
+        setCategories(data);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+        toast.error('Failed to load categories');
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   // Initialize form with default values or initial data
   const form = useForm<ProductFormValues>({
@@ -38,6 +70,7 @@ export function ProductForm({ initialData }: ProductFormProps) {
       app_store_link: "",
       website_link: "",
       project_images: [],
+      category: "",
     },
   });
 
@@ -134,6 +167,41 @@ export function ProductForm({ initialData }: ProductFormProps) {
               <FormInput name="slug" label={t("form.slug") || "Slug"} placeholder="project-url-slug" />
 
               <FormInput name="description" label={t("form.description")} area />
+              
+              {/* Category Dropdown */}
+              <FormField
+                control={form.control}
+                name="category"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{locale === 'ar' ? 'الفئة' : 'Category'}</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      value={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue 
+                            placeholder={locale === 'ar' ? 'اختر الفئة' : 'Select a category'} 
+                          />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {categories.map((category) => (
+                          <SelectItem 
+                            key={category._id} 
+                            value={category._id}
+                          >
+                            {locale === 'ar' ? category.name_ar : category.name_en}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
           </div>
 

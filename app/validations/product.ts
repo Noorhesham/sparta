@@ -11,6 +11,7 @@ export const productSchema = z.object({
   app_store_link: z.string().optional(),
   website_link: z.string().optional(),
   project_images: z.array(z.string()).optional().default([]),
+  category: z.string().min(1, "Category is required"),
 });
 
 export type ProductFormValues = z.infer<typeof productSchema>;

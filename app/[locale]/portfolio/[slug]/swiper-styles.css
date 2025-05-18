@@ -1,0 +1,63 @@
+/* Custom Swiper Styles */
+
+/* Main Swiper */
+.main-swiper {
+  --swiper-navigation-color: #fff;
+  --swiper-pagination-color: #fff;
+  height: 500px;
+  width: 100%;
+  border-radius: 1rem;
+}
+
+/* Thumbnail Swiper */
+.thumbs-swiper {
+  padding: 10px 0;
+}
+
+.thumbs-swiper .swiper-slide {
+  width: 96px;
+  height: 96px;
+  opacity: 0.6;
+  transition: opacity 0.3s;
+}
+
+.thumbs-swiper .swiper-slide-thumb-active {
+  opacity: 1;
+  border-color: #c026d3;
+}
+
+/* Custom Navigation Buttons */
+.swiper-button-prev,
+.swiper-button-next {
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #333;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  background-color: rgba(255, 255, 255, 1);
+  color: #c026d3;
+}
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  display: none;
+}
+
+/* Pagination Bullets */
+.swiper-pagination-bullet {
+  background: white;
+  opacity: 0.7;
+}
+
+.swiper-pagination-bullet-active {
+  background: white;
+  opacity: 1;
+}

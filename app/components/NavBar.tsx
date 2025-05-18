@@ -4,6 +4,8 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import MaxWidthWrapper from "./defaults/MaxWidthWrapper";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -16,11 +18,50 @@ const navItems = [
 
 export default function Navbar() {
   const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Don't render navbar on dashboard page
   if (pathname?.includes("/dashboard")) {
     return null;
   }
+
+  const isActiveLink = (href: string) => {
+    if (href === "/" && pathname === "/") return true;
+    if (href !== "/" && pathname?.startsWith(href)) return true;
+    return false;
+  };
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  // Animation variants for the menu
+  const menuVariants = {
+    closed: {
+      opacity: 0,
+      y: -20,
+      transition: {
+        duration: 0.2,
+        staggerChildren: 0.05,
+        staggerDirection: -1,
+      },
+    },
+    open: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.4,
+        staggerChildren: 0.07,
+        delayChildren: 0.1,
+      },
+    },
+  };
+
+  // Animation variants for menu items
+  const itemVariants = {
+    closed: { opacity: 0, y: -10 },
+    open: { opacity: 1, y: 0 },
+  };
 
   return (
     <nav className="w-full py-4">
@@ -33,16 +74,19 @@ export default function Navbar() {
           </Link>
 
           <ul className="hidden md:flex items-center space-x-8">
-            {navItems.map((item, index) => (
-              <li key={item.name}>
+            {navItems.map((item) => (
+              <li key={item.name} className="relative">
                 <Link
                   href={item.href}
                   className={cn(
-                    "text-sm font-medium transition-colors hover:text-[#8a70d6]",
-                    index === 0 ? "text-[#d359ff] border-b-2 border-[#d359ff] pb-1" : "text-white"
+                    "text-sm font-medium transition-colors",
+                    isActiveLink(item.href) ? "text-[#d359ff]" : "text-white hover:text-[#8a70d6]"
                   )}
                 >
                   {item.name}
+                  {isActiveLink(item.href) && (
+                    <div className="absolute -bottom-1.5 left-0 w-full h-1 bg-gradient-to-r from-[#8a70d6] to-[#d359ff] rounded-full" />
+                  )}
                 </Link>
               </li>
             ))}
@@ -58,12 +102,84 @@ export default function Navbar() {
           </Link>
           <Link
             href="/get-started"
-            className="inline-flex items-center justify-center rounded-full bg-white px-6 py-2 text-sm font-medium text-[#121628] transition-colors hover:bg-white/90"
+            className="hidden md:inline-flex items-center justify-center rounded-full bg-white px-6 py-2 text-sm font-medium text-[#121628] transition-colors hover:bg-white/90"
           >
             Get Started Now
           </Link>
+
+          {/* Mobile Get Started button */}
+          <Link
+            href="/get-started"
+            className="md:hidden inline-flex items-center justify-center rounded-full bg-white px-4 py-1.5 text-xs font-medium text-[#121628] transition-colors hover:bg-white/90"
+          >
+            Get Started
+          </Link>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden flex flex-col items-center justify-center w-8 h-8 space-y-1.5 z-50"
+            onClick={toggleMenu}
+            aria-label="Toggle menu"
+          >
+            <motion.span
+              animate={isMenuOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="w-6 h-0.5 bg-white block"
+            ></motion.span>
+            <motion.span
+              animate={isMenuOpen ? { opacity: 0 } : { opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              className="w-6 h-0.5 bg-white block"
+            ></motion.span>
+            <motion.span
+              animate={isMenuOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="w-6 h-0.5 bg-white block"
+            ></motion.span>
+          </button>
         </div>
       </MaxWidthWrapper>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial="closed"
+            animate="open"
+            exit="closed"
+            variants={menuVariants}
+            className="md:hidden fixed inset-0 bg-[#121628]/95 z-40 flex flex-col items-center justify-center"
+          >
+            <motion.ul className="flex flex-col items-center space-y-6 w-full px-12">
+              {navItems.map((item) => (
+                <motion.li key={item.name} variants={itemVariants} className="w-full">
+                  <Link
+                    href={item.href}
+                    onClick={() => setIsMenuOpen(false)}
+                    className={cn(
+                      "block text-center text-lg font-medium py-2 border-b border-white/10 w-full",
+                      isActiveLink(item.href)
+                        ? "text-[#d359ff] border-[#d359ff]"
+                        : "text-white hover:text-[#8a70d6]"
+                    )}
+                  >
+                    {item.name}
+                  </Link>
+                </motion.li>
+              ))}
+              <motion.li variants={itemVariants} className="w-full pt-4">
+                <Link
+                  href="/contact"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block text-center rounded-full border border-white px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-white/10 w-full"
+                >
+                  Contact Us
+                </Link>
+              </motion.li>
+            </motion.ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }

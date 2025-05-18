@@ -13,6 +13,7 @@ import Link from "next/link";
 import TranslatedHeader from "@/app/components/TranslatedHeader";
 import DeleteSingle from "@/app/components/DeleteSingle";
 import { Checkbox } from "@/components/ui/checkbox";
+import ViewButton from "./view/ViewButton";
 
 export interface ContactData {
   _id: string;
@@ -20,6 +21,7 @@ export interface ContactData {
   last_name: string;
   email: string;
   phone_number: string;
+  message: string;
   service_id: string;
   serviceName: string;
   createdAt: string;
@@ -31,7 +33,7 @@ export const contactColumns: ColumnDef<ContactData>[] = [
     id: "select",
     header: ({ table }) => (
       <Checkbox
-        checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
+        checked={table.getIsAllPageRowsSelected() ? true : table.getIsSomePageRowsSelected() ? "indeterminate" : false}
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
       />
@@ -90,6 +92,11 @@ export const contactColumns: ColumnDef<ContactData>[] = [
     cell: ({ row }) => new Date(row.original.createdAt).toLocaleDateString(),
   },
   {
+    id: "view",
+    header: () => <TranslatedHeader title="dashboard.common.view" />,
+    cell: ({ row }) => <ViewButton contact={row.original} />,
+  },
+  {
     id: "actions",
     header: () => <TranslatedHeader title="dashboard.common.actions" />,
     cell: ({ row }) => {
@@ -104,11 +111,6 @@ export const contactColumns: ColumnDef<ContactData>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem asChild>
-              <Link href={`/dashboard/contact/view/${contact._id}`}>
-                <TranslatedHeader title="dashboard.common.view" />
-              </Link>
-            </DropdownMenuItem>
             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
               <DeleteSingle data={contact} entity="ContactUs" />
             </DropdownMenuItem>

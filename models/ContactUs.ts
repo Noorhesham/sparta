@@ -21,9 +21,13 @@ const ContactUsSchema = new Schema(
       required: [true, "Phone number is required"],
     },
     service_id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Service",
+      type: String, // Changed from ObjectId to String for direct service name storage
       required: [true, "Service is required"],
+      ref: "Service",
+    },
+    message: {
+      type: String,
+      default: "",
     },
   },
   {

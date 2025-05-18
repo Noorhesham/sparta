@@ -1,27 +1,43 @@
-{  "create": "إنشاء",
-"update": "تحديث",
-"error": "حدث خطأ ما. حاول مرة أخرى.",
-"createSuccess": "تم الإنشاء بنجاح!",
-"updateSuccess": "تم التحديث بنجاح!",
-"editHomepage": "تعديل الصفحة الرئيسية",
-"createHomepage": "إنشاء الصفحة الرئيسية",
-"form": {
-  "hero": "قسم البطل",
-  "about": "قسم من نحن",
-  "services": "قسم الخدمات",
-  "logos": "قسم الشعارات",
-  "technologies": "قسم التقنيات",
-  "title": "العنوان",
-  "subtitle": "العنوان الفرعي",
-  "description": "الوصف",
-  "image": "الصورة",
-  "buttonText": "نص الزر",
-  "buttonLink": "رابط الزر",
-  "miniTitle": "العنوان الصغير",
-  "link": "الرابط",
-  "linkText": "نص الرابط"
-},
-  
+{
+  "create": "إنشاء",
+  "update": "تحديث",
+  "error": "حدث خطأ ما. حاول مرة أخرى.",
+  "createSuccess": "تم الإنشاء بنجاح!",
+  "updateSuccess": "تم التحديث بنجاح!",
+  "editHomepage": "تعديل الصفحة الرئيسية",
+  "createHomepage": "إنشاء الصفحة الرئيسية",
+  "form": {
+    "hero": "قسم البطل",
+    "about": "قسم من نحن",
+    "services": "قسم الخدمات",
+    "logos": "قسم الشعارات",
+    "technologies": "قسم التقنيات",
+    "title": "العنوان",
+    "subtitle": "العنوان الفرعي",
+    "description": "الوصف",
+    "image": "الصورة",
+    "buttonText": "نص الزر",
+    "buttonLink": "رابط الزر",
+    "miniTitle": "العنوان الصغير",
+    "link": "الرابط",
+    "linkText": "نص الرابط",
+    "contact": {
+      "firstName": "الاسم الأول",
+      "lastName": "اسم العائلة",
+      "email": "البريد الإلكتروني",
+      "phoneNumber": "رقم الهاتف",
+      "chooseService": "اختر الخدمة",
+      "message": "الرسالة",
+      "sendMessage": "إرسال الرسالة",
+      "sending": "جاري الإرسال...",
+      "loadingServices": "جاري تحميل الخدمات...",
+      "noServices": "لا توجد خدمات متاحة",
+      "contactInfo": "معلومات الاتصال",
+      "contactSubheading": "أرسل لنا رسالة الآن لتنفيذ مشروعك الأول.",
+      "writeMessage": "اكتب رسالتك.."
+    }
+  },
+
   "dashboard": {
     "common": {
       "save": "حفظ",
@@ -189,7 +205,8 @@
       "logout": "تسجيل الخروج",
       "services": "الخدمات",
       "contact": "طلبات التواصل",
-      "subscribers": "المشتركين"
+      "subscribers": "المشتركين",
+      "categories": "الفئات"
     },
     "team": {
       "title": "أعضاء الفريق",
@@ -275,13 +292,20 @@
         "iconPlaceholder": "أدخل فئة الأيقونة أو الرمز",
         "title": "العنوان",
         "titlePlaceholder": "أدخل عنوان الخدمة",
+        "title_en": "العنوان بالإنجليزية",
+        "title_ar": "العنوان بالعربية",
+        "slug": "الرابط المختصر",
         "descriptions": "أوصاف الخدمة",
         "descriptionItem": "الوصف",
         "addDescription": "إضافة وصف",
         "descriptionTitle": "العنوان",
         "descriptionTitlePlaceholder": "أدخل عنوان الوصف",
         "descriptionContent": "المحتوى",
-        "descriptionContentPlaceholder": "أدخل محتوى الوصف"
+        "descriptionContentPlaceholder": "أدخل محتوى الوصف",
+        "description_title_en": "العنوان بالإنجليزية",
+        "description_title_ar": "العنوان بالعربية",
+        "description_content_en": "الوصف بالإنجليزية",
+        "description_content_ar": "الوصف بالعربية"
       },
       "columns": {
         "icon": "الأيقونة",

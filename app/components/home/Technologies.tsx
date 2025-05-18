@@ -40,16 +40,16 @@ export default function Technologies({ data = [], locale = "en" }: TechnologiesP
         <Flex direction="col" gap="xl">
           <h2 className="text-3xl font-bold text-gray-900">Technologies we use</h2>
 
-          <Flex direction="row" gap="2xl" className="w-full justify-between">
+          <div className="w-full flex flex-col lg:flex-row justify-between gap-8">
             <div className="w-full lg:w-[45%]">
               {data.length > 0 && (
                 <Tabs defaultValue={defaultTab} className="w-full" onValueChange={setActiveTab}>
-                  <TabsList className="w-full grid grid-cols-4 bg-slate-50 p-1 rounded-lg">
+                  <TabsList className="w-full grid grid-cols-2 sm:grid-cols-4 bg-slate-50 p-1 rounded-lg">
                     {data.map((tech) => (
                       <TabsTrigger
                         key={tech.name}
                         value={tech.name.toLowerCase().trim()}
-                        className="rounded-md data-[state=active]:bg-gray-100 !text-black data-[state=active]:shadow-sm"
+                        className="rounded-md data-[state=active]:bg-gray-100 !text-black data-[state=active]:shadow-sm text-xs sm:text-sm"
                       >
                         {tech.name}
                       </TabsTrigger>
@@ -88,14 +88,14 @@ export default function Technologies({ data = [], locale = "en" }: TechnologiesP
               )}
             </div>
 
-            <div className="relative h-80 lg:w-[45%] items-center justify-center">
+            <div className="relative h-80 w-full lg:w-[45%] mt-12 lg:mt-0 flex items-center justify-center">
               <Image src="/chart.png" className="object-contain" alt="Technology chart" fill />
 
               {/* Technology icons positioned radially around the chart */}
               {activeTechnology?.images.slice(0, Math.min(8, activeTechnology.images.length)).map((image, index) => (
                 <motion.div
                   key={`icon-${index}`}
-                  className="absolute z-10 bg-white rounded-lg shadow-md p-2 w-14 h-14 flex items-center justify-center"
+                  className="absolute z-10 bg-white rounded-lg shadow-md p-2 w-12 sm:w-14 h-12 sm:h-14 flex items-center justify-center"
                   style={iconPositions[index % iconPositions.length]}
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -115,7 +115,7 @@ export default function Technologies({ data = [], locale = "en" }: TechnologiesP
                 </motion.div>
               ))}
             </div>
-          </Flex>
+          </div>
         </Flex>
       </MaxWidthWrapper>
     </section>

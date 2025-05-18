@@ -1,20 +1,43 @@
 "use client";
 
-import React, { useEffect, useTransition } from "react";
+import React, { useState, useTransition } from "react";
 import { useForm, FormProvider, SubmitHandler, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { serviceSchema, ServiceFormValues } from "@/app/validations/service";
-import FormInput from "@/app/components/inputs/FormInput";
-import { createEntity, updateEntity } from "@/app/actions/actions";
+import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useTranslations, useLocale } from "next-intl";
 import MaxWidthWrapper from "@/app/components/defaults/MaxWidthWrapper";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import { Card, CardContent } from "@/components/ui/card";
-import { Plus, Trash2 } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { LoadingButton } from "@/app/components/ui/loading-button";
+import FormInput from "@/app/components/inputs/FormInput";
+import { createEntity, updateEntity } from "@/app/actions/actions";
+import { Trash2 } from "lucide-react";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+
+// Description schema for validation
+const descriptionSchema = z.object({
+  title_en: z.string().min(1, "English title is required"),
+  title_ar: z.string().min(1, "Arabic title is required"),
+  description_en: z.string().min(1, "English description is required"),
+  description_ar: z.string().min(1, "Arabic description is required"),
+});
+
+// Service schema for validation
+const serviceSchema = z.object({
+  _id: z.string().optional(),
+  icon: z.string().min(1, "Icon is required"),
+  title_en: z.string().min(1, "English title is required"),
+  title_ar: z.string().min(1, "Arabic title is required"),
+  slug: z.string().optional(),
+  descriptions: z.array(descriptionSchema).min(1, "At least one description is required"),
+});
+
+type ServiceFormValues = z.infer<typeof serviceSchema>;
 
 interface ServiceFormProps {
   initialData?: ServiceFormValues;
@@ -32,18 +55,41 @@ export function ServiceForm({ initialData }: ServiceFormProps) {
     resolver: zodResolver(serviceSchema),
     defaultValues: initialData || {
       icon: "",
-      title: "",
-      descriptions: [{ title: "", description: "" }],
+      title_en: "",
+      title_ar: "",
+      slug: "",
+      descriptions: [
+        {
+          title_en: "",
+          title_ar: "",
+          description_en: "",
+          description_ar: "",
+        },
+      ],
     },
   });
 
-  // Setup field array for descriptions
+  // Setup field array for handling dynamic descriptions
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "descriptions",
   });
 
-  useEffect(() => {
+  // Generate slug from English title
+  const titleEn = form.watch("title_en");
+  React.useEffect(() => {
+    if (titleEn && !initialData && !form.getValues("slug")) {
+      const generatedSlug = titleEn
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-");
+      form.setValue("slug", generatedSlug);
+    }
+  }, [titleEn, form, initialData]);
+
+  // Show form errors
+  React.useEffect(() => {
     if (Object.keys(form.formState.errors).length > 0) {
       toast.error(
         Object.values(form.formState.errors)
@@ -53,17 +99,23 @@ export function ServiceForm({ initialData }: ServiceFormProps) {
     }
   }, [form.formState.errors]);
 
-  // Get form methods
-  const { handleSubmit } = form;
-
   // Handle form submission
   const onSubmit: SubmitHandler<ServiceFormValues> = async (data) => {
     startTransition(async () => {
       try {
-        // Create a clean copy of the data to avoid circular references
+        // Clean the data
         const cleanData = JSON.parse(JSON.stringify(data));
 
-        // Remove empty or undefined values
+        // Generate slug if empty
+        if (!cleanData.slug) {
+          cleanData.slug = cleanData.title_en
+            .toLowerCase()
+            .replace(/[^\w\s-]/g, "")
+            .replace(/\s+/g, "-")
+            .replace(/-+/g, "-");
+        }
+
+        // Remove empty _id if it's a new service
         if (cleanData._id === "") {
           delete cleanData._id;
         }
@@ -89,7 +141,7 @@ export function ServiceForm({ initialData }: ServiceFormProps) {
   return (
     <MaxWidthWrapper>
       <FormProvider {...form}>
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full mx-auto space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full mx-auto space-y-8">
           <div className="flex justify-between items-center">
             <h1 className="text-3xl font-bold">{initialData ? t("editService") : t("createService")}</h1>
             <LoadingButton type="submit" isLoading={isPending}>
@@ -99,69 +151,165 @@ export function ServiceForm({ initialData }: ServiceFormProps) {
 
           <Separator />
 
-          {/* Service Information */}
+          {/* Main Service Information */}
           <div className="p-6 rounded-lg shadow-sm border">
             <h2 className="text-xl font-semibold mb-4">{t("form.mainInfo")}</h2>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card>
-                <CardContent className="pt-6 space-y-4">
-                  <FormInput name="icon" photo single label={t("form.icon")} placeholder={t("form.iconPlaceholder")} />
-                  <FormInput name="title" label={t("form.title")} placeholder={t("form.titlePlaceholder")} />
-                </CardContent>
-              </Card>
+              <FormInput name="icon" label={t("form.icon")} photo single />
+
+              <div className="space-y-4 md:col-span-2">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="title_en"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("form.title_en")}</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter English title" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="title_ar"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("form.title_ar")}</FormLabel>
+                        <FormControl>
+                          <Input placeholder="أدخل العنوان بالعربية" {...field} dir="rtl" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <FormField
+                  control={form.control}
+                  name="slug"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("form.slug")}</FormLabel>
+                      <FormControl>
+                        <Input placeholder="service-url-slug" {...field} />
+                      </FormControl>
+                      <FormDescription>
+                        {locale === "ar"
+                          ? "سيتم إنشاؤه تلقائيًا من العنوان الإنجليزي إذا تُرك فارغًا"
+                          : "Will be auto-generated from English title if left empty"}
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
           </div>
 
-          {/* Descriptions Section */}
+          {/* Service Descriptions */}
           <div className="p-6 rounded-lg shadow-sm border">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold">{t("form.descriptions")}</h2>
               <Button
                 type="button"
-                variant="outline"
-                onClick={() => append({ title: "", description: "" })}
-                className="flex items-center gap-2"
-                disabled={isPending}
+                onClick={() =>
+                  append({
+                    title_en: "",
+                    title_ar: "",
+                    description_en: "",
+                    description_ar: "",
+                  })
+                }
               >
-                <Plus className="h-4 w-4" />
                 {t("form.addDescription")}
               </Button>
             </div>
 
-            {fields.map((field, index) => (
-              <Card key={field.id} className="mb-4">
-                <CardContent className="pt-6 space-y-4">
-                  <div className="flex justify-between items-center">
-                    <h3 className="font-medium">
-                      {t("form.descriptionItem")} {index + 1}
-                    </h3>
-                    {fields.length > 1 && (
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => remove(index)}
-                        className="text-destructive"
-                        disabled={isPending}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    )}
-                  </div>
-                  <FormInput
-                    name={`descriptions.${index}.title`}
-                    label={t("form.descriptionTitle")}
-                    placeholder={t("form.descriptionTitlePlaceholder")}
-                  />
-                  <FormInput
-                    name={`descriptions.${index}.description`}
-                    label={t("form.descriptionContent")}
-                    placeholder={t("form.descriptionContentPlaceholder")}
-                    area
-                  />
-                </CardContent>
-              </Card>
-            ))}
+            <div className="space-y-6">
+              {fields.map((field, index) => (
+                <Card key={field.id} className="shadow-sm">
+                  <CardHeader className="pb-2">
+                    <div className="flex justify-between items-center">
+                      <CardTitle className="text-lg">
+                        {locale === "ar" ? `الوصف ${index + 1}` : `Description ${index + 1}`}
+                      </CardTitle>
+                      {fields.length > 1 && (
+                        <Button variant="ghost" size="sm" type="button" onClick={() => remove(index)}>
+                          <Trash2 className="h-4 w-4 text-red-500" />
+                        </Button>
+                      )}
+                    </div>
+                  </CardHeader>
+
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <FormField
+                        control={form.control}
+                        name={`descriptions.${index}.title_en`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{t("form.description_title_en")}</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter English title" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name={`descriptions.${index}.title_ar`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{t("form.description_title_ar")}</FormLabel>
+                            <FormControl>
+                              <Input placeholder="أدخل العنوان بالعربية" {...field} dir="rtl" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <FormField
+                        control={form.control}
+                        name={`descriptions.${index}.description_en`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{t("form.description_content_en")}</FormLabel>
+                            <FormControl>
+                              <Textarea placeholder="Enter English description" className="min-h-32" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name={`descriptions.${index}.description_ar`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{t("form.description_content_ar")}</FormLabel>
+                            <FormControl>
+                              <Textarea placeholder="أدخل الوصف بالعربية" className="min-h-32" {...field} dir="rtl" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
 
           {/* Submit Button */}

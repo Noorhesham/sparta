@@ -27,12 +27,11 @@ interface BlogType {
 interface BlogsProps {
   data?: BlogType[];
   locale?: string;
+  more?: boolean;
 }
 
-export default function Blogs({ data = [], locale = "en" }: BlogsProps) {
-  // Limit to 6 blogs for homepage display
-  const limitedBlogs = data.slice(0, 6);
-
+export default function Blogs({ data = [], locale = "en", more = true }: BlogsProps) {
+  console.log(data);
   return (
     <section className="bg-[#0F172A] ">
       <MaxWidthWrapper>
@@ -43,7 +42,7 @@ export default function Blogs({ data = [], locale = "en" }: BlogsProps) {
           </div>
 
           <MotionContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {limitedBlogs.map((blog) => (
+            {data.map((blog) => (
               <motion.div key={blog._id} className="h-full">
                 <BlogCard
                   title={blog.title[locale as keyof typeof blog.title]}
@@ -57,20 +56,22 @@ export default function Blogs({ data = [], locale = "en" }: BlogsProps) {
             ))}
           </MotionContainer>
 
-          <div className="flex ml-auto justify-end mt-8">
-            <Link href="/blog" className="flex items-center text-white hover:text-[#8B5CF6] transition-colors">
-              <span className="mr-2">More Articles</span>
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7-7 7" />
-              </svg>
-            </Link>
-          </div>
+          {more && (
+            <div className="flex ml-auto justify-end mt-8">
+              <Link href="/blog" className="flex items-center text-white hover:text-[#8B5CF6] transition-colors">
+                <span className="mr-2">More Articles</span>
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7-7 7" />
+                </svg>
+              </Link>
+            </div>
+          )}
         </Flex>
       </MaxWidthWrapper>
     </section>

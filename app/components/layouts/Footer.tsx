@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import MaxWidthWrapper from "@/app/components/defaults/MaxWidthWrapper";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 interface FooterProps {
   locale?: string;
@@ -14,6 +14,12 @@ const Footer = ({ locale = "en" }: FooterProps) => {
   const [email, setEmail] = useState("");
   const router = useRouter();
   const currentYear = new Date().getFullYear();
+  const pathname = usePathname();
+
+  // Don't render navbar on dashboard page
+  if (pathname?.includes("/dashboard")) {
+    return null;
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

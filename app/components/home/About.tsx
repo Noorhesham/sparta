@@ -73,7 +73,7 @@ export default function About({ data, locale = "en" }: AboutProps) {
   return (
     <section className="relative flex justify-center min-h-[75dvh] bg-white">
       {" "}
-      <img src="/starts.svg" className="absolute top-1/2  left-1/2 -translate-x-1/2 w-40 -translate-y-1/2 " alt="" />
+      <img src="/starts.svg" className="absolute top-1/2 left-1/2 -translate-x-1/2 w-40 -translate-y-1/2" alt="" />
       <MaxWidthWrapper className="flex items-center w-full">
         <div className="grid w-full grid-cols-1 md:grid-cols-2 gap-10 items-center">
           <div className="relative flex flex-col gap-6 z-10">
@@ -102,7 +102,7 @@ export default function About({ data, locale = "en" }: AboutProps) {
                       whileInView={{ strokeDashoffset: 0 }}
                       transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
                       style={{ strokeDasharray: 300 }}
-                      className="absolute right-0"
+                      className="absolute lg:block hidden right-10"
                     >
                       <path
                         d="M1.59088 8.14588C17.3933 6.12998 74.9142 2.20919 122.006 8.1459C97.5611 8.1459 65.7122 8.7462 45.2056 15"
@@ -113,14 +113,13 @@ export default function About({ data, locale = "en" }: AboutProps) {
                     </motion.svg>
                   </motion.div>
                 </h2>
-                \{" "}
               </div>{" "}
               <MotionItem
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
               >
-                <h3 className="text-xl md:text-2xl  -mb-4 font-semibold text-gray-800 ">
+                <h3 className="text-xl md:text-2xl -mb-4 font-semibold text-gray-800">
                   {data?.miniTitle?.[locale as keyof typeof data.miniTitle] || "Company For Programming Services."}
                 </h3>
               </MotionItem>
@@ -162,16 +161,16 @@ export default function About({ data, locale = "en" }: AboutProps) {
           </div>
 
           <div className="relative">
-            <img src="/Blob.png" className="absolute top-20 right-[74%]  w-80" alt="" />
+            <img src="/Blob.png" className="absolute top-20 right-[74%] w-80 hidden md:block" alt="" />
 
-            <div className="relative mb-44">
+            <div className="relative mb-44 md:mb-44">
               <MotionItem
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.8 }}
                 className="overflow-hidden rounded-lg shadow-lg relative z-10"
               >
-                <div className="relative w-full h-96">
+                <div className="relative w-full h-64 md:h-96">
                   {/* Browser-like header */}
                   <div className="absolute top-0 left-0 w-full h-8 bg-gray-100 rounded-t-lg z-20 flex items-center px-3 border-b border-gray-200">
                     <div className="flex gap-1.5">
@@ -196,8 +195,50 @@ export default function About({ data, locale = "en" }: AboutProps) {
                 </div>
               </MotionItem>
 
-              {/* Feature cards positioned absolutely over the image */}
-              <div className="absolute -bottom-22 -left-20 right-10 translate-y-1/3 grid grid-cols-3 z-40 gap-3 px-2">
+              {/* Feature cards */}
+              <div className="hidden md:grid md:absolute md:-bottom-22 md:-left-20 md:right-10 md:translate-y-1/3 md:grid-cols-3 z-40 md:gap-3 md:px-2">
+                <MotionItem
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                >
+                  <FeatureCard
+                    color="purple"
+                    label="performance"
+                    title="Fast performance"
+                    description="The speed in the implementation of services is something we have been keen on from the beginning to reach our customers where they want in a short time."
+                  />
+                </MotionItem>
+
+                <MotionItem
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.4 }}
+                >
+                  <FeatureCard
+                    color="blue"
+                    label="Support"
+                    title="Fast technical support"
+                    description="Always ready to serve our customers and answer all questions and inquiries as quickly as possible."
+                  />
+                </MotionItem>
+
+                <MotionItem
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.5 }}
+                >
+                  <FeatureCard
+                    color="green"
+                    label="Innovative"
+                    title="Innovative Solutions"
+                    description="The speed in the implementation of services is something we have been keen on from the beginning to reach our customers where they want in a short time."
+                  />
+                </MotionItem>
+              </div>
+
+              {/* Mobile-only feature cards */}
+              <div className="grid grid-cols-1 gap-4 mt-8 md:hidden">
                 <MotionItem
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}

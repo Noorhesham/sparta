@@ -20,7 +20,22 @@
     "buttonLink": "Button Link",
     "miniTitle": "Mini Title",
     "link": "Link",
-    "linkText": "Link Text"
+    "linkText": "Link Text",
+    "contact": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "phoneNumber": "Phone Number",
+      "chooseService": "Choose Service",
+      "message": "Message",
+      "sendMessage": "Send Message",
+      "sending": "Sending...",
+      "loadingServices": "Loading services...",
+      "noServices": "No services available",
+      "contactInfo": "Contact Information",
+      "contactSubheading": "Send us a message now to implement your first project.",
+      "writeMessage": "Write your message.."
+    }
   },
   "dashboard": {
     "common": {
@@ -189,7 +204,8 @@
       "logout": "Logout",
       "services": "Services",
       "contact": "Contact Requests",
-      "subscribers": "Subscribers"
+      "subscribers": "Subscribers",
+      "categories": "Categories"
     },
     "team": {
       "title": "Team Members",
@@ -275,13 +291,20 @@
         "iconPlaceholder": "Enter icon class or code",
         "title": "Title",
         "titlePlaceholder": "Enter service title",
+        "title_en": "English Title",
+        "title_ar": "Arabic Title",
+        "slug": "Slug",
         "descriptions": "Service Descriptions",
         "descriptionItem": "Description",
         "addDescription": "Add Description",
         "descriptionTitle": "Title",
         "descriptionTitlePlaceholder": "Enter description title",
         "descriptionContent": "Content",
-        "descriptionContentPlaceholder": "Enter description content"
+        "descriptionContentPlaceholder": "Enter description content",
+        "description_title_en": "English Title",
+        "description_title_ar": "Arabic Title",
+        "description_content_en": "English Description",
+        "description_content_ar": "Arabic Description"
       },
       "columns": {
         "icon": "Icon",

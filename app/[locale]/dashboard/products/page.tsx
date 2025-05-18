@@ -17,7 +17,9 @@ const ProductsPage = async ({ searchParams }: { searchParams: { page?: string } 
   const currentPage = parseInt(searchParams.page || "1", 10);
   const limit = 10;
 
+  // Fetch products with populated category data
   const data = await Product.find({})
+    .populate("category")
     .sort({ createdAt: -1 })
     .limit(limit)
     .skip((currentPage - 1) * limit)
@@ -26,11 +28,12 @@ const ProductsPage = async ({ searchParams }: { searchParams: { page?: string } 
   const dataObj = JSON.parse(JSON.stringify(data));
   const totalCount = await Product.countDocuments({});
   const totalPages = Math.ceil(totalCount / limit);
-  console.log(dataObj);
+
   return (
     <MaxWidthWrapper className="flex px-4 flex-col mt-5">
-      <div className="flex items-center gap-2">
-        <Button className="self-end">
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-3xl font-bold">{t("title")}</h1>
+        <Button>
           <Link href={`/${locale}/dashboard/products/create`}>{t("addProduct")}</Link>
         </Button>
       </div>

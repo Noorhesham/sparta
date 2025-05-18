@@ -20,19 +20,19 @@ const ContactPage = async ({ searchParams }: { searchParams: { page?: string } }
     .skip((currentPage - 1) * limit)
     .populate("service_id")
     .lean();
-
+  console.log(data);
   // Format contact data with service information
   const formattedData = data.map((contact) => ({
     ...contact,
     serviceName: contact.service_id ? contact.service_id.title : "Unknown",
     _id: contact._id.toString(),
-    service_id: contact.service_id ? contact.service_id._id.toString() : "",
+    service_id: contact.service_id ? contact.service_id._id?.toString() : "",
   }));
 
   const dataObj = JSON.parse(JSON.stringify(formattedData));
   const totalCount = await ContactUs.countDocuments({});
   const totalPages = Math.ceil(totalCount / limit);
-
+  console.log(dataObj);
   return (
     <MaxWidthWrapper className="flex px-4 flex-col mt-5">
       <div className="flex items-center gap-2">

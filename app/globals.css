@@ -121,3 +121,29 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Add these 3D flip card utilities */
+.perspective {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+.duration-700 {
+  transition-duration: 700ms;
+}
+
+/* Add this class for hover effect */
+.group:hover .group-hover\:rotate-y-180 {
+  transform: rotateY(180deg);
+}

@@ -6,7 +6,6 @@ import { Pagination, Navigation } from "swiper/modules";
 import MaxWidthWrapper from "@/app/components/defaults/MaxWidthWrapper";
 import Flex from "@/app/components/defaults/Flex";
 import { ServiceType } from "@/app/types/homepage";
-import Image from "next/image";
 import Link from "next/link";
 
 // Import Swiper styles
@@ -83,20 +82,6 @@ export default function Services({ data = [], locale = "en" }: ServicesProps) {
           },
         ];
 
-  // Card background colors based on image
-  const cardColors = {
-    "Interaction Design": "#A5F3FC", // Light cyan for interaction design
-    "UX Design Course": "#E0E7FF", // Light indigo for UX design
-    "User Interface Design": "#FCE7F3", // Light pink for UI design
-  };
-
-  // Card icon colors based on image
-  const iconColors = {
-    "Interaction Design": "#0E7490", // Cyan icon
-    "UX Design Course": "#4F46E5", // Indigo icon
-    "User Interface Design": "#DB2777", // Pink icon
-  };
-
   // Custom pagination rendering
   const pagination = {
     clickable: true,
@@ -105,47 +90,6 @@ export default function Services({ data = [], locale = "en" }: ServicesProps) {
         index === 0 ? "!w-8 !bg-[#C026D3]" : "!w-2"
       } !h-2 !rounded-full !mx-1 !transition-all !duration-300"></span>`;
     },
-  };
-
-  // Card icon component
-  const ServiceIcon = ({ title }: { title: string }) => {
-    let iconPath = "";
-    let bgColor = "";
-    let iconColor = "";
-
-    // Match icon based on title
-    if (title.includes("Interaction")) {
-      iconPath = "/icons/service-interaction.svg";
-      bgColor = "#A5F3FC";
-      iconColor = "#0E7490";
-    } else if (title.includes("UX")) {
-      iconPath = "/icons/service-ux.svg";
-      bgColor = "#E0E7FF";
-      iconColor = "#4F46E5";
-    } else if (title.includes("Interface")) {
-      iconPath = "/icons/service-ui.svg";
-      bgColor = "#FCE7F3";
-      iconColor = "#DB2777";
-    } else {
-      iconPath = "/icons/service-default.svg";
-      bgColor = "#F3F4F6";
-      iconColor = "#4B5563";
-    }
-
-    return (
-      <div className="w-10 h-10 rounded-md flex items-center justify-center mb-4" style={{ backgroundColor: bgColor }}>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="24" height="24" rx="4" fill={iconColor} fillOpacity="0.1" />
-          <path
-            d="M12 16V12M12 8H12.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-            stroke={iconColor}
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </div>
-    );
   };
 
   return (
@@ -190,7 +134,7 @@ export default function Services({ data = [], locale = "en" }: ServicesProps) {
                 return (
                   <SwiperSlide className="h-full" key={index}>
                     <div
-                      className="bg-white  rounded-lg p-6 !h-full flex flex-col shadow-sm"
+                      className="bg-white   min-h-52 rounded-lg p-6 !h-full flex flex-col shadow-sm"
                       style={{ backgroundColor: getBgColor() }}
                     >
                       <div className="flex h-full  items-center gap-2">

@@ -36,6 +36,11 @@ const ProductSchema = new Schema(
       type: [String],
       default: [],
     },
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      required: [true, "Category is required"],
+    },
   },
   {
     timestamps: true,

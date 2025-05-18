@@ -36,7 +36,7 @@ const BlogCard = ({ title, description, slug, date, image, locale = "en" }: Blog
 
   return (
     <motion.div className="group flex flex-col h-full" whileHover={{ y: -5 }} transition={{ duration: 0.3 }}>
-      <Link href={`/blog/${slug}`} className="block h-full">
+      <Link href={`/${locale}/blog/${slug}`} className="block h-full">
         <div className="flex flex-col h-full bg-gray-900 text-white rounded-lg overflow-hidden shadow-lg">
           <div className="relative w-full h-48 md:h-64 lg:h-48 xl:h-56">
             <div
