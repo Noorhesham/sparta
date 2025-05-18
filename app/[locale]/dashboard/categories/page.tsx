@@ -7,7 +7,7 @@ import CategoryModal from "./CategoryModal";
 import { DataTable } from "@/app/components/DataTable";
 import { columns } from "./columns";
 import ModelCustom from "@/app/components/ModelCustom";
-
+export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Categories",
   description: "Manage product categories",
