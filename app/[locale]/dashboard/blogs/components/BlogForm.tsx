@@ -21,6 +21,37 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 // Simple function to generate a random ID
 const generateId = () => Math.random().toString(36).substring(2, 9);
 
+// Function to generate a slug from a title
+const generateSlug = (title: string) => {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+};
+
+// Function to recursively get all error messages from nested form errors
+const getNestedErrorMessages = (errors: any): string[] => {
+  if (!errors) return [];
+
+  return Object.entries(errors).flatMap(([key, value]: [string, any]) => {
+    // If it has a message property, it's a leaf error node
+    if (value?.message) {
+      return [`${key}: ${value.message}`];
+    }
+
+    // If it's an object with nested errors
+    if (typeof value === "object") {
+      const nestedMessages = getNestedErrorMessages(value);
+      if (nestedMessages.length > 0) {
+        // If the key is a number (array index), don't prefix it
+        return isNaN(Number(key)) ? nestedMessages.map((msg) => `${key}.${msg}`) : nestedMessages;
+      }
+    }
+
+    return [];
+  });
+};
+
 interface BlogFormProps {
   initialData?: BlogFormValues;
 }
@@ -100,18 +131,29 @@ export function BlogForm({ initialData }: BlogFormProps) {
       sections: [],
       published: false,
       featured: false,
-      tags: [],
     },
   });
+
+  // Show toast for form errors with better nested error handling
   useEffect(() => {
     if (Object.keys(form.formState.errors).length > 0) {
-      toast.error(
-        Object.values(form.formState.errors)
-          .map((error) => error.message)
-          .join(", ")
-      );
+      const errorMessages = getNestedErrorMessages(form.formState.errors);
+
+      if (errorMessages.length > 0) {
+        toast.error(
+          <div className="space-y-1">
+            <p className="font-medium">Please fix the following errors:</p>
+            <ul className="list-disc pl-4">
+              {errorMessages.map((msg, i) => (
+                <li key={i}>{msg}</li>
+              ))}
+            </ul>
+          </div>
+        );
+      }
     }
   }, [form.formState.errors]);
+
   // Get form methods
   const { handleSubmit, control, watch, setValue } = form;
 
@@ -124,6 +166,16 @@ export function BlogForm({ initialData }: BlogFormProps) {
   // Watch form values
   const watchPublished = watch("published");
   const watchFeatured = watch("featured");
+  const titleEn = watch("title.en");
+  const titleAr = watch("title.ar");
+  const currentSlug = watch("slug");
+
+  // Auto-generate slug when English title changes
+  useEffect(() => {
+    if (titleEn && (!currentSlug || currentSlug === "")) {
+      setValue("slug", generateSlug(titleEn));
+    }
+  }, [titleEn, currentSlug, setValue]);
 
   // Add a new section
   const addSection = (type: "text" | "image") => {
@@ -157,10 +209,7 @@ export function BlogForm({ initialData }: BlogFormProps) {
 
       // Generate slug if empty
       if (!cleanData.slug) {
-        cleanData.slug = cleanData.title.en
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/(^-|-$)/g, "");
+        cleanData.slug = generateSlug(cleanData.title.en);
       }
 
       // Ensure sections have correct order
@@ -168,13 +217,6 @@ export function BlogForm({ initialData }: BlogFormProps) {
         ...section,
         order: index,
       }));
-
-      // Process tags - convert from string to array if it's a string
-      if (typeof cleanData.tags === "string" && cleanData.tags.trim() !== "") {
-        cleanData.tags = cleanData.tags.split(",").map((tag: string) => tag.trim());
-      } else if (cleanData.tags === "") {
-        cleanData.tags = [];
-      }
 
       // Remove empty or undefined values
       if (cleanData._id === "") {
@@ -236,7 +278,12 @@ export function BlogForm({ initialData }: BlogFormProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <ArabicEnglishForm name="title" label={t("form.title")} />
-                <FormInput name="slug" label={t("form.slug")} placeholder={t("form.slugPlaceholder")} />
+                <FormInput
+                  name="slug"
+                  label={t("form.slug")}
+                  placeholder={t("form.slugPlaceholder")}
+                  help={t("form.slugHelp") || "Auto-generated from title if left empty"}
+                />
                 <ArabicEnglishForm name="description" label={t("form.description")} area />
                 <FormInput name="author" label={t("form.author")} placeholder={t("form.authorPlaceholder")} />
               </div>
@@ -256,7 +303,6 @@ export function BlogForm({ initialData }: BlogFormProps) {
                   photo
                   single
                 />
-                <FormInput name="tags" label={t("form.tags")} placeholder={t("form.tagsPlaceholder")} />
               </div>
             </div>
           </div>

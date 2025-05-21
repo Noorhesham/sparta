@@ -7,11 +7,12 @@ import { usePathname, useParams } from "next/navigation";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslations } from "next-intl";
+import LangSwitcher from "./LangSwitcher";
 
 export default function Navbar() {
   const pathname = usePathname();
   const params = useParams();
-  const locale = params.locale as string || "en";
+  const locale = (params.locale as string) || "en";
   const t = useTranslations("Navbar");
   const isRTL = locale === "ar";
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -69,15 +70,15 @@ export default function Navbar() {
   };
 
   return (
-    <nav className={`w-full py-4 ${isRTL ? "rtl" : "ltr"}`}>
+    <nav className={`w-full fixed top-0 z-50 bg-black/50 backdrop-blur-sm py-4 ${isRTL ? "rtl" : "ltr"}`}>
       <MaxWidthWrapper noPadding className="container mx-auto flex items-center justify-between">
         <div className="flex items-center">
-          <Link href={`/${locale}`} className={`${isRTL ? 'ml-12' : 'mr-12'}`}>
+          <Link href={`/${locale}`} className={`${isRTL ? "ml-12" : "mr-12"}`}>
             <span className="text-2xl font-bold">
               <span className="text-[#8a70d6]">Sparta</span>
             </span>
           </Link>
-
+          <LangSwitcher locale={locale} />
           <ul className="hidden md:flex items-center gap-4   rtl:space-x-reverse">
             {navItems.map((item) => (
               <li key={item.name} className="relative">
@@ -178,6 +179,9 @@ export default function Navbar() {
                 >
                   {t("contact")}
                 </Link>
+              </motion.li>
+              <motion.li variants={itemVariants} className="w-full pt-2 flex justify-center">
+                <LangSwitcher locale={locale} />
               </motion.li>
             </motion.ul>
           </motion.div>

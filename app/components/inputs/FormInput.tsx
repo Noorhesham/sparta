@@ -46,6 +46,7 @@ interface FormInputProps {
   noSwitch?: boolean;
   currency?: boolean;
   single?: boolean;
+  help?: string;
 }
 
 export interface PhoneProps {
@@ -82,6 +83,7 @@ const FormInput = ({
   width,
   check = false,
   mediaType,
+  help,
 }: FormInputProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -182,8 +184,9 @@ const FormInput = ({
               )}
             </FormControl>
           </div>
-          {desc && <FormDescription className=" text-sm text-muted-foreground">{desc}</FormDescription>}
-          <FormMessage className=" text-sm dark:text-red-500" />
+          {help && <FormDescription className="text-xs text-muted-foreground">{help}</FormDescription>}
+          {desc && <FormDescription className="text-sm text-muted-foreground">{desc}</FormDescription>}
+          <FormMessage className="text-sm dark:text-red-500" />
         </FormItem>
       )}
     />

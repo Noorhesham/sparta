@@ -50,7 +50,7 @@ export default function Hero({ data, locale = "en" }: HeroProps) {
                 </span>{" "}
                 <span className="text-white relative">
                   {data?.title?.[locale as keyof typeof data.title] || t("trustedPartner")}
-                  <div className="absolute -bottom-2 md:-bottom-6 right-0">
+                  <div className="absolute -bottom-2 md:-bottom-2 right-40">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: "100%" }}

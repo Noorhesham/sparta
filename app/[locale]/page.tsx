@@ -21,7 +21,7 @@ import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
-const Page = async () => {
+const Page = async ({ params }: { params: { locale: string } }) => {
   try {
     await connectToDatabase();
 
@@ -40,8 +40,7 @@ const Page = async () => {
     // Fetch team members
     const teamModel = TeamMember as any;
     const teamData = await teamModel.find({}).sort({ createdAt: -1 }).lean();
-
-    const locale = await getLocale();
+    const locale = await params.locale;
     const t = await getTranslations("home");
 
     return (

@@ -60,7 +60,7 @@ export default function Blogs({ data = [], locale = "en", more = true }: BlogsPr
           </MotionContainer>
 
           {more && (
-            <div className={`flex ${isRTL ? "mr-auto justify-start" : "ml-auto justify-end"} mt-8`}>
+            <div className={`flex w-fit  mt-8`}>
               <Link
                 href={`/${locale}/blog`}
                 className="flex items-center text-white hover:text-[#8B5CF6] transition-colors"

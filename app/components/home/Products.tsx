@@ -29,7 +29,7 @@ interface ProductsProps {
 export default function Products({ data = [], locale = "en" }: ProductsProps) {
   // Limit to 4 products for homepage display
   const limitedProducts = data.slice(0, 4);
-  const t = useTranslations("Products");
+  const t = useTranslations("");
   const isRTL = locale === "ar";
 
   return (
@@ -41,7 +41,7 @@ export default function Products({ data = [], locale = "en" }: ProductsProps) {
 
       <MaxWidthWrapper className={`relative z-20 ${isRTL ? "rtl" : ""}`}>
         <Flex direction="col" gap="xl">
-          <div className="flex mx-auto flex-col items-center text-center mb-8">
+          <div className="flex uppercase mx-auto flex-col items-center text-center mb-8">
             <span className="text-fuchsia-500 text-sm font-medium">{t("portfolio")}</span>
             <h2 className="text-3xl font-bold text-white mt-2">{t("recentProducts")}</h2>
           </div>

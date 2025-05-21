@@ -236,6 +236,8 @@
         "socials": "Social Links"
       }
     },
+    "portfolio": "Portfolio",
+    "recentProducts": "Recent Products",
     "products": {
       "title": "Products Management",
       "addProduct": "Add Product",
@@ -250,6 +252,7 @@
       "noProducts": "No products found",
       "searchPlaceholder": "Search products...",
       "deleteProduct": "Delete Product",
+
       "deleteProductConfirmation": "Are you sure you want to delete this product? This action cannot be undone.",
       "form": {
         "mainInfo": "Product Information",
@@ -493,7 +496,7 @@
     "contactUs": "Contact Us",
     "emailPlaceholder": "Enter your email",
     "send": "Send",
-    "copyright": "Copyright © {year} Sparta, All rights reserved."
+    "copyright": "Copyright © Sparta, All rights reserved."
   },
   "Portfolio": {
     "title": "Our Portfolio",

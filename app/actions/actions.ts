@@ -361,6 +361,9 @@ export async function deleteEntities(model: string, ids: string[]): Promise<Acti
       case "User":
         Entity = User;
         break;
+      case "ContactUs":
+        Entity = ContactUs;
+        break;
       default:
         throw new Error(`Unknown model: ${model}`);
     }
