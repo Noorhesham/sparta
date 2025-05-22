@@ -29,7 +29,7 @@ interface ProductsProps {
 export default function Products({ data = [], locale = "en" }: ProductsProps) {
   // Limit to 4 products for homepage display
   const limitedProducts = data.slice(0, 4);
-  const t = useTranslations("Products");
+  const t = useTranslations("");
   const isRTL = locale === "ar";
 
   return (
