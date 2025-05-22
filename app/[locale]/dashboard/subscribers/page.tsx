@@ -7,10 +7,20 @@ import { subscriberColumns } from "./columns";
 
 export const dynamic = "force-dynamic";
 
-const SubscribersPage = async ({ searchParams }: { searchParams: { page?: string } }) => {
+const SubscribersPage = async ({
+  searchParams,
+  params,
+}: {
+  searchParams: { page?: string };
+  params: { locale: string };
+}) => {
   await connectToDatabase();
-  const locale = await getLocale();
-  const t = await getTranslations("dashboard.subscribers");
+  const locale = params.locale;
+
+  const t = await getTranslations({
+    namespace: "dashboard.subscribers",
+    locale,
+  });
 
   const currentPage = parseInt(searchParams.page || "1", 10);
   const limit = 10;

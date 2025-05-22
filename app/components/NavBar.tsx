@@ -4,7 +4,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import MaxWidthWrapper from "./defaults/MaxWidthWrapper";
 import { usePathname, useParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslations } from "next-intl";
 import LangSwitcher from "./LangSwitcher";
@@ -21,12 +21,21 @@ interface NavbarProps {
 export default function Navbar({ initialSettings }: NavbarProps = {}) {
   const pathname = usePathname();
   const params = useParams();
+  // Ensure locale is always a valid value
   const locale = (params.locale as string) || "en";
+  const isValidLocale = locale === "en" || locale === "ar";
+  const safeLocale = isValidLocale ? locale : "en";
+
   const t = useTranslations("Navbar");
-  const isRTL = locale === "ar";
+  const isRTL = safeLocale === "ar";
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [logoUrl, setLogoUrl] = useState(initialSettings?.logo || "");
   const [isLoading, setIsLoading] = useState(!initialSettings?.logo);
+
+  // Function to handle menu toggle - memoized with useCallback
+  const toggleMenu = useCallback(() => {
+    setIsMenuOpen((prev) => !prev);
+  }, []);
 
   // Fetch site settings if not provided in props
   useEffect(() => {
@@ -58,32 +67,28 @@ export default function Navbar({ initialSettings }: NavbarProps = {}) {
   }
 
   const navItems = [
-    { name: t("home"), href: `/${locale}` },
-    { name: t("about"), href: `/${locale}/about` },
-    { name: t("services"), href: `/${locale}/services` },
-    { name: t("portfolio"), href: `/${locale}/portfolio` },
-    { name: t("blog"), href: `/${locale}/blog` },
-    { name: t("contact"), href: `/${locale}/contact` },
+    { name: t("home"), href: `/${safeLocale}` },
+    { name: t("about"), href: `/${safeLocale}/about` },
+    { name: t("services"), href: `/${safeLocale}/services` },
+    { name: t("portfolio"), href: `/${safeLocale}/portfolio` },
+    { name: t("blog"), href: `/${safeLocale}/blog` },
+    { name: t("contact"), href: `/${safeLocale}/contact` },
   ];
 
   const isActiveLink = (href: string) => {
     // For home page
-    if (href === `/${locale}` && pathname === `/${locale}`) return true;
+    if (href === `/${safeLocale}` && pathname === `/${safeLocale}`) return true;
 
     // For other pages
     // Check if pathname starts with href, accounting for nested routes
-    if (href !== `/${locale}` && pathname?.startsWith(href)) return true;
+    if (href !== `/${safeLocale}` && pathname?.startsWith(href)) return true;
 
     // Alternative check for when pathname has additional segments
-    const hrefWithoutLocale = href.replace(new RegExp(`^/${locale}`), "");
-    const pathnameWithoutLocale = pathname.replace(new RegExp(`^/${locale}`), "");
+    const hrefWithoutLocale = href.replace(new RegExp(`^/${safeLocale}`), "");
+    const pathnameWithoutLocale = pathname.replace(new RegExp(`^/${safeLocale}`), "");
     if (hrefWithoutLocale && pathnameWithoutLocale.startsWith(hrefWithoutLocale)) return true;
 
     return false;
-  };
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
   };
 
   // Animation variants for the menu
@@ -118,7 +123,7 @@ export default function Navbar({ initialSettings }: NavbarProps = {}) {
     <nav className={`w-full fixed top-0 z-50 bg-black/50 backdrop-blur-sm py-4 ${isRTL ? "rtl" : "ltr"}`}>
       <MaxWidthWrapper noPadding className="container mx-auto flex items-center justify-between">
         <div className="flex items-center">
-          <Link href={`/${locale}`} className={`${isRTL ? "ml-12" : "mr-12"}`}>
+          <Link href={`/${safeLocale}`} className={`${isRTL ? "ml-12" : "mr-12"}`}>
             {logoUrl ? (
               <div className="relative h-10 w-32">
                 <Image src={logoUrl} alt="Sparta Logo" fill className="object-contain" priority />
@@ -129,8 +134,8 @@ export default function Navbar({ initialSettings }: NavbarProps = {}) {
               </span>
             )}
           </Link>
-          <LangSwitcher locale={locale} />
-          <ul className="hidden md:flex items-center gap-4   rtl:space-x-reverse">
+          <LangSwitcher locale={safeLocale} />
+          <ul className="hidden md:flex items-center gap-4 rtl:space-x-reverse">
             {navItems.map((item) => (
               <li key={item.name} className="relative">
                 <Link
@@ -139,6 +144,7 @@ export default function Navbar({ initialSettings }: NavbarProps = {}) {
                     "text-sm font-medium transition-colors",
                     isActiveLink(item.href) ? "text-[#d359ff]" : "text-white hover:text-[#8a70d6]"
                   )}
+                  prefetch={false}
                 >
                   {item.name}
                   {isActiveLink(item.href) && (
@@ -152,22 +158,25 @@ export default function Navbar({ initialSettings }: NavbarProps = {}) {
 
         <div className="flex items-center space-x-4 rtl:space-x-reverse">
           <Link
-            href={`/${locale}/contact`}
+            href={`/${safeLocale}/contact`}
             className="hidden md:inline-flex items-center justify-center rounded-full border border-white px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-white/10"
+            prefetch={false}
           >
             {t("contact")}
           </Link>
           <Link
-            href={`/${locale}/services`}
+            href={`/${safeLocale}/services`}
             className="hidden md:inline-flex items-center justify-center rounded-full bg-white px-6 py-2 text-sm font-medium text-[#121628] transition-colors hover:bg-white/90"
+            prefetch={false}
           >
             {t("getStarted")}
           </Link>
 
           {/* Mobile Get Started button */}
           <Link
-            href={`/${locale}/about`}
+            href={`/${safeLocale}/about`}
             className="md:hidden inline-flex items-center justify-center rounded-full bg-white px-2 text-nowrap py-1.5 text-xs font-medium text-[#121628] transition-colors hover:bg-white/90"
+            prefetch={false}
           >
             {t("getStartedMobile")}
           </Link>
@@ -217,6 +226,7 @@ export default function Navbar({ initialSettings }: NavbarProps = {}) {
                       "block text-center text-lg font-medium py-2 border-b border-white/10 w-full",
                       isActiveLink(item.href) ? "text-[#d359ff] border-[#d359ff]" : "text-white hover:text-[#8a70d6]"
                     )}
+                    prefetch={false}
                   >
                     {item.name}
                   </Link>
@@ -224,15 +234,16 @@ export default function Navbar({ initialSettings }: NavbarProps = {}) {
               ))}
               <motion.li variants={itemVariants} className="w-full pt-4">
                 <Link
-                  href={`/${locale}/contact`}
+                  href={`/${safeLocale}/contact`}
                   onClick={() => setIsMenuOpen(false)}
                   className="block text-center rounded-full border border-white px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-white/10 w-full"
+                  prefetch={false}
                 >
                   {t("contact")}
                 </Link>
               </motion.li>
               <motion.li variants={itemVariants} className="w-full pt-2 flex justify-center">
-                <LangSwitcher locale={locale} />
+                <LangSwitcher locale={safeLocale} />
               </motion.li>
             </motion.ul>
           </motion.div>

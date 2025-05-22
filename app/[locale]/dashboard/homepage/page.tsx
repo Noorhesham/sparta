@@ -10,11 +10,11 @@ import Image from "next/image";
 
 export const dynamic = "force-dynamic";
 
-const HomepagePage = async () => {
+const HomepagePage = async ({ params }: { params: { locale: string } }) => {
   await connectToDatabase();
   const t = await getTranslations("dashboard.homepage");
   const common = await getTranslations("dashboard.common");
-  const locale = await getLocale();
+  const locale = params.locale; 
 
   // Get only the first homepage entity
   const homepageData = await Homepage.findOne().sort({ createdAt: -1 }).lean();

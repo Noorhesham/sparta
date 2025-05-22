@@ -52,7 +52,7 @@ const BlogCard = ({ title, description, slug, date, image, locale = "en" }: Blog
               src={image}
               alt={title}
               fill
-              className="object-cover transition-transform duration-700 group-hover:scale-110"
+              className="object-cover transition-transform duration-700"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/60 to-transparent"></div>
           </div>
@@ -70,7 +70,7 @@ const BlogCard = ({ title, description, slug, date, image, locale = "en" }: Blog
               <span className="text-sm font-medium group-hover:text-[#8B5CF6] transition-colors">{t("readMore")}</span>
               <svg
                 className={`w-5 h-5 transform transition-transform ${
-                  isRTL ? "rotate-180 mr-auto group-hover:-translate-x-1" : "ml-auto group-hover:translate-x-1"
+                  isRTL ? " mr-auto group-hover:-translate-x-1" : "ml-auto group-hover:translate-x-1"
                 }`}
                 fill="none"
                 viewBox="0 0 24 24"

@@ -3,15 +3,21 @@ import TeamMember from "@/models/TeamMember";
 import connectToDatabase from "@/lib/mongodb";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { DataTable } from "@/app/components/DataTable";
 import { teamMemberColumns } from "./columns";
 
 export const dynamic = "force-dynamic";
 
-const TeamMembersPage = async ({ searchParams }: { searchParams: { page?: string } }) => {
+const TeamMembersPage = async ({
+  searchParams,
+  params,
+}: {
+  searchParams: { page?: string };
+  params: { locale: string };
+}) => {
   await connectToDatabase();
-  const locale = await getLocale();
+  const locale = params.locale;
   const t = await getTranslations("dashboard.team");
 
   const currentPage = parseInt(searchParams.page || "1", 10);

@@ -1,7 +1,9 @@
-import React from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+"use client";
+
+import React, { useState, useTransition } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { Loader2 } from "lucide-react";
 
 interface LangSwitcherProps {
   locale: string;
@@ -9,7 +11,13 @@ interface LangSwitcherProps {
 
 export default function LangSwitcher({ locale }: LangSwitcherProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const isArabic = locale === "ar";
+  const [isPending, startTransition] = useTransition();
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Combined loading state
+  const isChanging = isPending || isLoading;
 
   // Remove locale prefix from pathname to get the route
   const route = pathname.replace(/^\/(ar|en)/, "") || "/";
@@ -19,13 +27,48 @@ export default function LangSwitcher({ locale }: LangSwitcherProps) {
   const cleanRoute = route.startsWith("/") ? route : `/${route}`;
   const targetPath = `/${targetLocale}${cleanRoute}`;
 
+  const handleLanguageChange = (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    if (isChanging) return;
+
+    setIsLoading(true);
+
+    // Use React transitions for smoother UI
+    startTransition(() => {
+      // Save the language choice in sessionStorage to avoid flickering on reload
+      try {
+        sessionStorage.setItem("preferredLocale", targetLocale);
+      } catch (error) {
+        console.error("Failed to save locale preference:", error);
+      }
+
+      // Navigate with a small delay to allow UI feedback
+      setTimeout(() => {
+        router.push(targetPath);
+      }, 50);
+    });
+  };
+
   return (
-    <Link
-      href={targetPath}
-      className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-sm font-medium text-white hover:text-[#d359ff] transition-colors mx-4"
+    <button
+      onClick={handleLanguageChange}
+      disabled={isChanging}
+      className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-sm font-medium transition-colors mx-4 ${
+        isChanging ? "opacity-70 cursor-not-allowed" : "text-white hover:text-[#d359ff]"
+      }`}
+      aria-label={`Switch to ${isArabic ? "English" : "Arabic"}`}
     >
-      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex items-center">
-        <span className="mr-1">{isArabic ? "English" : "العربية"}</span>
+      <motion.div
+        whileHover={!isChanging ? { scale: 1.05 } : {}}
+        whileTap={!isChanging ? { scale: 0.95 } : {}}
+        className="flex items-center"
+      >
+        {isChanging ? (
+          <Loader2 className="h-4 w-4 mr-1 animate-spin text-[#8a70d6]" />
+        ) : (
+          <span className="mr-1">{isArabic ? "English" : "العربية"}</span>
+        )}
         <svg
           width="18"
           height="18"
@@ -50,6 +93,6 @@ export default function LangSwitcher({ locale }: LangSwitcherProps) {
           />
         </svg>
       </motion.div>
-    </Link>
+    </button>
   );
 }

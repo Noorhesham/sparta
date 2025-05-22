@@ -9,9 +9,15 @@ import { productColumns } from "./columns";
 
 export const dynamic = "force-dynamic";
 
-const ProductsPage = async ({ searchParams }: { searchParams: { page?: string } }) => {
+const ProductsPage = async ({
+  searchParams,
+  params,
+}: {
+  searchParams: { page?: string };
+  params: { locale: string };
+}) => {
   await connectToDatabase();
-  const locale = await getLocale();
+  const locale = params.locale;
   const t = await getTranslations("dashboard.products");
 
   const currentPage = parseInt(searchParams.page || "1", 10);

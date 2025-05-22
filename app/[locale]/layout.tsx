@@ -11,6 +11,7 @@ import React from "react";
 import SideBar from "../components/SideBar";
 import { getSiteSettings } from "../actions/actions";
 import { cache } from "react";
+import Script from "next/script";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -48,19 +49,58 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  const messages = await getMessages({ locale });
-  const isArabic = locale === "ar";
+  // Validate the locale to ensure it's one of our supported locales
+  const validatedLocale = ["en", "ar"].includes(locale) ? locale : "en";
+
+  const messages = await getMessages({ locale: validatedLocale });
+  const isArabic = validatedLocale === "ar";
 
   // Get cached site settings
   const siteSettings = await getSiteSettingsCached();
 
+  // timeZone is required for proper Next-intl functionality
+  const now = new Date();
+
   return (
     <html
-      lang={locale}
+      lang={validatedLocale}
       dir={isArabic ? "rtl" : "ltr"}
       suppressHydrationWarning
       className={`${cairo.variable} ${poppins.variable}`}
     >
+      <head>
+        {/* Client-side script to prevent flickering when changing languages */}
+        <Script id="language-switcher-script" strategy="beforeInteractive">
+          {`
+            (function() {
+              try {
+                // Check if there's a stored locale preference
+                const storedLocale = sessionStorage.getItem('preferredLocale');
+                const currentLocale = "${validatedLocale}";
+                
+                // If there's a preference and it's different from current locale, redirect
+                if (storedLocale && storedLocale !== currentLocale) {
+                  // Get current path without locale prefix
+                  const path = window.location.pathname.replace(/^\/(ar|en)/, '') || '/';
+                  // Construct new path with preferred locale
+                  const newPath = '/' + storedLocale + path;
+                  
+                  // Only redirect if we're not already in a redirecting state
+                  if (!sessionStorage.getItem('isRedirecting')) {
+                    sessionStorage.setItem('isRedirecting', 'true');
+                    window.location.replace(newPath);
+                  } else {
+                    // Clear the redirecting flag to prevent redirect loops
+                    sessionStorage.removeItem('isRedirecting');
+                  }
+                }
+              } catch (e) {
+                console.error('Language switcher script error:', e);
+              }
+            })();
+          `}
+        </Script>
+      </head>
       <body className={`${isArabic ? cairo.className : poppins.className} !bg-bg relative`}>
         {/* Top radial gradient */}
         <SideBar siteSettings={siteSettings} />
@@ -76,11 +116,11 @@ export default async function RootLayout({
         </div>
 
         <ThemeProvider attribute="class" enableSystem defaultTheme="system">
-          <NextIntlClientProvider locale={locale} messages={messages}>
+          <NextIntlClientProvider locale={validatedLocale} messages={messages} timeZone="UTC" now={now}>
             {/* Pass the site settings as props to avoid refetching */}
             <Navbar initialSettings={siteSettings} />
             <div className="pt-10 relative z-[1]">{children}</div>
-            <Footer locale={locale} />
+            <Footer locale={validatedLocale} />
             <Toaster />
           </NextIntlClientProvider>
         </ThemeProvider>

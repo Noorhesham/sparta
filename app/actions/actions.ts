@@ -584,19 +584,29 @@ export async function getSiteSettings(): Promise<{ success: boolean; data?: any;
     await connectToDatabase();
 
     // Get the first site settings document or create one if it doesn't exist
-    let settings = await SiteSettings.find({});
+    let settings = await SiteSettings.find({}).lean().exec();
 
-    if (!settings) {
-      settings = new SiteSettings({
+    if (!settings || settings.length === 0) {
+      const newSettings = new SiteSettings({
         logo: "",
         whatsapp: "",
         phone: "",
         email: "",
         address: "",
       });
-      await settings.save();
+      await newSettings.save();
+      settings = [newSettings.toObject()];
     }
-    const settingsData = JSON.parse(JSON.stringify(settings[0]));
+
+    if (!settings[0]) {
+      return {
+        success: false,
+        message: "Failed to retrieve site settings",
+      };
+    }
+
+    // Convert MongoDB document to plain object and ensure consistent structure
+    const settingsData = settings[0];
     return {
       success: true,
       data: settingsData,

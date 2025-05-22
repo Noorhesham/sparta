@@ -9,9 +9,9 @@ import { serviceColumns } from "./columns";
 
 export const dynamic = "force-dynamic";
 
-const ServicesPage = async ({ searchParams }: { searchParams: { page?: string } }) => {
+const ServicesPage = async ({ searchParams, params }: { searchParams: { page?: string }; params: { locale: string } }) => {
   await connectToDatabase();
-  const locale = await getLocale();
+  const locale = params.locale;
   const t = await getTranslations("dashboard.services");
 
   const currentPage = parseInt(searchParams.page || "1", 10);

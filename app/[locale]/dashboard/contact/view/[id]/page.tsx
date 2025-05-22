@@ -9,9 +9,9 @@ import { ArrowLeft } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export default async function ContactDetailPage({ params }: { params: { id: string } }) {
+export default async function ContactDetailPage({ params }: { params: { id: string; locale: string } }) {
   await connectToDatabase();
-  const locale = await getLocale();
+  const locale = params.locale;
   const t = await getTranslations("dashboard.contact");
   const common = await getTranslations("dashboard.common");
 

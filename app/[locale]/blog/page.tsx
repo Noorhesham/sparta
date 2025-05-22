@@ -9,9 +9,9 @@ import connectToDatabase from "@/lib/mongodb";
 export const dynamic = "force-dynamic";
 
 // Renamed from 'page' to 'BlogPage' to avoid naming conflict
-export default async function BlogPage({ searchParams }: { searchParams: { page?: string } }) {
+export default async function BlogPage({ searchParams, params }: { searchParams: { page?: string }, params: { locale: string } }) {
   await connectToDatabase();
-  const locale = await getLocale();
+  const locale = params.locale;
   const currentPage = parseInt(searchParams.page || "1", 10); // Renamed from 'page' to 'currentPage'
   const limit = 10;
   const skip = (currentPage - 1) * limit;
