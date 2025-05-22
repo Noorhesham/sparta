@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import Paragraph from "@/app/components/defaults/Paragraph";
 
 interface PortfolioClientProps {
   initialProducts: any[];
@@ -150,7 +151,11 @@ export default function PortfolioClient({
                     </span>
                   )}
                   <h3 className="font-semibold text-lg mt-2">{getTitle(product)}</h3>
-                  <p className="text-gray-600 text-sm line-clamp-2 mt-1">{getDescription(product)}</p>
+                  <Paragraph
+                    className="text-gray-400 text-xs mb-4 flex-grow line-clamp-2"
+                    content={getDescription(product)}
+                    locale={locale}
+                  />
                   <Link
                     href={`/${locale}/portfolio/${product.slug || product._id}`}
                     className="mt-3 inline-flex items-center text-sm text-fuchsia-600 hover:text-fuchsia-700"
