@@ -12,7 +12,10 @@ export const dynamic = "force-dynamic";
 const BlogsPage = async ({ searchParams, params }: { searchParams: { page?: string }; params: { locale: string } }) => {
   await connectToDatabase();
   const locale = params.locale;
-  const t = await getTranslations("dashboard.blogs");
+  const t = await getTranslations({
+    namespace: "dashboard.blogs",
+    locale,
+  });
 
   const currentPage = parseInt(searchParams.page || "1", 10);
   const limit = 10;

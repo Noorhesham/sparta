@@ -12,8 +12,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 export default async function ContactDetailPage({ params }: { params: { id: string; locale: string } }) {
   await connectToDatabase();
   const locale = params.locale;
-  const t = await getTranslations("dashboard.contact");
-  const common = await getTranslations("dashboard.common");
+  const t = await getTranslations({
+    namespace: "dashboard.contact",
+    locale,
+  });
+  const common = await getTranslations({
+    namespace: "dashboard.common",
+    locale,
+  });
 
   try {
     const contact = await ContactUs.findById(params.id).populate("service_id").lean();

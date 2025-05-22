@@ -136,6 +136,7 @@
     "blogs": {
       "title": "Blog Management",
       "create": "Create Blog",
+      "createBlog": "Create Blog",
       "edit": "Edit Blog",
       "addBlog": "Add Blog",
       "updateSuccess": "Blog updated successfully",
@@ -465,6 +466,9 @@
     "getStartedMobile": "Get Started"
   },
   "Services": {
+    "title": "Our Services",
+    "subtitle": "Discover all the services we offer to clients",
+    "noServices": "No services available at the moment",
     "sectionTitle": "Our Services",
     "sectionSubtitle": "Discover all the services we offer to clients",
     "workWithUs": "Work with Us!",

@@ -12,9 +12,15 @@ export const dynamic = "force-dynamic";
 
 const HomepagePage = async ({ params }: { params: { locale: string } }) => {
   await connectToDatabase();
-  const t = await getTranslations("dashboard.homepage");
-  const common = await getTranslations("dashboard.common");
-  const locale = params.locale; 
+  const locale = params.locale;
+  const t = await getTranslations({
+    namespace: "dashboard.homepage",
+    locale,
+  });
+  const common = await getTranslations({
+    namespace: "dashboard.common",
+    locale,
+  });
 
   // Get only the first homepage entity
   const homepageData = await Homepage.findOne().sort({ createdAt: -1 }).lean();

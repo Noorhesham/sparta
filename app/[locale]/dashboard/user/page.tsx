@@ -1,4 +1,4 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { userColumns, UserData } from "./columns";
 import { Button } from "@/components/ui/button";
 import ModelCustom from "@/app/components/ModelCustom";
@@ -14,9 +14,13 @@ interface ExtendedUserData extends UserData {
   [key: string]: unknown;
 }
 
-const UsersPage = async ({ searchParams }: { searchParams: { page?: string } }) => {
+const UsersPage = async ({ searchParams, params }: { searchParams: { page?: string }; params: { locale: string } }) => {
   await connectToDatabase();
-  const t = await getTranslations("dashboard.team");
+  const locale = params.locale;
+  const t = await getTranslations({
+    namespace: "dashboard.team",
+    locale,
+  });
 
   const currentPage = parseInt(searchParams.page || "1", 10);
   const limit = 10;

@@ -7,9 +7,13 @@ import { contactColumns } from "./columns";
 
 export const dynamic = "force-dynamic";
 
-const ContactPage = async ({ searchParams }: { searchParams: { page?: string } }) => {
+const ContactPage = async ({ searchParams, params }: { searchParams: { page?: string }; params: { locale: string } }) => {
   await connectToDatabase();
-  const t = await getTranslations("dashboard.contact");
+  const locale = params.locale;
+  const t = await getTranslations({
+    namespace: "dashboard.contact",
+    locale,
+  });
 
   const currentPage = parseInt(searchParams.page || "1", 10);
   const limit = 10;

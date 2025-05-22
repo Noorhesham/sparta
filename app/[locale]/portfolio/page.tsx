@@ -8,7 +8,10 @@ export const dynamic = "force-dynamic";
 
 export default async function PortfolioPage({ params }: { params: { locale: string } }) {
   const { locale } = params;
-  const t = await getTranslations("Portfolio");
+  const t = await getTranslations({
+    namespace: "Portfolio",
+    locale,
+  });
 
   // Fetch all categories
   const categoryModel = Category as any;

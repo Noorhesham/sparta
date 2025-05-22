@@ -3,7 +3,7 @@ import Homepage from "@/models/Homepage";
 import Blog from "@/models/Blog";
 import Product from "@/models/Product";
 import connectToDatabase from "@/lib/mongodb";
-import {  getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import Hero from "../components/home/Hero";
 import About from "../components/home/About";
 import Logos from "../components/home/Logos";
@@ -46,7 +46,6 @@ const Page = async ({ params }: { params: { locale: string } }) => {
   } catch (error) {
     console.error("Error fetching homepage data:", error);
     const locale = params.locale;
-    const t = await getTranslations("home");
 
     // Return the components with default values if there's an error
     return (

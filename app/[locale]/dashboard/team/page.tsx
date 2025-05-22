@@ -18,7 +18,10 @@ const TeamMembersPage = async ({
 }) => {
   await connectToDatabase();
   const locale = params.locale;
-  const t = await getTranslations("dashboard.team");
+  const t = await getTranslations({
+    namespace: "dashboard.team",
+    locale,
+  });
 
   const currentPage = parseInt(searchParams.page || "1", 10);
   const limit = 10;

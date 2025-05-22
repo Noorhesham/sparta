@@ -6,7 +6,6 @@ import { getTranslations } from "next-intl/server";
 
 export default async function EditServicePage({ params }: { params: { id: string } }) {
   await connectToDatabase();
-  const t = await getTranslations("dashboard.services");
 
   try {
     const service = await Service.findById(params.id).lean();

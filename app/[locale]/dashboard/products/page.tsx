@@ -18,7 +18,10 @@ const ProductsPage = async ({
 }) => {
   await connectToDatabase();
   const locale = params.locale;
-  const t = await getTranslations("dashboard.products");
+  const t = await getTranslations({
+    namespace: "dashboard.products",
+    locale,
+  });
 
   const currentPage = parseInt(searchParams.page || "1", 10);
   const limit = 10;
