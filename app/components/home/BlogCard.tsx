@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 
 interface BlogCardProps {
   title: string;
@@ -39,20 +40,21 @@ const BlogCard = ({ title, description, slug, date, image, locale = "en" }: Blog
   }, [description]);
 
   return (
-    <motion.div
-      className={`group flex flex-col h-full ${isRTL ? "rtl" : ""}`}
-      whileHover={{ y: -5 }}
-      transition={{ duration: 0.3 }}
-    >
+    <motion.div className="group h-full" whileHover={{ y: -5 }} transition={{ duration: 0.3 }}>
       <Link href={`/${locale}/blog/${slug}`} className="block h-full">
-        <div className="flex flex-col h-full bg-gray-900 text-white rounded-lg overflow-hidden shadow-lg">
+        <div
+          className={`flex flex-col h-full bg-gray-900 text-white rounded-lg overflow-hidden shadow-lg ${
+            isRTL ? "text-right" : "text-left"
+          }`}
+        >
           <div className="relative w-full h-48 md:h-64 lg:h-48 xl:h-56">
-            <div
-              className="absolute inset-0 bg-center bg-cover transition-transform duration-700 group-hover:scale-110"
-              style={{ backgroundImage: `url(${image})` }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/60 to-transparent"></div>
-            </div>
+            <Image
+              src={image}
+              alt={title}
+              fill
+              className="object-cover transition-transform duration-700 group-hover:scale-110"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/60 to-transparent"></div>
           </div>
 
           <div className="p-5 flex flex-col flex-grow">
@@ -62,11 +64,13 @@ const BlogCard = ({ title, description, slug, date, image, locale = "en" }: Blog
             </h3>
             <p className="text-gray-400 text-xs mb-4 flex-grow line-clamp-2">{truncatedDescription}</p>
 
-            <div className={`flex justify-between items-center mt-auto ${isRTL ? "flex-row-reverse" : ""}`}>
+            <div
+              className={`flex items-center mt-auto ${isRTL ? "justify-start flex-row-reverse" : "justify-between"}`}
+            >
               <span className="text-sm font-medium group-hover:text-[#8B5CF6] transition-colors">{t("readMore")}</span>
               <svg
-                className={`w-5 h-5 transform group-hover:translate-x-1 transition-transform ${
-                  isRTL ? "rotate-180 group-hover:-translate-x-1" : ""
+                className={`w-5 h-5 transform transition-transform ${
+                  isRTL ? "rotate-180 mr-auto group-hover:-translate-x-1" : "ml-auto group-hover:translate-x-1"
                 }`}
                 fill="none"
                 viewBox="0 0 24 24"

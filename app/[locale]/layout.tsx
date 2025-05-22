@@ -8,6 +8,9 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "../components/NavBar";
 import Footer from "../components/layouts/Footer";
 import React from "react";
+import SideBar from "../components/SideBar";
+import { getSiteSettings } from "../actions/actions";
+import { cache } from "react";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -30,6 +33,14 @@ export async function generateStaticParams() {
   return [{ locale: "en" }, { locale: "ar" }];
 }
 
+// Cache the site settings using React's cache function for better performance
+const getSiteSettingsCached = cache(async () => {
+  const settingsResult = await getSiteSettings();
+
+  // Return data or empty object to avoid null
+  return settingsResult.success ? settingsResult.data : {};
+});
+
 export default async function RootLayout({
   children,
   params: { locale },
@@ -40,6 +51,9 @@ export default async function RootLayout({
   const messages = await getMessages({ locale });
   const isArabic = locale === "ar";
 
+  // Get cached site settings
+  const siteSettings = await getSiteSettingsCached();
+
   return (
     <html
       lang={locale}
@@ -49,6 +63,7 @@ export default async function RootLayout({
     >
       <body className={`${isArabic ? cairo.className : poppins.className} !bg-bg relative`}>
         {/* Top radial gradient */}
+        <SideBar siteSettings={siteSettings} />
         <div className="fixed inset-0 pointer-events-none z-[-1]">
           <div
             className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#7E22CE]/20"
@@ -62,7 +77,8 @@ export default async function RootLayout({
 
         <ThemeProvider attribute="class" enableSystem defaultTheme="system">
           <NextIntlClientProvider locale={locale} messages={messages}>
-            <Navbar />
+            {/* Pass the site settings as props to avoid refetching */}
+            <Navbar initialSettings={siteSettings} />
             <div className="pt-10 relative z-[1]">{children}</div>
             <Footer locale={locale} />
             <Toaster />

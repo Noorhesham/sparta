@@ -22,7 +22,7 @@ export default function Hero({ data, locale = "en" }: HeroProps) {
   const isRTL = locale === "ar";
 
   return (
-    <section className={`relative overflow-hidden pb-20 ${isRTL ? "rtl" : ""}`}>
+    <section className={`relative overflow-hidden lg:pt-0 pt-20 pb-20 ${isRTL ? "rtl" : ""}`}>
       <MaxWidthWrapper className="relative grid grid-cols-1 md:grid-cols-2 ">
         {/* Background SVG animation */}
         <div className="absolute w-[30rem] left-0 top-0 z-10">

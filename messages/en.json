@@ -196,6 +196,7 @@
       "management": "Management",
       "home": "Home",
       "products": "Products",
+      "settings": "Settings",
       "createProduct": "Create Product",
       "blogs": "Blogs",
       "createBlog": "Create Blog",
@@ -440,7 +441,11 @@
     "blogSection": "Our Blog",
     "allPosts": "Latest Articles & News",
     "moreArticles": "View All Articles",
-    "readMore": "Read More"
+    "readMore": "Read more",
+    "backToBlog": "Back to Blog",
+    "minRead": "min read",
+    "tags": "Tags",
+    "relatedPosts": "Related Posts"
   },
   "CallToAction": {
     "title": "Ready to Transform Your Business?",

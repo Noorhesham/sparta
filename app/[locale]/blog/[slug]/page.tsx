@@ -1,5 +1,5 @@
 import React from "react";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import MaxWidthWrapper from "@/app/components/defaults/MaxWidthWrapper";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,6 +7,7 @@ import { ArrowLeft, Calendar, Clock, User } from "lucide-react";
 import Blog from "@/models/Blog";
 import connectToDatabase from "@/lib/mongodb";
 import { format } from "date-fns";
+import { ar } from "date-fns/locale";
 import { notFound } from "next/navigation";
 import Paragraph from "@/app/components/defaults/Paragraph";
 
@@ -32,7 +33,12 @@ export async function generateMetadata({ params }: { params: { slug: string; loc
 
 export default async function BlogPostPage({ params }: { params: { slug: string; locale: string } }) {
   await connectToDatabase();
-  const locale = await getLocale();
+  const locale = params.locale;
+  const t = await getTranslations({
+    namespace: "Blog",
+    locale: locale,
+  });
+  const isRTL = locale === "ar";
 
   // Fetch blog post data
   const blogModel = Blog as any;
@@ -46,7 +52,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string;
   const post = JSON.parse(JSON.stringify(postData));
 
   // Format date
-  const formattedDate = format(new Date(post.createdAt), "EEEE, d MMM yyyy");
+  const formattedDate = format(new Date(post.createdAt), "EEEE, d MMM yyyy", { locale: isRTL ? ar : undefined });
 
   // Sort sections by order
   const orderedSections = [...post.sections].sort((a, b) => a.order - b.order);
@@ -88,34 +94,36 @@ export default async function BlogPostPage({ params }: { params: { slug: string;
   const relatedPosts = JSON.parse(JSON.stringify(relatedPostsData));
 
   return (
-    <div className="bg-[#0F172A] ">
+    <div className="bg-[#0F172A]">
       <MaxWidthWrapper>
         {/* Back button */}
         <Link
           href={`/${locale}/blog`}
-          className="inline-flex items-center text-[#8B5CF6] hover:text-purple-400 mb-8 transition-colors"
+          className={`inline-flex items-center text-[#8B5CF6] hover:text-purple-400 mb-8 transition-colors ${
+            isRTL ? "" : "flex-row-reverse"
+          }`}
         >
-          <ArrowLeft size={16} className="mr-2" />
-          <span>{locale === "ar" ? "العودة إلى المدونة" : "Back to Blog"}</span>
+          <ArrowLeft size={16} className={isRTL ? "ml-2 " : "mr-2 rotate-180"} />
+          <span>{t("backToBlog")}</span>
         </Link>
 
         {/* Hero section */}
-        <div className="mb-10">
+        <div className={`mb-10 ${isRTL ? "text-right" : ""}`}>
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">{post.title[locale]}</h1>
 
-          <div className="flex flex-wrap items-center text-gray-400 text-sm mb-6 gap-4">
-            <div className="flex items-center">
-              <User size={14} className="mr-1" />
+          <div className={`flex flex-wrap items-center text-gray-400 text-sm mb-6 gap-4 ${isRTL ? "justify-end" : ""}`}>
+            <div className={`flex items-center ${isRTL ? "flex-row-reverse" : ""}`}>
+              <User size={14} className={isRTL ? "mr-0 ml-1" : "mr-1"} />
               <span>{post.author}</span>
             </div>
-            <div className="flex items-center">
-              <Calendar size={14} className="mr-1" />
+            <div className={`flex items-center ${isRTL ? "flex-row-reverse" : ""}`}>
+              <Calendar size={14} className={isRTL ? "mr-0 ml-1" : "mr-1"} />
               <span>{formattedDate}</span>
             </div>
-            <div className="flex items-center">
-              <Clock size={14} className="mr-1" />
+            <div className={`flex items-center ${isRTL ? "flex-row-reverse" : ""}`}>
+              <Clock size={14} className={isRTL ? "mr-0 ml-1" : "mr-1"} />
               <span>
-                {readingTime} {locale === "ar" ? "دقائق للقراءة" : "min read"}
+                {readingTime} {t("minRead")}
               </span>
             </div>
           </div>
@@ -131,11 +139,11 @@ export default async function BlogPostPage({ params }: { params: { slug: string;
         <Paragraph
           content={post.description[locale]}
           locale={locale}
-          className="text-lg text-gray-300 mb-10 leading-relaxed"
+          className={`text-lg text-gray-300 mb-10 leading-relaxed ${isRTL ? "text-right" : ""}`}
         />
 
         {/* Content sections */}
-        <div className="prose prose-lg prose-invert max-w-none">
+        <div className={`prose prose-lg prose-invert max-w-none ${isRTL ? "text-right" : ""}`}>
           {orderedSections.map((section, index) => {
             // Text section
             if (section.type === "text") {
@@ -145,7 +153,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string;
                     content={section.content[locale]}
                     locale={locale}
                     isHtml={true}
-                    className="text-gray-300 leading-relaxed"
+                    className={`text-gray-300 leading-relaxed ${isRTL ? "text-right" : ""}`}
                   />
                 </div>
               );
@@ -160,7 +168,9 @@ export default async function BlogPostPage({ params }: { params: { slug: string;
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-transparent to-transparent opacity-30"></div>
                   </div>
                   {section.caption && (
-                    <p className="text-center text-sm text-gray-400 mt-2">{section.caption[locale]}</p>
+                    <p className={`text-center text-sm text-gray-400 mt-2 ${isRTL ? "text-right" : ""}`}>
+                      {section.caption[locale]}
+                    </p>
                   )}
                 </div>
               );
@@ -172,8 +182,8 @@ export default async function BlogPostPage({ params }: { params: { slug: string;
 
         {/* Tags */}
         {post.tags && post.tags.length > 0 && (
-          <div className="mt-8 mb-12">
-            <h3 className="text-white text-lg font-medium mb-3">{locale === "ar" ? "الوسوم" : "Tags"}</h3>
+          <div className={`mt-8 mb-12 ${isRTL ? "text-right" : ""}`}>
+            <h3 className="text-white text-lg font-medium mb-3">{t("tags")}</h3>
             <div className="flex flex-wrap gap-2">
               {post.tags.map((tag: string, index: number) => (
                 <span
@@ -189,37 +199,50 @@ export default async function BlogPostPage({ params }: { params: { slug: string;
 
         {/* Related Posts */}
         {relatedPosts.length > 0 && (
-          <div className="mt-16 border-t border-gray-800 pt-12">
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-8">
-              {locale === "ar" ? "مقالات ذات صلة" : "Recent blog posts"}
-            </h2>
+          <div className={`mt-16 border-t border-gray-800 pt-12 ${isRTL ? "text-right" : ""}`}>
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-8">{t("relatedPosts")}</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {relatedPosts.map((relatedPost: any) => (
                 <Link key={relatedPost._id} href={`/${locale}/blog/${relatedPost.slug}`} className="group block">
-                  <div className="bg-gray-900 rounded-lg overflow-hidden shadow-lg h-full flex flex-col">
+                  <div
+                    className={`bg-gray-900 rounded-lg overflow-hidden shadow-lg h-full flex flex-col ${
+                      isRTL ? "text-right" : ""
+                    }`}
+                  >
                     <div className="relative w-full h-48">
-                      <div
-                        className="absolute inset-0 bg-center bg-cover transition-transform duration-700 group-hover:scale-110"
-                        style={{ backgroundImage: `url(${relatedPost.thumbnailImage || relatedPost.mainImage})` }}
-                      >
-                        <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/60 to-transparent"></div>
-                      </div>
+                      <Image
+                        src={relatedPost.thumbnailImage || relatedPost.mainImage}
+                        alt={relatedPost.title[locale]}
+                        fill
+                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/60 to-transparent"></div>
                     </div>
 
                     <div className="p-5 flex flex-col flex-grow">
                       <span className="text-xs text-gray-400 mb-2">
-                        {format(new Date(relatedPost.createdAt), "EEEE, d MMM yyyy")}
+                        {format(new Date(relatedPost.createdAt), "EEEE, d MMM yyyy", {
+                          locale: isRTL ? ar : undefined,
+                        })}
                       </span>
                       <h3 className="text-lg font-bold mb-2 group-hover:text-[#8B5CF6] transition-colors line-clamp-2">
                         {relatedPost.title[locale]}
                       </h3>
-                      <div className="flex justify-between items-center mt-auto">
+                      <div
+                        className={`flex items-center mt-auto ${
+                          isRTL ? "justify-start flex-row-reverse" : "justify-between"
+                        }`}
+                      >
                         <span className="text-sm text-white font-medium group-hover:text-[#8B5CF6] transition-colors">
-                          {locale === "ar" ? "اقرأ المزيد" : "Read more"}
+                          {t("readMore")}
                         </span>
                         <svg
-                          className="w-5 h-5 transform group-hover:translate-x-1 transition-transform text-white"
+                          className={`w-5 h-5 transform transition-transform ${
+                            isRTL
+                              ? "rotate-180 mr-auto group-hover:-translate-x-1"
+                              : "ml-auto group-hover:translate-x-1"
+                          }`}
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -239,10 +262,12 @@ export default async function BlogPostPage({ params }: { params: { slug: string;
         <div className="mt-12 border-t border-gray-800 pt-8">
           <Link
             href={`/${locale}/blog`}
-            className="inline-flex items-center text-[#8B5CF6] hover:text-purple-400 transition-colors"
+            className={`inline-flex items-center text-[#8B5CF6] hover:text-purple-400 transition-colors ${
+              isRTL ? "" : "flex-row-reverse"
+            }`}
           >
-            <ArrowLeft size={16} className="mr-2" />
-            <span>{locale === "ar" ? "العودة إلى المدونة" : "Back to Blog"}</span>
+            <ArrowLeft size={16} className={isRTL ? "ml-2 " : "mr-2 rotate-180"} />
+            <span>{t("backToBlog")}</span>
           </Link>
         </div>
       </MaxWidthWrapper>

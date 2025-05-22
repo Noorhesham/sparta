@@ -14,11 +14,14 @@ export default function LangSwitcher({ locale }: LangSwitcherProps) {
   // Remove locale prefix from pathname to get the route
   const route = pathname.replace(/^\/(ar|en)/, "") || "/";
   const targetLocale = isArabic ? "en" : "ar";
-  const targetPath = targetLocale === "en" ? route : `/${route}`;
+
+  // Ensure we don't have double slashes in the path
+  const cleanRoute = route.startsWith("/") ? route : `/${route}`;
+  const targetPath = `/${targetLocale}${cleanRoute}`;
 
   return (
     <Link
-      href={`/${targetLocale}${targetPath}`}
+      href={targetPath}
       className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-sm font-medium text-white hover:text-[#d359ff] transition-colors mx-4"
     >
       <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex items-center">

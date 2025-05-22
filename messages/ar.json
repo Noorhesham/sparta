@@ -201,6 +201,7 @@
       "blogs": "المدونات",
       "createBlog": "إنشاء مدونة",
       "users": "المستخدمين",
+      "settings": "الإعدادات",
       "business": "الأعمال",
       "logout": "تسجيل الخروج",
       "services": "الخدمات",
@@ -239,6 +240,7 @@
     },
     "products": {
       "title": "إدارة المنتجات",
+      
       "addProduct": "إضافة منتج",
       "editProduct": "تعديل المنتج",
       "createProduct": "إنشاء منتج",
@@ -440,7 +442,11 @@
     "blogSection": "مدونتنا",
     "allPosts": "أحدث المقالات والأخبار",
     "moreArticles": "عرض جميع المقالات",
-    "readMore": "قراءة المزيد"
+    "readMore": "قراءة المزيد",
+    "backToBlog": "العودة إلى المدونة",
+    "minRead": "دقائق للقراءة",
+    "tags": "الوسوم",
+    "relatedPosts": "مقالات ذات صلة"
   },
   "CallToAction": {
     "title": "هل أنت مستعد لتحويل عملك؟",

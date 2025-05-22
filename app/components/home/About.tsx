@@ -170,7 +170,7 @@ export default function About({ data, locale = "en" }: AboutProps) {
           <div className="relative">
             <img src="/Blob.png" className="absolute top-20 right-[74%] w-80 hidden md:block" alt="" />
 
-            <div className="relative mb-44 md:mb-44">
+            <div className="relative   mb-10 md:mb-44">
               <MotionItem
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}

@@ -92,11 +92,8 @@ const data = {
           url: "/dashboard/user",
           icon: Users,
         },
-        {
-          title: "categories",
-          url: "/dashboard/categories",
-          icon: Circle,
-        },
+        { title: "categories", url: "/dashboard/categories", icon: Circle },
+        { title: "settings", url: "/dashboard/settings", icon: Settings },
       ],
     },
   ],

@@ -10,7 +10,7 @@ import User from "@/models/User";
 import { hash } from "bcryptjs";
 import Service from "@/models/Service";
 import ContactUs from "@/models/ContactUs";
-
+import SiteSettings from "@/models/SiteSettings";
 interface ActionResponse {
   success: boolean;
   message?: string;
@@ -574,6 +574,81 @@ export async function deleteUsers(ids: string[]): Promise<ActionResponse> {
     return {
       success: false,
       message: error.message || "Failed to delete users",
+    };
+  }
+}
+
+// Get site settings
+export async function getSiteSettings(): Promise<{ success: boolean; data?: any; message?: string }> {
+  try {
+    await connectToDatabase();
+
+    // Get the first site settings document or create one if it doesn't exist
+    let settings = await SiteSettings.find({});
+
+    if (!settings) {
+      settings = new SiteSettings({
+        logo: "",
+        whatsapp: "",
+        phone: "",
+        email: "",
+        address: "",
+      });
+      await settings.save();
+    }
+    const settingsData = JSON.parse(JSON.stringify(settings[0]));
+    return {
+      success: true,
+      data: settingsData,
+    };
+  } catch (error: any) {
+    console.error("Error getting site settings:", error);
+    return {
+      success: false,
+      message: error.message || "Failed to get site settings",
+    };
+  }
+}
+
+// Update site settings
+export async function updateSiteSettings(data: any): Promise<ActionResponse> {
+  try {
+    await connectToDatabase();
+
+    // Find the first document or create a new one
+    let settings = await SiteSettings.findOne();
+
+    if (!settings) {
+      settings = new SiteSettings(data);
+      await settings.save();
+
+      return {
+        success: true,
+        message: "Site settings created successfully",
+        data: {
+          _id: settings._id,
+          createdAt: settings.createdAt,
+          updatedAt: settings.updatedAt,
+        },
+      };
+    }
+
+    // Update existing settings
+    const updatedSettings = await SiteSettings.findByIdAndUpdate(settings._id, data, { new: true });
+
+    return {
+      success: true,
+      message: "Site settings updated successfully",
+      data: {
+        _id: updatedSettings._id,
+        updatedAt: updatedSettings.updatedAt,
+      },
+    };
+  } catch (error: any) {
+    console.error("Error updating site settings:", error);
+    return {
+      success: false,
+      message: error.message || "Failed to update site settings",
     };
   }
 }

@@ -23,8 +23,8 @@ async function getProduct(slug: string) {
 }
 
 export default async function ProductPage({ params }: { params: { slug: string; locale: string } }) {
-  const locale = await getLocale();
   const product = await getProduct(params.slug);
+  const locale = params.locale;
 
   if (!product) {
     notFound();

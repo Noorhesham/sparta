@@ -4,18 +4,53 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import MaxWidthWrapper from "./defaults/MaxWidthWrapper";
 import { usePathname, useParams } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslations } from "next-intl";
 import LangSwitcher from "./LangSwitcher";
+import Image from "next/image";
+import { getSiteSettings } from "@/app/actions/actions";
 
-export default function Navbar() {
+interface NavbarProps {
+  initialSettings?: {
+    logo?: string;
+    [key: string]: any;
+  };
+}
+
+export default function Navbar({ initialSettings }: NavbarProps = {}) {
   const pathname = usePathname();
   const params = useParams();
   const locale = (params.locale as string) || "en";
   const t = useTranslations("Navbar");
   const isRTL = locale === "ar";
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [logoUrl, setLogoUrl] = useState(initialSettings?.logo || "");
+  const [isLoading, setIsLoading] = useState(!initialSettings?.logo);
+
+  // Fetch site settings if not provided in props
+  useEffect(() => {
+    const fetchSettings = async () => {
+      // Skip fetching if we already have settings
+      if (initialSettings?.logo) {
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+        const result = await getSiteSettings();
+        if (result.success && result.data && result.data.logo) {
+          setLogoUrl(result.data.logo);
+        }
+      } catch (error) {
+        console.error("Failed to load logo:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSettings();
+  }, [initialSettings]);
 
   // Don't render navbar on dashboard page
   if (pathname?.includes("/dashboard")) {
@@ -32,8 +67,18 @@ export default function Navbar() {
   ];
 
   const isActiveLink = (href: string) => {
+    // For home page
     if (href === `/${locale}` && pathname === `/${locale}`) return true;
+
+    // For other pages
+    // Check if pathname starts with href, accounting for nested routes
     if (href !== `/${locale}` && pathname?.startsWith(href)) return true;
+
+    // Alternative check for when pathname has additional segments
+    const hrefWithoutLocale = href.replace(new RegExp(`^/${locale}`), "");
+    const pathnameWithoutLocale = pathname.replace(new RegExp(`^/${locale}`), "");
+    if (hrefWithoutLocale && pathnameWithoutLocale.startsWith(hrefWithoutLocale)) return true;
+
     return false;
   };
 
@@ -74,9 +119,15 @@ export default function Navbar() {
       <MaxWidthWrapper noPadding className="container mx-auto flex items-center justify-between">
         <div className="flex items-center">
           <Link href={`/${locale}`} className={`${isRTL ? "ml-12" : "mr-12"}`}>
-            <span className="text-2xl font-bold">
-              <span className="text-[#8a70d6]">Sparta</span>
-            </span>
+            {logoUrl ? (
+              <div className="relative h-10 w-32">
+                <Image src={logoUrl} alt="Sparta Logo" fill className="object-contain" priority />
+              </div>
+            ) : (
+              <span className="text-2xl font-bold">
+                <span className="text-[#8a70d6]">Sparta</span>
+              </span>
+            )}
           </Link>
           <LangSwitcher locale={locale} />
           <ul className="hidden md:flex items-center gap-4   rtl:space-x-reverse">
@@ -107,7 +158,7 @@ export default function Navbar() {
             {t("contact")}
           </Link>
           <Link
-            href={`/${locale}/get-started`}
+            href={`/${locale}/services`}
             className="hidden md:inline-flex items-center justify-center rounded-full bg-white px-6 py-2 text-sm font-medium text-[#121628] transition-colors hover:bg-white/90"
           >
             {t("getStarted")}
@@ -115,8 +166,8 @@ export default function Navbar() {
 
           {/* Mobile Get Started button */}
           <Link
-            href={`/${locale}/get-started`}
-            className="md:hidden inline-flex items-center justify-center rounded-full bg-white px-4 py-1.5 text-xs font-medium text-[#121628] transition-colors hover:bg-white/90"
+            href={`/${locale}/about`}
+            className="md:hidden inline-flex items-center justify-center rounded-full bg-white px-2 text-nowrap py-1.5 text-xs font-medium text-[#121628] transition-colors hover:bg-white/90"
           >
             {t("getStartedMobile")}
           </Link>
@@ -154,7 +205,7 @@ export default function Navbar() {
             animate="open"
             exit="closed"
             variants={menuVariants}
-            className="md:hidden fixed inset-0 bg-[#121628]/95 z-40 flex flex-col items-center justify-center"
+            className="md:hidden h-screen fixed inset-0 bg-[#121628]/95 z-40 flex flex-col items-center justify-center"
           >
             <motion.ul className={`flex flex-col items-center space-y-6 w-full px-12 ${isRTL ? "rtl" : "ltr"}`}>
               {navItems.map((item) => (

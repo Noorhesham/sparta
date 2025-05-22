@@ -160,3 +160,7 @@ const Footer = ({ locale = "en" }: FooterProps) => {
 };
 
 export default Footer;
+/*
+
+
+*/

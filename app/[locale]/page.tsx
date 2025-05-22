@@ -2,7 +2,6 @@ import React from "react";
 import Homepage from "@/models/Homepage";
 import Blog from "@/models/Blog";
 import Product from "@/models/Product";
-import TeamMember from "@/models/TeamMember";
 import connectToDatabase from "@/lib/mongodb";
 import { getLocale, getTranslations } from "next-intl/server";
 import Hero from "../components/home/Hero";
@@ -12,12 +11,6 @@ import Services from "../components/home/Services";
 import Technologies from "../components/home/Technologies";
 import Blogs from "../components/home/Blogs";
 import Products from "../components/home/Products";
-import ContactForm from "../components/home/ContactForm";
-import Team from "../components/home/Team";
-import VisionMission from "../components/home/VisionMission";
-import { HomepageType } from "@/app/types/homepage";
-import MaxWidthWrapper from "../components/defaults/MaxWidthWrapper";
-import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -32,16 +25,12 @@ const Page = async ({ params }: { params: { locale: string } }) => {
     // Fetch latest blog posts
     const blogModel = Blog as any;
     const blogData = await blogModel.find({ published: true }).sort({ createdAt: -1 }).limit(9).lean();
-
+    const blogDataa = JSON.parse(JSON.stringify(blogData));
     // Fetch products
     const productModel = Product as any;
     const productData = await productModel.find({}).sort({ createdAt: -1 }).limit(4).lean();
-
-    // Fetch team members
-    const teamModel = TeamMember as any;
-    const teamData = await teamModel.find({}).sort({ createdAt: -1 }).lean();
-    const locale = await params.locale;
-    const t = await getTranslations("home");
+    const productDataa = JSON.parse(JSON.stringify(productData));
+    const locale = params.locale;
 
     return (
       <div className="">
@@ -50,8 +39,8 @@ const Page = async ({ params }: { params: { locale: string } }) => {
         <Logos data={homepageData?.logos} locale={locale} />
         <Services data={homepageData?.services} locale={locale} />
         <Technologies data={homepageData?.technologies} locale={locale} />
-        <Blogs data={blogData} locale={locale} />
-        <Products data={productData} locale={locale} />
+        <Blogs data={blogDataa} locale={locale} />
+        <Products data={productDataa} locale={locale} />
       </div>
     );
   } catch (error) {
