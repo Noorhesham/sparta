@@ -11,6 +11,7 @@ import Button from "@/app/components/defaults/Button";
 import { motion } from "framer-motion";
 import Lines from "./Lines";
 import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
 
 interface HeroProps {
   data?: HeroType;
@@ -20,6 +21,40 @@ interface HeroProps {
 export default function Hero({ data, locale = "en" }: HeroProps) {
   const t = useTranslations("Hero");
   const isRTL = locale === "ar";
+  const [lineWidth, setLineWidth] = useState(127);
+  const [linePosition, setLinePosition] = useState("right-40");
+
+  // Adjust line dimensions based on screen size
+  useEffect(() => {
+    const updateLineDimensions = () => {
+      if (window.innerWidth < 640) {
+        // Mobile
+        setLineWidth(80);
+        setLinePosition(isRTL ? "left-8" : "right-8");
+      } else if (window.innerWidth < 768) {
+        // Small tablets
+        setLineWidth(100);
+        setLinePosition(isRTL ? "left-16" : "right-16");
+      } else if (window.innerWidth < 1024) {
+        // Tablets/small laptops
+        setLineWidth(120);
+        setLinePosition(isRTL ? "left-24" : "right-24");
+      } else {
+        // Desktop
+        setLineWidth(127);
+        setLinePosition(isRTL ? "left-40" : "right-40");
+      }
+    };
+
+    // Initial call
+    updateLineDimensions();
+
+    // Add event listener
+    window.addEventListener("resize", updateLineDimensions);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", updateLineDimensions);
+  }, [isRTL]);
 
   return (
     <section className={`relative overflow-hidden lg:pt-0 pt-20 pb-20 ${isRTL ? "rtl" : ""}`}>
@@ -44,23 +79,25 @@ export default function Hero({ data, locale = "en" }: HeroProps) {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="w-full"
             >
-              <h1 className="text-[3rem] md:text-[5rem] leading-tight font-bold">
+              <h1 className="text-[3.5rem] sm:text-[3rem] md:text-[4rem] lg:text-[5rem] leading-tight font-bold">
                 <span className="bg-gradient-to-r from-[#8ED4DD] via-[#7E22CE] to-[#8ED4DD] bg-clip-text text-transparent">
                   {t("companyName")}
                 </span>{" "}
                 <span className="text-white relative">
                   {data?.title?.[locale as keyof typeof data.title] || t("trustedPartner")}
-                  <div className="absolute -bottom-2 md:-bottom-2 right-40">
+                  <div className={`absolute -bottom-1 sm:-bottom-2 ${linePosition}`}>
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: "100%" }}
                       transition={{ duration: 0.8, delay: 0.6, ease: "easeInOut" }}
-                      style={{ width: 127, overflow: "hidden" }}
+                      style={{ width: lineWidth, overflow: "hidden" }}
+                      className="w-full"
                     >
                       <motion.svg
-                        width="127"
+                        width="100%"
                         height="20"
-                        viewBox="0 0 127 20"
+                        viewBox={`0 0 ${lineWidth} 20`}
+                        preserveAspectRatio="none"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
                         initial={{ strokeDashoffset: 300 }}
@@ -69,7 +106,9 @@ export default function Hero({ data, locale = "en" }: HeroProps) {
                         style={{ strokeDasharray: 300 }}
                       >
                         <path
-                          d="M1.59088 8.14588C17.3933 6.12998 74.9142 2.20919 122.006 8.1459C97.5611 8.1459 65.7122 8.7462 45.2056 15"
+                          d={`M1 8.15C${lineWidth * 0.14} 6.13 ${lineWidth * 0.6} 2.21 ${lineWidth * 0.96} 8.15C${
+                            lineWidth * 0.77
+                          } 8.15 ${lineWidth * 0.52} 8.75 ${lineWidth * 0.36} 15`}
                           stroke="#C026D3"
                           strokeWidth="10"
                           strokeLinejoin="round"
@@ -87,7 +126,7 @@ export default function Hero({ data, locale = "en" }: HeroProps) {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="w-full"
             >
-              <h2 className="text-2xl md:text-3xl text-white font-bold">
+              <h2 className="text-xl sm:text-2xl md:text-3xl text-white font-bold">
                 {data?.subtitle?.[locale as keyof typeof data.subtitle] || t("forProgramming")}
               </h2>
             </MotionItem>

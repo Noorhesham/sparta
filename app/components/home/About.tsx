@@ -11,6 +11,7 @@ import { AboutType } from "@/app/types/homepage";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { ArrowRight } from "lucide-react";
 
 interface AboutProps {
   data?: AboutType;
@@ -149,20 +150,11 @@ export default function About({ data, locale = "en" }: AboutProps) {
               transition={{ duration: 0.5, delay: 0.4 }}
             >
               <Link
-                href={`/${locale}/about`}
+                href={`/${locale}/services`}
                 className="text-[#C026D3] font-medium flex items-center gap-2 hover:underline"
               >
                 {t("findMore")}
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M13.5 19L20 12L13.5 5"
-                    stroke="#C026D3"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path d="M4 12H20" stroke="#C026D3" strokeWidth="2" strokeLinecap="round" />
-                </svg>
+                <ArrowRight className="w-4 h-4 rtl:rotate-180" />
               </Link>
             </MotionItem>
           </div>

@@ -99,7 +99,7 @@ export default function Services({ data = [], locale = "en" }: ServicesProps) {
                       <Link
                         href={service.link}
                         className={`text-sm font-medium text-gray-700 hover:text-[#C026D3] inline-flex items-center ${
-                          isRTL ? "flex-row-reverse" : ""
+                          isRTL ? "" : ""
                         }`}
                       >
                         {service.linkText[locale as keyof typeof service.linkText] || t("workWithUs")}

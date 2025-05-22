@@ -104,22 +104,12 @@ export default async function RootLayout({
       <body className={`${isArabic ? cairo.className : poppins.className} !bg-bg relative`}>
         {/* Top radial gradient */}
         <SideBar siteSettings={siteSettings} />
-        <div className="fixed inset-0 pointer-events-none z-[-1]">
-          <div
-            className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#7E22CE]/20"
-            style={{
-              filter: "blur(150px)",
-              borderRadius: "50%",
-              transform: "translate(10%, -30%)",
-            }}
-          ></div>
-        </div>
 
         <ThemeProvider attribute="class" enableSystem defaultTheme="system">
           <NextIntlClientProvider locale={validatedLocale} messages={messages} timeZone="UTC" now={now}>
             {/* Pass the site settings as props to avoid refetching */}
             <Navbar initialSettings={siteSettings} />
-            <div className="pt-10 relative z-[1]">{children}</div>
+            <div className=" pt-20 lg:pt-10 relative z-[1]">{children}</div>
             <Footer locale={validatedLocale} />
             <Toaster />
           </NextIntlClientProvider>
