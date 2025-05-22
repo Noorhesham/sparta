@@ -1,4 +1,5 @@
 {
+  "readMore": "اقرأ المزيد",
   "create": "إنشاء",
   "update": "تحديث",
   "error": "حدث خطأ ما. حاول مرة أخرى.",
@@ -6,6 +7,12 @@
   "updateSuccess": "تم التحديث بنجاح!",
   "editHomepage": "تعديل الصفحة الرئيسية",
   "createHomepage": "إنشاء الصفحة الرئيسية",
+  "cta": {
+    "title": "حقق مشاريعك معنا",
+    "description": "تواصل معنا الآن ودع أفكارك تتحول إلى مشاريع ناجحة على أرض الواقع",
+    "getStarted": "ابدأ الآن",
+    "contactUs": "تواصل معنا"
+  },
   "form": {
     "hero": "قسم البطل",
     "about": "قسم من نحن",
@@ -240,7 +247,7 @@
     },
     "products": {
       "title": "إدارة المنتجات",
-      
+
       "addProduct": "إضافة منتج",
       "editProduct": "تعديل المنتج",
       "createProduct": "إنشاء منتج",
@@ -471,7 +478,10 @@
     "noServices": "لا توجد خدمات متاحة حالياً",
     "sectionTitle": "خدماتنا",
     "sectionSubtitle": "اكتشف جميع الخدمات التي نقدمها للعملاء",
-    "workWithUs": "اعمل معنا!"
+    "workWithUs": "اعمل معنا!",
+    "backToServices": "العودة إلى الخدمات",
+    "serviceDetails": "تفاصيل الخدمة",
+    "noDescriptions": "لا توجد تفاصيل متاحة لهذه الخدمة"
   },
   "Technologies": {
     "sectionTitle": "التقنيات التي نستخدمها",

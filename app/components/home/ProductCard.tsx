@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import Paragraph from "../defaults/Paragraph";
 import MotionItem from "../defaults/MotionItem";
+import { useTranslations } from "next-intl";
 interface ProductCardProps {
   name: string;
   slug: string;
@@ -14,6 +15,7 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ name, slug, description, cover, website_link, locale = "en" }: ProductCardProps) => {
+  const t = useTranslations("");
   return (
     <MotionItem className="rounded-xl w-full overflow-hidden">
       <div className="flex flex-col md:flex-row bg-[#F0F4FF]">
@@ -35,12 +37,12 @@ const ProductCard = ({ name, slug, description, cover, website_link, locale = "e
           </div>
 
           <Link
-            href={website_link || `/portfolio/${slug}`}
+            href={ `/portfolio/${slug}`}
             className="flex ml-auto items-center text-[#8B5CF6] transition-all w-fit group"
           >
-            <span className="mr-2 text-sm">Read more</span>
+            <span className="mr-2 text-sm">{t("readMore")}</span>
             <svg
-              className="w-4 h-4 transform group-hover:translate-x-1 transition-transform"
+              className="w-4 h-4  rtl:rotate-180 transform group-hover:translate-x-1 transition-transform"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"

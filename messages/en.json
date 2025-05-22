@@ -1,4 +1,5 @@
 {
+  "readMore": "Read more",
   "create": "Create",
   "update": "Update",
   "error": "Something went wrong. Please try again.",
@@ -6,6 +7,12 @@
   "updateSuccess": "Updated successfully!",
   "editHomepage": "Edit Homepage",
   "createHomepage": "Create Homepage",
+  "cta": {
+    "title": "Make your projects come true with us",
+    "description": "Contact us now and let your ideas turn into successful projects on the reality",
+    "getStarted": "Get Started Now",
+    "contactUs": "Contact Us"
+  },
   "form": {
     "hero": "Hero Section",
     "about": "About Section",
@@ -473,7 +480,10 @@
     "sectionSubtitle": "Discover all the services we offer to clients",
     "workWithUs": "Work with Us!",
     "portfolio": "Portfolio",
-    "recentProducts": "Our recent Products"
+    "recentProducts": "Our recent Products",
+    "backToServices": "Back to services",
+    "serviceDetails": "Service Details",
+    "noDescriptions": "No details available for this service"
   },
   "Technologies": {
     "sectionTitle": "Technologies we use",
