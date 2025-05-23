@@ -27,9 +27,9 @@ export async function submitContactForm(data: any): Promise<ActionResponse> {
     await connectToDatabase();
 
     // Extract and validate required fields
-    const { first_name, last_name, email, phone_number, service_id, message } = data;
+    const { first_name, last_name, email, phone_number, service_ids, message } = data;
 
-    if (!first_name || !last_name || !email || !phone_number || !service_id) {
+    if (!first_name || !last_name || !email || !phone_number || !service_ids) {
       return {
         success: false,
         message: "All fields are required",
@@ -42,7 +42,7 @@ export async function submitContactForm(data: any): Promise<ActionResponse> {
       last_name,
       email,
       phone_number,
-      service_id, // This is now the MongoDB ID of the service
+      service_ids , // This is now the MongoDB ID of the service
       message: message || "",
     });
 

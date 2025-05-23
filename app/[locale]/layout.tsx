@@ -103,7 +103,7 @@ export default async function RootLayout({
       </head>
       <body className={`${isArabic ? cairo.className : poppins.className} !bg-bg relative`}>
         {/* Top radial gradient */}
-        <SideBar siteSettings={siteSettings} />
+        {/* <SideBar siteSettings={siteSettings} /> */}
 
         <ThemeProvider attribute="class" enableSystem defaultTheme="system">
           <NextIntlClientProvider locale={validatedLocale} messages={messages} timeZone="UTC" now={now}>

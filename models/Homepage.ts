@@ -94,7 +94,6 @@ const HomepageSchema = new Schema(
     about: { type: AboutSchema, required: true },
     aboutServices: { type: [AboutServiceSchema], required: true },
     logos: { type: [LogoSchema], required: true },
-    services: { type: [ServiceSchema], required: true },
     technologies: { type: [TechnologySchema], required: true },
   },
   { timestamps: true }

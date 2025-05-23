@@ -89,19 +89,6 @@ const HomepagePage = async ({ params }: { params: { locale: string } }) => {
                     </div>
                   </div>
                 </div>
-                <div>
-                  <h3 className="font-medium mb-2">{t("form.hero.backgroundImage")}</h3>
-                  {homepage.hero.backgroundImage && (
-                    <div className="relative aspect-video w-full overflow-hidden rounded-lg border">
-                      <Image
-                        src={homepage.hero.backgroundImage}
-                        alt={getLocalizedContent(homepage.hero.title)}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  )}
-                </div>
               </div>
             </CardContent>
             <CardFooter className="border-t bg-muted/50 flex justify-between">

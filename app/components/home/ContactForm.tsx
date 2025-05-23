@@ -20,7 +20,7 @@ const formSchema = z.object({
   last_name: z.string().min(1, "Last name is required"),
   email: z.string().email("Invalid email address"),
   phone_number: z.string().min(1, "Phone number is required"),
-  service_id: z.string().min(1, "Please select a service"),
+  service_ids: z.array(z.string()).min(1, "Please select at least one service"),
   message: z.string().min(1, "Message is required"),
 });
 
@@ -101,7 +101,7 @@ const ContactForm = ({ locale = "en" }: ContactFormProps) => {
       last_name: "",
       email: "",
       phone_number: "",
-      service_id: "",
+      service_ids: [],
       message: "",
     },
   });
@@ -112,7 +112,7 @@ const ContactForm = ({ locale = "en" }: ContactFormProps) => {
 
       // Submit using server action
       const result = await submitContactForm(data);
-
+      console.log(result);
       if (!result.success) {
         throw new Error(result.message || "Something went wrong");
       }
@@ -313,11 +313,11 @@ const ContactForm = ({ locale = "en" }: ContactFormProps) => {
                         services.map((service) => (
                           <div key={service._id} className="flex items-center">
                             <input
-                              type="radio"
+                              type="checkbox"
                               id={service._id}
                               value={service._id}
                               className="w-4 h-4 accent-purple-600 cursor-pointer"
-                              {...form.register("service_id")}
+                              {...form.register("service_ids")}
                             />
                             <label
                               htmlFor={service._id}
@@ -335,8 +335,8 @@ const ContactForm = ({ locale = "en" }: ContactFormProps) => {
                     </div>
                   )}
 
-                  {form.formState.errors.service_id && (
-                    <p className="text-sm text-red-500 mt-1">{form.formState.errors.service_id.message}</p>
+                  {form.formState.errors.service_ids && (
+                    <p className="text-sm text-red-500 mt-1">{form.formState.errors.service_ids.message}</p>
                   )}
                 </div>
 

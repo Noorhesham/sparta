@@ -14,6 +14,7 @@ import TranslatedHeader from "@/app/components/TranslatedHeader";
 import DeleteSingle from "@/app/components/DeleteSingle";
 import { Checkbox } from "@/components/ui/checkbox";
 import ViewButton from "./view/ViewButton";
+import { Badge } from "@/components/ui/badge";
 
 export interface ContactData {
   _id: string;
@@ -22,8 +23,11 @@ export interface ContactData {
   email: string;
   phone_number: string;
   message: string;
-  service_id: string;
-  serviceName: string;
+  service_ids: Array<{
+    _id: string;
+    title_en: string;
+    title_ar: string;
+  }>;
   createdAt: string;
   updatedAt: string;
 }
@@ -83,8 +87,23 @@ export const contactColumns: ColumnDef<ContactData>[] = [
     },
   },
   {
-    accessorKey: "serviceName",
+    accessorKey: "service_ids",
     header: () => <TranslatedHeader title="dashboard.contact.columns.service" />,
+    cell: ({ row }) => {
+      const services = row.original.service_ids || [];
+      return (
+        <div className="flex flex-wrap gap-1">
+          {services.map((service) => (
+            <Badge key={service._id} variant="outline" className="bg-purple-50 hover:bg-purple-100 transition-colors">
+              <span className="flex flex-col text-xs">
+                <span className="font-medium">{service.title_en}</span>
+                <span className="text-gray-500 text-[10px] rtl:text-right">{service.title_ar}</span>
+              </span>
+            </Badge>
+          ))}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "createdAt",

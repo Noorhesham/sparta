@@ -20,9 +20,9 @@ const ContactUsSchema = new Schema(
       type: String,
       required: [true, "Phone number is required"],
     },
-    service_id: {
-      type: String, // Changed from ObjectId to String for direct service name storage
-      required: [true, "Service is required"],
+    service_ids: {
+      type: [String], // Changed to array of strings
+      required: [true, "At least one service is required"],
       ref: "Service",
     },
     message: {

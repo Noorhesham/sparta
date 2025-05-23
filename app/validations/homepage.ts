@@ -65,7 +65,6 @@ export const homepageSchema = z.object({
   about: aboutSchema,
   aboutServices: z.array(aboutServiceSchema),
   logos: z.array(logoSchema),
-  services: z.array(serviceSchema),
   technologies: z.array(technologySchema),
 });
 

@@ -44,7 +44,6 @@ export function HomepageForm({ initialData }: HomepageFormProps) {
       },
       aboutServices: [],
       logos: [],
-      services: [],
       technologies: [],
     },
   });
@@ -80,15 +79,6 @@ export function HomepageForm({ initialData }: HomepageFormProps) {
   } = useFieldArray({
     control,
     name: "logos",
-  });
-
-  const {
-    fields: services,
-    append: appendService,
-    remove: removeService,
-  } = useFieldArray({
-    control,
-    name: "services",
   });
 
   const {
@@ -255,68 +245,6 @@ export function HomepageForm({ initialData }: HomepageFormProps) {
                       photo
                       single
                     />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Services */}
-          <div className="p-6 rounded-lg shadow-sm border">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">{t("services.title")}</h2>
-              <Button
-                type="button"
-                onClick={() =>
-                  appendService({
-                    title: { en: "", ar: "" },
-                    description: { en: "", ar: "" },
-                    icon: "",
-                    color: "#3B82F6",
-                    link: "",
-                    linkText: { en: "", ar: "" },
-                  })
-                }
-                className="inline-flex items-center"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                {t("services.addService")}
-              </Button>
-            </div>
-            <div className="space-y-4">
-              {services.map((field, index) => (
-                <div key={field.id} className="p-4 border rounded-md">
-                  <div className="flex justify-between items-start mb-4">
-                    <h3 className="text-lg font-medium">
-                      {t("services.service")} {index + 1}
-                    </h3>
-                    <Button type="button" onClick={() => removeService(index)} variant="destructive" size="icon">
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                  <div className="space-y-4">
-                    <ArabicEnglishForm name={`services.${index}.title`} label={common("title")} />
-                    <ArabicEnglishForm name={`services.${index}.description`} label={t("services.description")} area />
-                    <FormInput
-                      name={`services.${index}.icon`}
-                      label={t("services.icon")}
-                      placeholder={t("services.icon")}
-                      photo
-                      single
-                    />
-                    <FormInput
-                      name={`services.${index}.color`}
-                      label={t("services.color")}
-                      type="color"
-                      placeholder="#3B82F6"
-                      className="!w-[150px]"
-                    />
-                    <FormInput
-                      name={`services.${index}.link`}
-                      label={t("services.link")}
-                      placeholder={t("services.link")}
-                    />
-                    <ArabicEnglishForm name={`services.${index}.linkText`} label={t("services.linkText")} />
                   </div>
                 </div>
               ))}

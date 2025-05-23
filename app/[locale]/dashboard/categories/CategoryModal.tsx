@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
-import { useForm, FormProvider } from "react-hook-form"; // Import FormProvider
+import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { createCategory, updateCategory } from "./actions";
@@ -21,7 +21,7 @@ const formSchema = z.object({
 type CategoryFormValues = z.infer<typeof formSchema>;
 
 interface CategoryModalProps {
-  children?: React.ReactNode; // Made optional since it's not used
+  children?: React.ReactNode;
   mode?: "create" | "edit";
   category?: Category;
 }
@@ -40,15 +40,21 @@ export default function CategoryModal({ mode = "create", category }: CategoryMod
 
   async function onSubmit(values: CategoryFormValues) {
     try {
+      // Ensure values are not undefined
+      const categoryData = {
+        name_en: values.name_en,
+        name_ar: values.name_ar,
+      };
+
       if (mode === "edit" && category) {
-        const result = await updateCategory(category.id, values);
+        const result = await updateCategory(category.id, categoryData);
         if (result.error) {
           toast.error(result.error);
           return;
         }
         toast.success("Category updated successfully");
       } else {
-        const result = await createCategory(values);
+        const result = await createCategory(categoryData);
         if (result.error) {
           toast.error(result.error);
           return;
@@ -66,8 +72,6 @@ export default function CategoryModal({ mode = "create", category }: CategoryMod
 
   return (
     <FormProvider {...form}>
-      {" "}
-      {/* Wrap the form with FormProvider */}
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4">
         <FormField
           control={form.control}

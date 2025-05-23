@@ -4,6 +4,14 @@ import { revalidatePath } from "next/cache";
 import Category from "@/models/Category";
 import connectToDatabase from "@/lib/mongodb";
 
+// Helper function to generate slug
+function generateSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
+}
+
 export async function createCategory(data: { name_en: string; name_ar: string }) {
   try {
     await connectToDatabase();
@@ -19,8 +27,21 @@ export async function createCategory(data: { name_en: string; name_ar: string })
       return { error: "A category with this Arabic name already exists" };
     }
 
+    // Generate slug from English name
+    const slug = generateSlug(data.name_en);
+
+    // Check if slug exists
+    const existingSlug = await Category.findOne({ slug });
+    if (existingSlug) {
+      return { error: "A category with this slug already exists" };
+    }
+
     // Create new category
-    const category = await Category.create(data);
+    const category = await Category.create({
+      name_en: data.name_en,
+      name_ar: data.name_ar,
+      slug,
+    });
 
     revalidatePath("/[locale]/dashboard/categories");
     return { success: true, data: category };
@@ -51,8 +72,25 @@ export async function updateCategory(id: string, data: { name_en: string; name_a
       return { error: "A category with this Arabic name already exists" };
     }
 
+    // Generate new slug from English name
+    const slug = generateSlug(data.name_en);
+
+    // Check if slug exists (excluding current)
+    const existingSlug = await Category.findOne({ slug, _id: { $ne: id } });
+    if (existingSlug) {
+      return { error: "A category with this slug already exists" };
+    }
+
     // Update category
-    const category = await Category.findByIdAndUpdate(id, { ...data }, { new: true });
+    const category = await Category.findByIdAndUpdate(
+      id,
+      {
+        name_en: data.name_en,
+        name_ar: data.name_ar,
+        slug,
+      },
+      { new: true }
+    );
 
     if (!category) {
       return { error: "Category not found" };

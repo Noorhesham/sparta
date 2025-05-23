@@ -186,7 +186,7 @@ const Team = ({ data = [], locale = "en" }: TeamProps) => {
                       whileInView={{ strokeDashoffset: 0 }}
                       transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
                       style={{ strokeDasharray: 300 }}
-                      className={`absolute ${isRTL ? "left-0" : "right-0"}`}
+                      className={`absolute !-bottom-7 ${isRTL ? "left-0" : "right-0"}`}
                     >
                       <path
                         d="M1.59088 8.14588C17.3933 6.12998 74.9142 2.20919 122.006 8.1459C97.5611 8.1459 65.7122 8.7462 45.2056 15"

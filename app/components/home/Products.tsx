@@ -33,13 +33,37 @@ export default function Products({ data = [], locale = "en" }: ProductsProps) {
   const isRTL = locale === "ar";
 
   return (
-    <section className="bg-[#111827]  relative overflow-hidden">
+    <section className="bg-[#111827]  relative">
       {/* Colorful vertical bars */}
       {/* <div className="absolute left-[10%] z[-1] top-0 h-full w-4 md:w-6 bg-purple-600 opacity-90"></div>
       <div className="absolute left-[calc(10%+60px)] z[-1] top-0 h-full w-4 md:w-6 bg-cyan-400 opacity-80"></div>
       <div className="absolute left-[calc(10%+120px)] z[-1] top-0 h-full w-4 md:w-6 bg-fuchsia-500 opacity-90"></div> */}
 
-      <MaxWidthWrapper className={`relative z-20 ${isRTL ? "rtl" : ""}`}>
+      <MaxWidthWrapper className={`relative z-10 ${isRTL ? "rtl" : ""}`}>
+        <svg
+          width="240"
+          height="800"
+          className="absolute  -scale-x-100 left-[13%] w-fit  lg:block hidden bottom-80    z-[-1]"
+          viewBox="0 0 192 800"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect width="52" height="875" fill="#9333EA" />
+          <rect x="80" width="52" height="875" fill="#8ED4DD" />
+          <rect x="160" width="52" height="875" fill="#C026D3" />
+        </svg>
+        <svg
+          width="240"
+          height="800"
+          className="absolute  -scale-x-100 left-[13%] lg:block hidden w-fit -bottom-20    z-[-1]"
+          viewBox="0 0 192 800"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect width="52" height="875" fill="#9333EA" />
+          <rect x="80" width="52" height="875" fill="#8ED4DD" />
+          <rect x="160" width="52" height="875" fill="#C026D3" />
+        </svg>{" "}
         <Flex direction="col" gap="xl">
           <div className="flex uppercase mx-auto flex-col items-center text-center mb-8">
             <span className="text-fuchsia-500 text-sm font-medium">{t("portfolio")}</span>

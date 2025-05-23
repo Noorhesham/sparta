@@ -34,6 +34,9 @@ import { Button } from "@/components/ui/button";
 import { signOut, useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
+import { getSiteSettings } from "../actions/actions";
+import { useEffect, useState } from "react";
+import Image from "next/image";
 
 const data = {
   versions: ["1.0.1", "1.1.0-alpha", "2.0.0-beta1"],
@@ -102,7 +105,28 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
   const session = useSession();
+  const [logoUrl, setLogoUrl] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const t = useTranslations("dashboard.sidebar");
+  useEffect(() => {
+    const fetchSettings = async () => {
+      // Skip fetching if we already have settings
+
+      try {
+        setIsLoading(true);
+        const result = await getSiteSettings();
+        if (result.success && result.data && result.data.logo) {
+          setLogoUrl(result.data.logo);
+        }
+      } catch (error) {
+        console.error("Failed to load logo:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSettings();
+  }, []);
 
   return (
     <Sidebar {...props}>
@@ -110,14 +134,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link href="/dashboard">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <LayoutDashboard className="size-4" />
+              {!isLoading && (
+                <div className="relative h-10 w-32">
+                  <Image src={logoUrl} alt="Sparta Logo" fill className="object-contain" priority />
                 </div>
-                <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-semibold">Sparta</span>
-                </div>
-              </Link>
+              )}
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
