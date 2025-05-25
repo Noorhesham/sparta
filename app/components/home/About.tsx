@@ -90,7 +90,7 @@ export default function About({ data, locale = "en" }: AboutProps) {
             >
               <div className="relative">
                 <h2 className="text-3xl w-fit relative md:text-5xl font-bold text-gray-900 lg:mb-8">
-                  <span className=" text-black !mb-6">{data?.title?.[locale as keyof typeof data.title] || t("title")}</span>
+                  <span className=" text-black  text-nowrap !mb-6">{data?.title?.[locale as keyof typeof data.title] || t("title")}</span>
                   <motion.div
                     initial={{ width: 0 }}
                     whileInView={{ width: "100%" }}
@@ -107,7 +107,7 @@ export default function About({ data, locale = "en" }: AboutProps) {
                       whileInView={{ strokeDashoffset: 0 }}
                       transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
                       style={{ strokeDasharray: 300 }}
-                      className="absolute -bottom-7 lg:block hidden right-10"
+                      className="absolute -bottom-7 block right-1 lg:right-10"
                     >
                       <path
                         d="M1.59088 8.14588C17.3933 6.12998 74.9142 2.20919 122.006 8.1459C97.5611 8.1459 65.7122 8.7462 45.2056 15"
@@ -122,7 +122,7 @@ export default function About({ data, locale = "en" }: AboutProps) {
               <MotionItem
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
+                transition={{ duration: 0.5, delay: 0.2 }} className=" mt-8"
               >
                 <h3 className="text-xl md:text-2xl -mb-4 font-semibold text-gray-800">
                   {data?.miniTitle?.[locale as keyof typeof data.miniTitle] || t("subtitle")}

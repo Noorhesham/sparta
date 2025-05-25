@@ -47,7 +47,7 @@ const Page = async ({ params }: { params: { locale: string } }) => {
         {/* CTA Section */}
         <section className="relative  z-10 overflow-hidden  border-t border-blue-500">
           <MaxWidthWrapper className="grid z-10 relative grid-cols-1 gap-10 md:grid-cols-2 items-center">
-            <div className="flex flex-col gap-6 z-10">
+            <div className="flex order-2 flex-col gap-6 z-10">
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white">{t("cta.title")}</h2>
               <p className="text-gray-300 text-lg max-w-md">{t("cta.description")}</p>
               <div className="flex flex-col sm:flex-row gap-4 mt-4">
@@ -67,9 +67,9 @@ const Page = async ({ params }: { params: { locale: string } }) => {
                 </Link>
               </div>
             </div>
-            <div className="relative">
+            <div className="relative order-1">
               <img src="/Mask Group.png" className="mx-auto z-20 relative md:-ml-16" alt="contact" />
-              <div className="absolute z-[1] top-0 right-0 w-full h-full">
+              <div className={`absolute z-[1] top-0 ${locale === "ar" ? "right-0" : "left-0"}  w-full h-full`}>
                 <img src="/Shapes (3).svg" className="w-full h-full object-cover" alt="background shapes" />
               </div>
             </div>
