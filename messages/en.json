@@ -200,6 +200,7 @@
       }
     },
     "sidebar": {
+      "team": "team",
       "adminDashboard": "Admin Dashboard",
       "management": "Management",
       "home": "Home",

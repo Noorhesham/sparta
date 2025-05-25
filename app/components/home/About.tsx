@@ -90,7 +90,7 @@ export default function About({ data, locale = "en" }: AboutProps) {
             >
               <div className="relative">
                 <h2 className="text-3xl w-fit relative md:text-5xl font-bold text-gray-900 lg:mb-8">
-                  <span className=" text-black !mb-6">{t("title")}</span>
+                  <span className=" text-black !mb-6">{data?.title?.[locale as keyof typeof data.title] || t("title")}</span>
                   <motion.div
                     initial={{ width: 0 }}
                     whileInView={{ width: "100%" }}

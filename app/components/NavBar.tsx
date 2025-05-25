@@ -21,7 +21,6 @@ interface NavbarProps {
 export default function Navbar({ initialSettings }: NavbarProps = {}) {
   const pathname = usePathname();
   const params = useParams();
-  // Ensure locale is always a valid value
   const locale = (params.locale as string) || "en";
   const isValidLocale = locale === "en" || locale === "ar";
   const safeLocale = isValidLocale ? locale : "en";
@@ -31,10 +30,30 @@ export default function Navbar({ initialSettings }: NavbarProps = {}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [logoUrl, setLogoUrl] = useState(initialSettings?.logo || "");
   const [isLoading, setIsLoading] = useState(!initialSettings?.logo);
+  const [hasScrolled, setHasScrolled] = useState(false);
 
-  // Function to handle menu toggle - memoized with useCallback
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setHasScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Function to handle menu toggle
   const toggleMenu = useCallback(() => {
     setIsMenuOpen((prev) => !prev);
+    // Prevent body scroll when menu is open
+    document.body.style.overflow = !isMenuOpen ? "hidden" : "unset";
+  }, [isMenuOpen]);
+
+  // Cleanup effect for body scroll
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = "unset";
+    };
   }, []);
 
   // Fetch site settings if not provided in props
@@ -120,28 +139,41 @@ export default function Navbar({ initialSettings }: NavbarProps = {}) {
   };
 
   return (
-    <nav className={`w-full fixed top-0 z-50 bg-black/50 backdrop-blur-sm py-4 ${isRTL ? "rtl" : "ltr"}`}>
-      <MaxWidthWrapper noPadding className="container mx-auto flex items-center justify-between">
-        <div className="flex items-center">
-          <Link href={`/${safeLocale}`} className={`${isRTL ? "ml-12" : "mr-12"}`}>
+    <nav
+      className={cn(
+        "w-full fixed top-0 z-50 transition-all duration-300",
+        hasScrolled ? "bg-black/80 backdrop-blur-lg py-2" : "bg-black/50 backdrop-blur-sm py-4",
+        isRTL ? "rtl" : "ltr"
+      )}
+    >
+      <MaxWidthWrapper noPadding className="container mx-auto flex items-center justify-between px-4 lg:px-8">
+        <div className="flex items-center gap-4">
+          <Link
+            href={`/${safeLocale}`}
+            className={cn("transition-transform hover:scale-105", isRTL ? "ml-4 md:ml-8" : "mr-4 md:mr-8")}
+          >
             {logoUrl ? (
-              <div className="relative h-10 w-32">
+              <div className="relative h-8 w-24 md:h-10 md:w-32">
                 <Image src={logoUrl} alt="Sparta Logo" fill className="object-contain" priority />
               </div>
             ) : (
-              <span className="text-2xl font-bold">
+              <span className="text-xl md:text-2xl font-bold">
                 <span className="text-[#8a70d6]">Sparta</span>
               </span>
             )}
           </Link>
-          <LangSwitcher locale={safeLocale} />
-          <ul className="hidden md:flex items-center gap-4 rtl:space-x-reverse">
+
+          <div className="hidden md:block">
+            <LangSwitcher locale={safeLocale} />
+          </div>
+
+          <ul className="hidden md:flex items-center gap-2 lg:gap-4 rtl:space-x-reverse">
             {navItems.map((item) => (
               <li key={item.name} className="relative">
                 <Link
                   href={item.href}
                   className={cn(
-                    "text-sm font-medium transition-colors",
+                    "text-sm font-medium transition-colors px-2 py-1",
                     isActiveLink(item.href) ? "text-[#d359ff]" : "text-white hover:text-[#8a70d6]"
                   )}
                   prefetch={false}
@@ -156,17 +188,18 @@ export default function Navbar({ initialSettings }: NavbarProps = {}) {
           </ul>
         </div>
 
-        <div className="flex items-center space-x-4 rtl:space-x-reverse">
+        <div className="flex items-center gap-2 md:gap-4">
           <Link
             href={`/${safeLocale}/contact`}
-            className="hidden md:inline-flex items-center justify-center rounded-full border border-white px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-white/10"
+            className="hidden md:inline-flex items-center justify-center rounded-full border border-white px-4 
+            py-2 text-sm font-medium text-white transition-colors hover:bg-white/10"
             prefetch={false}
           >
             {t("contact")}
           </Link>
           <Link
             href={`/${safeLocale}/services`}
-            className="hidden md:inline-flex items-center justify-center rounded-full bg-white px-6 py-2 text-sm font-medium text-[#121628] transition-colors hover:bg-white/90"
+            className="hidden md:inline-flex items-center justify-center rounded-full bg-white px-4 lg:px-6 py-2 text-sm font-medium text-[#121628] transition-colors hover:bg-white/90"
             prefetch={false}
           >
             {t("getStarted")}
@@ -174,16 +207,24 @@ export default function Navbar({ initialSettings }: NavbarProps = {}) {
 
           {/* Mobile Get Started button */}
           <Link
-            href={`/${safeLocale}/about`}
-            className="md:hidden inline-flex items-center justify-center rounded-full bg-white px-2 text-nowrap py-1.5 text-xs font-medium text-[#121628] transition-colors hover:bg-white/90"
+            href={`/${safeLocale}/contact`}
+            className=" inline-flex items-center justify-center rounded-full border border-white px-4 lg:px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-white/10"
             prefetch={false}
           >
-            {t("getStartedMobile")}
+            {t("contact")}
+          </Link>
+          <Link
+            href={`/${safeLocale}/services`}
+            className=" inline-flex items-center justify-center rounded-full bg-white px-4 
+            py-2 text-sm font-medium text-[#121628] transition-colors hover:bg-white/90"
+            prefetch={false}
+          >
+            {t("getStarted")}
           </Link>
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden flex flex-col items-center justify-center w-8 h-8 space-y-1.5 z-50"
+            className="md:hidden flex flex-col items-center justify-center w-10 h-10 rounded-lg hover:bg-white/10 transition-colors z-50"
             onClick={toggleMenu}
             aria-label="Toggle menu"
           >
@@ -210,42 +251,56 @@ export default function Navbar({ initialSettings }: NavbarProps = {}) {
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            initial="closed"
-            animate="open"
-            exit="closed"
-            variants={menuVariants}
-            className="md:hidden h-screen fixed inset-0 bg-[#121628]/95 z-40 flex flex-col items-center justify-center"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden fixed inset-0 top-0  h-full bg-[#121628] backdrop-blur-sm z-40"
           >
-            <motion.ul className={`flex flex-col items-center space-y-6 w-full px-12 ${isRTL ? "rtl" : "ltr"}`}>
-              {navItems.map((item) => (
-                <motion.li key={item.name} variants={itemVariants} className="w-full">
+            <div className="flex flex-col items-center bg-[#121628] justify-center min-h-screen px-6">
+              <motion.ul
+                className={cn("flex flex-col items-center space-y-6 w-full", isRTL ? "rtl" : "ltr")}
+                variants={menuVariants}
+                initial="closed"
+                animate="open"
+                exit="closed"
+              >
+                {navItems.map((item) => (
+                  <motion.li key={item.name} variants={itemVariants} className="w-full">
+                    <Link
+                      href={item.href}
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        document.body.style.overflow = "unset";
+                      }}
+                      className={cn(
+                        "block text-center text-lg font-medium py-3 border-b border-white/10 w-full transition-colors",
+                        isActiveLink(item.href) ? "text-[#d359ff] border-[#d359ff]" : "text-white hover:text-[#8a70d6]"
+                      )}
+                      prefetch={false}
+                    >
+                      {item.name}
+                    </Link>
+                  </motion.li>
+                ))}
+                <motion.li variants={itemVariants} className="w-full pt-6">
                   <Link
-                    href={item.href}
-                    onClick={() => setIsMenuOpen(false)}
-                    className={cn(
-                      "block text-center text-lg font-medium py-2 border-b border-white/10 w-full",
-                      isActiveLink(item.href) ? "text-[#d359ff] border-[#d359ff]" : "text-white hover:text-[#8a70d6]"
-                    )}
+                    href={`/${safeLocale}/contact`}
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      document.body.style.overflow = "unset";
+                    }}
+                    className="block text-center rounded-full border border-white px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-white/10 w-full"
                     prefetch={false}
                   >
-                    {item.name}
+                    {t("contact")}
                   </Link>
                 </motion.li>
-              ))}
-              <motion.li variants={itemVariants} className="w-full pt-4">
-                <Link
-                  href={`/${safeLocale}/contact`}
-                  onClick={() => setIsMenuOpen(false)}
-                  className="block text-center rounded-full border border-white px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-white/10 w-full"
-                  prefetch={false}
-                >
-                  {t("contact")}
-                </Link>
-              </motion.li>
-              <motion.li variants={itemVariants} className="w-full pt-2 flex justify-center">
-                <LangSwitcher locale={safeLocale} />
-              </motion.li>
-            </motion.ul>
+                <motion.li variants={itemVariants} className="w-full pt-4 flex justify-center">
+                  <LangSwitcher locale={safeLocale} />
+                </motion.li>
+              </motion.ul>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

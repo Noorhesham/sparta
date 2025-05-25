@@ -8,7 +8,7 @@ const localeMiddleware = createMiddleware({
   localePrefix: "as-needed",
 
   // Used when no locale matches
-  defaultLocale: "en",
+  defaultLocale: "ar",
 });
 
 export async function middleware(req: NextRequest) {

@@ -3,7 +3,7 @@ import React from "react";
 const Lines = ({ className }: { className?: string }) => {
   return (
     <svg
-      className={` absolute -right-[24%]  scale-125 top-[20%] z-[-1] w-full ${className}`}
+      className={` absolute -right-[24%]  scale-125 top-10 h-full lg:top-[20%] z-[-1] w-full ${className}`}
       width="900"
       height="1417"
       viewBox="0 0 900 1417"

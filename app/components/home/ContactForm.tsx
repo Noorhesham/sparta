@@ -44,9 +44,10 @@ interface Service {
 
 interface ContactFormProps {
   locale?: string;
+  email?: string;
 }
 
-const ContactForm = ({ locale = "en" }: ContactFormProps) => {
+const ContactForm = ({ locale = "en", email = "" }: ContactFormProps) => {
   const t = useTranslations("form.contact");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [services, setServices] = useState<Service[]>([]);
@@ -66,12 +67,13 @@ const ContactForm = ({ locale = "en" }: ContactFormProps) => {
 
         // Fetch services
         const servicesResult = await getServices();
+        console.log(servicesResult);
         if (servicesResult.success && servicesResult.data) {
           setServices(servicesResult.data);
         } else {
           setServices([]);
         }
-
+        console.log(services);
         // Fetch settings
         const settingsResult = await getSiteSettings();
         console.log(settingsResult);
@@ -99,7 +101,7 @@ const ContactForm = ({ locale = "en" }: ContactFormProps) => {
     defaultValues: {
       first_name: "",
       last_name: "",
-      email: "",
+      email: email,
       phone_number: "",
       service_ids: [],
       message: "",
@@ -321,11 +323,9 @@ const ContactForm = ({ locale = "en" }: ContactFormProps) => {
                             />
                             <label
                               htmlFor={service._id}
-                              className="ml-2 text-sm font-medium text-gray-700 cursor-pointer truncate"
+                              className=" text-sm mx-2 font-medium text-gray-700 cursor-pointer truncate"
                             >
-                              {typeof service?.title === "string"
-                                ? service?.title
-                                : service?.title?.[locale] || service?.title?.en}
+                              {locale === "en" ? service?.title_en : service?.title_ar}
                             </label>
                           </div>
                         ))

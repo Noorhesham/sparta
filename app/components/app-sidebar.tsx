@@ -86,8 +86,8 @@ const data = {
           icon: Mail,
         },
         {
-          title: "subscribers",
-          url: "/dashboard/subscribers",
+          title: "team",
+          url: "/dashboard/team",
           icon: Users2,
         },
         {

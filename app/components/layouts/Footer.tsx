@@ -26,9 +26,7 @@ const Footer = ({ locale = "en" }: FooterProps) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle newsletter signup
-    console.log("Email submitted:", email);
-    setEmail("");
+    router.push(`/${locale}/contact?email=${email}`);
   };
 
   return (

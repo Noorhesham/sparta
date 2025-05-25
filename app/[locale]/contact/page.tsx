@@ -1,10 +1,11 @@
 import ContactForm from "@/app/components/home/ContactForm";
 import React from "react";
 
-const page = () => {
+const page = ({ searchParams }: { searchParams: { email: string } }) => {
+  const email = searchParams.email;
   return (
     <div>
-      <ContactForm />
+      <ContactForm email={email} />
     </div>
   );
 };
