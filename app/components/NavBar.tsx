@@ -189,33 +189,17 @@ export default function Navbar({ initialSettings }: NavbarProps = {}) {
         </div>
 
         <div className="flex items-center gap-2 md:gap-4">
-          <Link
-            href={`/${safeLocale}/contact`}
-            className="hidden md:inline-flex items-center justify-center rounded-full border border-white px-4 
-            py-2 text-sm font-medium text-white transition-colors hover:bg-white/10"
-            prefetch={false}
-          >
-            {t("contact")}
-          </Link>
-          <Link
-            href={`/${safeLocale}/services`}
-            className="hidden md:inline-flex items-center justify-center rounded-full bg-white px-4 lg:px-6 py-2 text-sm font-medium text-[#121628] transition-colors hover:bg-white/90"
-            prefetch={false}
-          >
-            {t("getStarted")}
-          </Link>
-
           {/* Mobile Get Started button */}
           <Link
             href={`/${safeLocale}/contact`}
-            className=" inline-flex items-center justify-center rounded-full border border-white px-4 lg:px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-white/10"
+            className=" inline-flex items-center lg:textbase text-nowrap justify-center rounded-full border border-white px-2 lg:px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-white/10"
             prefetch={false}
           >
             {t("contact")}
           </Link>
           <Link
             href={`/${safeLocale}/services`}
-            className=" inline-flex items-center justify-center rounded-full bg-white px-4 
+            className=" inline-flex items-center text-nowrap lg:text-base text-s justify-center rounded-full bg-white px-2 
             py-2 text-sm font-medium text-[#121628] transition-colors hover:bg-white/90"
             prefetch={false}
           >

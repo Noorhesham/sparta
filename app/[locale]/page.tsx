@@ -12,11 +12,9 @@ import Blogs from "../components/home/Blogs";
 import Products from "../components/home/Products";
 import MaxWidthWrapper from "../components/defaults/MaxWidthWrapper";
 import Link from "next/link";
-import { PhoneIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Service from "@/models/Service";
 export const dynamic = "force-dynamic";
-
 const Page = async ({ params }: { params: { locale: string } }) => {
   try {
     await connectToDatabase();

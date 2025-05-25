@@ -240,7 +240,7 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData, isEdit = false 
             {t("common.cancel")}
           </Button>
           <Button disabled={isLoading} type="submit">
-            {isLoading ? t("common.loading") : isEdit ? t("common.update") : t("common.create")}
+            {isLoading ? 'Loading' : isEdit ? t("common.update") : t("common.create")}
           </Button>
         </div>
       </form>
