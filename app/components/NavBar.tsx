@@ -199,7 +199,7 @@ export default function Navbar({ initialSettings }: NavbarProps = {}) {
           </Link>
           <Link
             href={`/${safeLocale}/services`}
-            className=" inline-flex items-center text-nowrap lg:text-base text-s justify-center rounded-full bg-white px-2 
+            className=" hidden lg:inline-flex items-center text-nowrap lg:text-base text-s justify-center rounded-full bg-white px-2 
             py-2 text-sm font-medium text-[#121628] transition-colors hover:bg-white/90"
             prefetch={false}
           >
